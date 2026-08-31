@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node tests/run-all.mjs",
+    "crawl:tor": "node crawlers/tor_scraper.mjs",
+    "crawl:tg": "node crawlers/telegram_scraper.mjs",
+    "crawl:all": "node crawlers/tor_scraper.mjs && node crawlers/telegram_scraper.mjs",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.mjs && node prisma/seed-financial.mjs",
     "postinstall": "prisma generate"
