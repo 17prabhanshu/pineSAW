@@ -31,6 +31,7 @@ const navSections = [
   {
     title: "INTELLIGENCE",
     items: [
+      { href: "/console", label: "21st.dev Dark Console", icon: Pulse, badge: "LIVE", badgeColor: "bg-violet-600 text-white" },
       { href: "/entities", label: "Entities Directory", icon: Users },
       { href: "/search", label: "Global Search", icon: MagnifyingGlass, shortcut: "⌘K" },
     ]
