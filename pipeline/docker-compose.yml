@@ -1,0 +1,108 @@
+version: "3.8"
+
+networks:
+  pinesaw-network:
+    driver: bridge
+
+services:
+  # ============================================================================
+  # 1. TOR SOCKS5 FLEET (4 EPHEMERAL DAEMONS)
+  # ============================================================================
+  tor1:
+    image: osminogin/tor-simple:latest
+    restart: always
+    networks:
+      - pinesaw-network
+    environment:
+      - TOR_SOCKS_PORT=0.0.0.0:9050
+    command: >
+      tor --SocksPort 0.0.0.0:9050 IsolateSOCKSAuth --NewCircuitPeriod 30 --MaxCircuitDirtiness 30
+
+  tor2:
+    image: osminogin/tor-simple:latest
+    restart: always
+    networks:
+      - pinesaw-network
+    environment:
+      - TOR_SOCKS_PORT=0.0.0.0:9050
+    command: >
+      tor --SocksPort 0.0.0.0:9050 IsolateSOCKSAuth --NewCircuitPeriod 30 --MaxCircuitDirtiness 30
+
+  tor3:
+    image: osminogin/tor-simple:latest
+    restart: always
+    networks:
+      - pinesaw-network
+    environment:
+      - TOR_SOCKS_PORT=0.0.0.0:9050
+    command: >
+      tor --SocksPort 0.0.0.0:9050 IsolateSOCKSAuth --NewCircuitPeriod 30 --MaxCircuitDirtiness 30
+
+  tor4:
+    image: osminogin/tor-simple:latest
+    restart: always
+    networks:
+      - pinesaw-network
+    environment:
+      - TOR_SOCKS_PORT=0.0.0.0:9050
+    command: >
+      tor --SocksPort 0.0.0.0:9050 IsolateSOCKSAuth --NewCircuitPeriod 30 --MaxCircuitDirtiness 30
+
+  # ============================================================================
+  # 2. HAPROXY SOCKS5 LOAD BALANCER
+  # ============================================================================
+  haproxy:
+    image: haproxy:2.8-alpine
+    restart: always
+    networks:
+      - pinesaw-network
+    ports:
+      - "9050:9050"   # Balanced SOCKS5 entrypoint
+      - "8404:8404"   # HAProxy Stats UI
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - tor1
+      - tor2
+      - tor3
+      - tor4
+
+  # ============================================================================
+  # 3. APACHE KAFKA (KRAFT MODE - ZERO ZOOKEEPER DEPENDENCY)
+  # ============================================================================
+  kafka:
+    image: apache/kafka:3.7.0
+    restart: always
+    networks:
+      - pinesaw-network
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+  # ============================================================================
+  # 4. GRAPH DATABASE (NEO4J / MEMGRAPH)
+  # ============================================================================
+  neo4j:
+    image: neo4j:5.19-community
+    restart: always
+    networks:
+      - pinesaw-network
+    ports:
+      - "7474:7474"   # HTTP Web Console
+      - "7687:7687"   # Bolt Protocol
+    environment:
+      - NEO4J_AUTH=neo4j/pinesaw_threat_intel_2026
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
