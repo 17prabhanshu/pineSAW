@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gov-blue: #003366; /* Deep official navy */
+  --color-gov-blue-hover: #002244; 
+  --color-gov-blue-light: #e6f0fa;
+  
+  --color-nexus-cyan: #0055cc; /* Standard link blue */
+  --color-nexus-amber: #d97706; 
+  --color-nexus-red: #dc2626; 
+  --color-nexus-green: #16a34a; 
+  
+  --font-display: var(--font-inter), "Inter", "Segoe UI", sans-serif;
+  --font-mono: var(--font-mono), "Consolas", "Courier New", monospace;
+  --font-sans: var(--font-inter), "Inter", "Segoe UI", sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: #f0f2f5;
+    --foreground: #111827;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Institutional borders */
+.nexus-border { border: 1px solid #cbd5e1; }
+.nexus-border-t { border-top: 1px solid #cbd5e1; }
+.nexus-border-b { border-bottom: 1px solid #cbd5e1; }
+.nexus-border-l { border-left: 1px solid #cbd5e1; }
+.nexus-border-r { border-right: 1px solid #cbd5e1; }
+
+/* Utility classes for quick buttons */
+.btn-gov {
+  @apply bg-gov-blue text-white px-4 py-2 font-semibold text-xs uppercase tracking-wider transition-none hover:bg-gov-blue-hover border border-gov-blue shadow-none rounded-none;
+}
+.btn-secondary {
+  @apply bg-zinc-100 text-zinc-800 px-4 py-2 font-semibold text-xs uppercase tracking-wider transition-none hover:bg-zinc-200 border border-zinc-300 shadow-none rounded-none;
+}
+.badge-critical {
+  @apply bg-red-50 text-red-700 border border-red-200 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+}
+.badge-warning {
+  @apply bg-amber-50 text-amber-700 border border-amber-200 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+}
+.badge-info {
+  @apply bg-blue-50 text-blue-700 border border-blue-200 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+}
+.badge-neutral {
+  @apply bg-zinc-100 text-zinc-600 border border-zinc-300 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+}
+
+/* Animations (Removed for institutional feel) */
+.drawer-animate {
+  /* No animation for absolute speed */
+}
+
+/* Print */
+@media print {
+  body { background: white !important; color: black !important; }
+}

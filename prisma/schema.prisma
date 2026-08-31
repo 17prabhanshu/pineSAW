@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Entity {
+  id            String   @id @default(uuid())
+  type          String // "ACTOR", "ACCOUNT", "WALLET", "IDENTIFIER", "LISTING", "PLATFORM", "DEVICE"
+  label         String // e.g. "DarkLord99", "0x123..."
+  confidence    Float    @default(1.0)
+  priorityScore Int      @default(0)
+  riskFactors   String? // JSON string of risk reasons
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sourceRelations Relationship[]        @relation("SourceEntity")
+  targetRelations Relationship[]        @relation("TargetEntity")
+  events          ActivityEvent[]
+  investigations  InvestigationEntity[]
+  notes           Note[]
+  evidence        Evidence[]
+  legalReferences LegalReference[]
+  actionItems     ActionItem[]
+}
+
+model Relationship {
+  id            String   @id @default(uuid())
+  sourceId      String
+  targetId      String
+  type          String // "OWNS", "USES", "LISTS", "TRANSACTS_WITH", "COMMUNICATES_WITH", "ASSOCIATED_WITH"
+  confidence    Float    @default(1.0)
+  evidenceCount Int      @default(0)
+  provenance    String? // Where did this come from
+  createdAt     DateTime @default(now())
+
+  source Entity @relation("SourceEntity", fields: [sourceId], references: [id])
+  target Entity @relation("TargetEntity", fields: [targetId], references: [id])
+}
+
+model Investigation {
+  id           String   @id @default(uuid())
+  caseId       String   @unique
+  title        String
+  status       String // "OPEN", "CLOSED", "PENDING"
+  priority     String // "LOW", "MEDIUM", "HIGH", "CRITICAL"
+  investigator String
+  confidence   Float    @default(0.8)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  entities    InvestigationEntity[]
+  notes       Note[]
+  evidence    Evidence[]
+  actionItems ActionItem[]
+}
+
+model InvestigationEntity {
+  investigationId String
+  entityId        String
+
+  investigation Investigation @relation(fields: [investigationId], references: [id])
+  entity        Entity        @relation(fields: [entityId], references: [id])
+
+  @@id([investigationId, entityId])
+}
+
+model Alert {
+  id          String   @id @default(uuid())
+  type        String // "ACTIVITY_SPIKE", "NEW_LINK"
+  severity    String // "INFO", "WARNING", "CRITICAL"
+  title       String
+  description String
+  status      String // "UNREAD", "ACKNOWLEDGED", "DISMISSED"
+  entityId    String?
+  createdAt   DateTime @default(now())
+}
+
+model ActivityEvent {
+  id        String   @id @default(uuid())
+  entityId  String
+  type      String // "LOGIN", "TRANSACTION", "POST", "MESSAGE"
+  timestamp DateTime @default(now())
+  details   String? // JSON string
+  source    String
+
+  entity Entity @relation(fields: [entityId], references: [id])
+}
+
+model AuditEvent {
+  id        String   @id @default(uuid())
+  action    String
+  actor     String
+  objectId  String?
+  metadata  String? // JSON
+  timestamp DateTime @default(now())
+}
+
+model Note {
+  id              String         @id @default(uuid())
+  content         String
+  author          String
+  entityId        String?
+  investigationId String?
+  createdAt       DateTime       @default(now())
+  Entity          Entity?        @relation(fields: [entityId], references: [id])
+  Investigation   Investigation? @relation(fields: [investigationId], references: [id])
+}
+
+model Evidence {
+  id              String         @id @default(uuid())
+  type            String
+  source          String
+  description     String
+  confidence      Float
+  entityId        String?
+  investigationId String?
+  createdAt       DateTime       @default(now())
+  Entity          Entity?        @relation(fields: [entityId], references: [id])
+  Investigation   Investigation? @relation(fields: [investigationId], references: [id])
+}
+
+model LegalReference {
+  id           String   @id @default(uuid())
+  jurisdiction String
+  provision    String
+  reason       String
+  entityId     String
+  createdAt    DateTime @default(now())
+  Entity       Entity   @relation(fields: [entityId], references: [id])
+}
+
+model ActionItem {
+  id              String         @id @default(uuid())
+  title           String
+  status          String // "DRAFT", "PENDING", "READY", "COMPLETED"
+  priority        String
+  reason          String?
+  type            String // "FREEZE", "BANK_REQUEST", "ESCALATION", "REPORT"
+  entityId        String?
+  investigationId String?
+  createdAt       DateTime       @default(now())
+  Entity          Entity?        @relation(fields: [entityId], references: [id])
+  Investigation   Investigation? @relation(fields: [investigationId], references: [id])
+}

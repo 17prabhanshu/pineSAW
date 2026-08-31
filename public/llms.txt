@@ -1,0 +1,12 @@
+# NEXUS Intelligence Platform
+
+NEXUS is an intelligent cyber threat intelligence platform to identify, monitor, and analyze illicit drug trafficking activities on dark web and encrypted platforms.
+
+Capabilities:
+- Entity Resolution
+- Network Relationship Graphing
+- Threat Priority Scoring
+- Real-time Alerting
+- Automated Intelligence Reporting
+
+This is a law-enforcement investigation prototype. Real data is not used.
