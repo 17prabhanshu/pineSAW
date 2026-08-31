@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node tests/run-all.mjs",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.mjs && node prisma/seed-financial.mjs",
     "postinstall": "prisma generate"
