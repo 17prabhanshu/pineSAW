@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${outfit.variable} ${space.variable} antialiased bg-gemini-bg text-foreground min-h-screen flex flex-col selection:bg-gemini-purple/30`}>
+      <body className={`${inter.variable} ${outfit.variable} ${space.variable} antialiased bg-black text-foreground min-h-screen flex flex-col selection:bg-gemini-purple/30`}>
         <ClientLenis>
           {/* Aesthetic Liquid Glass Header */}
           <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-16 liquid-glass rounded-full flex items-center justify-between px-6 z-50 transition-all">

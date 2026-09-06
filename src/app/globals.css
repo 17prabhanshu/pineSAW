@@ -47,10 +47,11 @@
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(24, 24, 27, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(10, 10, 12, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.02), 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 /* Beautiful Buttons */
@@ -200,4 +201,22 @@ body::after {
 }
 @keyframes rotate-border {
   to { --angle: 360deg; }
+}
+
+@keyframes pulse-star {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+.star-halo {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150vw;
+  height: 150vh;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.08) 0%, rgba(100, 100, 100, 0.03) 20%, transparent 60%);
+  animation: pulse-star 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
 }

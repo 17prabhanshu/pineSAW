@@ -176,6 +176,7 @@ export default function CommandCenter() {
 
   return (
     <div className="flex h-full overflow-hidden relative">
+      <div className="star-halo"></div>
       <TopoGrid />
       <NewCaseModal 
         isOpen={isNewCaseOpen}
@@ -206,7 +207,7 @@ export default function CommandCenter() {
         </header>
 
         {/* Operational Status KPI Strip */}
-        <div className="glow-border glass nexus-border rounded-none flex divide-x divide-zinc-300 mb-8 overflow-hidden shadow-sm">
+        <div className="glow-border glass nexus-border rounded-[2rem] flex divide-x divide-zinc-300 mb-8 overflow-hidden shadow-sm">
           {[
             { label: "Active Investigations", value: data.metrics?.investigationCount || data.activeInvestigations || "06", color: "text-white" },
             { label: "Critical Alerts", value: data.recentAlerts?.filter((a:any)=>a.severity==='CRITICAL').length || "03", color: "text-nexus-red" },
@@ -223,7 +224,7 @@ export default function CommandCenter() {
         <div className="flex-1 flex gap-6 min-h-0">
           
           {/* Priority Incidents Table */}
-          <div className="flex-[2] flex flex-col min-h-0 glass nexus-border rounded-none shadow-sm overflow-hidden">
+          <div className="flex-[2] flex flex-col min-h-0 glass nexus-border rounded-[2rem] shadow-sm overflow-hidden">
             <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <WarningOctagon className="text-nexus-red" size={16} /> <CyberText text="Priority Incidents" />
@@ -267,7 +268,7 @@ export default function CommandCenter() {
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-gov-blue">INV-2026-0042</td>
                       <td className="px-4 py-3 text-right">
-                        <button className="text-xs font-semibold text-gov-blue hover:text-white transition-colors">
+                        <button className="text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-gov-blue/20 border border-gov-blue/50 px-3 py-1.5 rounded-full hover:bg-gov-blue hover:shadow-[0_0_15px_rgba(37,99,235,0.6)] transition-all">
                           Investigate
                         </button>
                       </td>
@@ -279,7 +280,7 @@ export default function CommandCenter() {
           </div>
           
           {/* Real-time Alert Feed */}
-          <div className="flex-1 flex flex-col min-h-0 glass nexus-border rounded-none shadow-sm overflow-hidden">
+          <div className="flex-1 flex flex-col min-h-0 glass nexus-border rounded-[2rem] shadow-sm overflow-hidden">
             <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <Lightning className="text-nexus-amber" size={16} /> <CyberText text="Live Alert Feed" />
@@ -294,7 +295,7 @@ export default function CommandCenter() {
 
       {/* Slide-out Drawer */}
       {selectedIncident && (
-        <div className="absolute top-0 right-0 bottom-0 w-[400px] glass border-l border-white/10 shadow-md flex flex-col drawer-animate z-30">
+        <div className="absolute top-0 right-0 bottom-0 w-[400px] glass rounded-l-[2.5rem] border-l border-white/10 shadow-md flex flex-col drawer-animate z-30">
           <div className="p-5 border-b border-white/10 bg-zinc-900/50 relative">
             <button onClick={() => setSelectedIncident(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><X size={16}/></button>
             <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">ENTITY INCIDENT</div>
@@ -312,7 +313,7 @@ export default function CommandCenter() {
           <div className="flex-1 overflow-auto p-5 space-y-6">
             <section>
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Why Flagged</h3>
-              <div className="text-sm text-zinc-300 leading-relaxed glass/5 border border-white/5 p-3 rounded-none">
+              <div className="text-sm text-zinc-300 leading-relaxed glass/5 border border-white/5 p-3 rounded-[2rem]">
                 Activity spike and cross-platform overlapping identifiers strongly suggest evasion tactics.
               </div>
             </section>
@@ -321,7 +322,7 @@ export default function CommandCenter() {
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Risk Contribution</h3>
               <div className="space-y-1">
                 {(selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors) : ["Suspicious Activity"]).map((risk: string, i: number) => (
-                  <div key={i} className="flex justify-between items-center text-xs bg-zinc-900/50 px-2 py-1.5 rounded-none border border-white/5">
+                  <div key={i} className="flex justify-between items-center text-xs bg-zinc-900/50 px-2 py-1.5 rounded-[2rem] border border-white/5">
                     <span className="text-zinc-300">{risk}</span>
                     <span className="text-nexus-amber font-mono">+{(selectedIncident.priorityScore / (selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors).length : 1)).toFixed(0)}</span>
                   </div>
@@ -331,7 +332,7 @@ export default function CommandCenter() {
             
             <section>
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Pending Actions</h3>
-              <div className="glass/5 border border-white/5 p-3 rounded-none space-y-2">
+              <div className="glass/5 border border-white/5 p-3 rounded-[2rem] space-y-2">
                 <div className="flex justify-between items-start">
                   <div className="text-sm text-zinc-200">Prepare Bank Request</div>
                   <span className="badge-warning">DRAFT</span>
