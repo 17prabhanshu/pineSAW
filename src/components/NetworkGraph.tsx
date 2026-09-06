@@ -14,9 +14,48 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
   const [hoveredNode, setHoveredNode] = useState<any | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  const [pulses, setPulses] = useState<any[]>([]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted || !filteredData.links || !filteredData.links.length) return;
+    
+    const interval = setInterval(() => {
+      setPulses(prev => {
+        const now = Date.now();
+        const activePulses = prev.filter(p => now - p.createdAt < 2000);
+        
+        for (let i = 0; i < 2; i++) {
+          const randomLink = filteredData.links[Math.floor(Math.random() * filteredData.links.length)];
+          if (randomLink && randomLink.source && randomLink.target && fgRef.current) {
+            const src = typeof randomLink.source === 'object' ? randomLink.source : null;
+            const tgt = typeof randomLink.target === 'object' ? randomLink.target : null;
+            if (src && tgt && src.x !== undefined && tgt.x !== undefined) {
+              try {
+                const start = fgRef.current.graph2ScreenCoords(src.x, src.y);
+                const end = fgRef.current.graph2ScreenCoords(tgt.x, tgt.y);
+                if (start && end) {
+                  activePulses.push({
+                    id: Math.random().toString(),
+                    createdAt: now,
+                    startX: start.x,
+                    startY: start.y,
+                    endX: end.x,
+                    endY: end.y,
+                  });
+                }
+              } catch(e) {}
+            }
+          }
+        }
+        return activePulses;
+      });
+    }, 600);
+    return () => clearInterval(interval);
+  }, [mounted, filteredData.links]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -67,7 +106,30 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
   );
 
   return (
-    <div className="w-full h-full relative bg-[#F8FAFC] overflow-hidden">
+        <div className="w-full h-full relative bg-[#F8FAFC] overflow-hidden">
+      {/* SVG Pulse Overlay */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+        <AnimatePresence>
+          {pulses.map(p => {
+            const dx = p.endX - p.startX;
+            const dy = p.endY - p.startY;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            return (
+              <motion.path
+                key={p.id}
+                d={`M ${p.startX} ${p.startY} L ${p.endX} ${p.endY}`}
+                stroke="#0EA5E9"
+                strokeWidth="3"
+                fill="none"
+                strokeDasharray={`${length * 0.2} ${length}`}
+                initial={{ strokeDashoffset: length, opacity: 0 }}
+                animate={{ strokeDashoffset: -length * 0.2, opacity: [0, 1, 1, 0] }}
+                transition={{ duration: 1.2, ease: "linear" }}
+              />
+            );
+          })}
+        </AnimatePresence>
+      </svg>
       {/* Top Legend and Filter Toolbar */}
       <div className="absolute top-4 left-4 z-20 flex gap-1.5 bg-black/50/95 backdrop-blur-sm p-1.5 border border-zinc-300 shadow-sm text-xs font-mono">
         {[
