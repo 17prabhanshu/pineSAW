@@ -20,6 +20,18 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
     setMounted(true);
   }, []);
 
+  // Filter nodes if requested
+  const filteredData = {
+    nodes: data?.nodes?.filter((n: any) => filterType === "ALL" || n.group === filterType) || [],
+    links: data?.links?.filter((l: any) => {
+      if (filterType === "ALL") return true;
+      const srcId = typeof l.source === 'object' ? l.source.id : l.source;
+      const tgtId = typeof l.target === 'object' ? l.target.id : l.target;
+      const srcNode = data?.nodes?.find((n: any) => n.id === srcId);
+      const tgtNode = data?.nodes?.find((n: any) => n.id === tgtId);
+      return srcNode?.group === filterType || tgtNode?.group === filterType;
+    }) || []
+  };
   useEffect(() => {
     if (!mounted || !filteredData.links || !filteredData.links.length) return;
     
@@ -86,18 +98,6 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
     if (fgRef.current) fgRef.current.zoomToFit(600, 40);
   };
 
-  // Filter nodes if requested
-  const filteredData = {
-    nodes: data?.nodes?.filter((n: any) => filterType === "ALL" || n.group === filterType) || [],
-    links: data?.links?.filter((l: any) => {
-      if (filterType === "ALL") return true;
-      const srcId = typeof l.source === 'object' ? l.source.id : l.source;
-      const tgtId = typeof l.target === 'object' ? l.target.id : l.target;
-      const srcNode = data?.nodes?.find((n: any) => n.id === srcId);
-      const tgtNode = data?.nodes?.find((n: any) => n.id === tgtId);
-      return srcNode?.group === filterType || tgtNode?.group === filterType;
-    }) || []
-  };
 
   if (!mounted) return (
     <div className="w-full h-full bg-zinc-50 flex items-center justify-center text-zinc-400 font-mono text-xs">
