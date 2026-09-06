@@ -215,7 +215,7 @@ export default function EntityIntelligence() {
                     placeholder="Add a note..." 
                     value={noteText}
                     onChange={e => setNoteText(e.target.value)}
-                    className="flex-1 glass border border-white/10 rounded-2xl px-3 py-1.5 text-xs text-white placeholder:text-zinc-300 focus:outline-none focus:border-nexus-cyan"
+                    className="flex-1 bg-zinc-900/60 border border-white/10 rounded-2xl px-3 py-1.5 text-xs text-white placeholder:text-zinc-300 focus:outline-none focus:border-nexus-cyan"
                   />
                   <button onClick={handleNoteSubmit} className="glass/10 hover:glass/20 px-3 py-1.5 rounded-2xl text-xs transition-colors">
                     Save

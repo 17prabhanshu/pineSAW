@@ -80,7 +80,7 @@ export function ExplainabilityPanel({
             {features.map((feature, index) => (
               <motion.div
                 key={feature.name}
-                className="glass/5 dark:bg-zinc-800/50 p-4 rounded-lg border border-zinc-100 dark:border-zinc-800"
+                className="bg-zinc-800/20 dark:bg-zinc-800/50 p-4 rounded-lg border border-zinc-100 dark:border-zinc-800"
                 initial={shouldReduceMotion ? { opacity: 0 } : motionTokens.variants.fadeInUp.hidden}
                 animate={shouldReduceMotion ? { opacity: 1 } : motionTokens.variants.fadeInUp.visible}
                 transition={{

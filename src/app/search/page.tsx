@@ -65,7 +65,7 @@ export default function SearchPage() {
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {results.entities.map(ent => (
-                      <Link key={ent.id} href={`/entities/${ent.id}`} className="flex items-start gap-3 glass border border-white/5 rounded-2xl p-4 hover:bg-zinc-800/30 hover:border-white/10 transition-colors group">
+                      <Link key={ent.id} href={`/entities/${ent.id}`} className="flex items-start gap-3 bg-zinc-900/60 border border-white/5 rounded-2xl p-4 hover:bg-zinc-800/30 hover:border-white/10 transition-colors group">
                         <User className="text-zinc-400 group-hover:text-gov-blue mt-0.5 transition-colors" />
                         <div className="flex-1">
                           <div className="text-sm font-semibold text-white group-hover:text-gov-blue transition-colors mb-1">{ent.label}</div>
@@ -90,7 +90,7 @@ export default function SearchPage() {
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {results.investigations.map(inv => (
-                      <Link key={inv.id} href={`/investigations/${inv.id}`} className="flex items-start gap-3 glass border border-white/5 rounded-2xl p-4 hover:bg-zinc-800/30 hover:border-white/10 transition-colors group">
+                      <Link key={inv.id} href={`/investigations/${inv.id}`} className="flex items-start gap-3 bg-zinc-900/60 border border-white/5 rounded-2xl p-4 hover:bg-zinc-800/30 hover:border-white/10 transition-colors group">
                         <Folder className="text-zinc-400 group-hover:text-gov-blue mt-0.5 transition-colors" />
                         <div className="flex-1">
                           <div className="text-sm font-semibold text-white group-hover:text-gov-blue transition-colors mb-1">{inv.title}</div>

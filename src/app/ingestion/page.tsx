@@ -174,7 +174,7 @@ export default function IngestionSimulator() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                 {/* Narcotics */}
-                <div className="glass p-3 border border-white/5">
+                <div className="bg-zinc-900/60 p-3 border border-white/5 rounded-2xl">
                   <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
                     Detected Narcotics ({nlpResult.narcotics.length})
                   </div>
@@ -193,7 +193,7 @@ export default function IngestionSimulator() {
                 </div>
 
                 {/* Crypto Addresses */}
-                <div className="glass p-3 border border-white/5">
+                <div className="bg-zinc-900/60 p-3 border border-white/5 rounded-2xl">
                   <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
                     Cryptocurrency Addresses ({nlpResult.identifiers.cryptoAddresses.length})
                   </div>
@@ -212,7 +212,7 @@ export default function IngestionSimulator() {
                 </div>
 
                 {/* Communication Vectors */}
-                <div className="glass p-3 border border-white/5">
+                <div className="bg-zinc-900/60 p-3 border border-white/5 rounded-2xl">
                   <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
                     Contact Vectors ({nlpResult.identifiers.communicationHandles.length})
                   </div>
@@ -245,7 +245,7 @@ export default function IngestionSimulator() {
         </div>
         <div className="p-4 font-mono text-xs bg-[#090D16] text-zinc-300 flex-1 overflow-auto leading-relaxed space-y-1.5">
           {logs.map((log, i) => (
-            <div key={i} className="flex gap-3 hover:glass/5 px-2 py-0.5 transition-colors">
+            <div key={i} className="flex gap-3 hover:bg-zinc-800/30 px-2 py-0.5 transition-colors">
               <span className="text-zinc-300 select-none">[{new Date().toISOString().split('T')[1].substring(0,8)}]</span>
               <span className={clsx(
                 log.type === 'info' && "text-zinc-300",

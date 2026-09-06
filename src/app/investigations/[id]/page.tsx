@@ -109,7 +109,7 @@ export default function InvestigationWorkspace() {
         <div className="w-80 glass border-r border-white/10 flex flex-col shrink-0 z-10 overflow-y-auto p-5 space-y-6">
           <div className="space-y-2">
             <h2 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest font-semibold">Executive Intelligence Summary</h2>
-            <p className="text-xs text-zinc-300 leading-relaxed glass/5 p-3 border border-white/5">
+            <p className="text-xs text-zinc-300 leading-relaxed bg-zinc-800/20 p-3 border border-white/5">
               Syndicate identified as <strong className="text-white">{investigation.entities?.[0]?.entity?.label || "ShadowBroker"}</strong> operates across GenesisMarket (.onion) and Telegram. Automated on-chain tracing confirms fund flows to 4 domestic Indian bank accounts and an offshore Swiss deposit.
             </p>
           </div>
@@ -225,7 +225,7 @@ export default function InvestigationWorkspace() {
                 </div>
 
                 {/* Evidentiary Box */}
-                <div className="p-4 glass/5 border border-white/10 text-xs space-y-2">
+                <div className="p-4 bg-zinc-800/20 border border-white/10 text-xs space-y-2">
                   <div className="font-bold text-white font-mono text-[11px] uppercase">
                     Forensic Choke-Point Verification
                   </div>
@@ -316,7 +316,7 @@ export default function InvestigationWorkspace() {
             transition={motionTokens.awwwardsSpring}
             className="absolute top-20 right-6 w-96 glass border border-white/10 flex flex-col shrink-0 z-50 shadow-2xl rounded-xl cursor-grab active:cursor-grabbing"
           >
-            <div className="p-5 glass/5 border-b border-white/10 relative cursor-default">
+            <div className="p-5 bg-zinc-800/20 border-b border-white/10 relative cursor-default">
               <button onClick={() => setSelectedEntity(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><CaretRight size={18} /></button>
               <div className="text-[10px] font-mono text-gov-blue uppercase font-bold tracking-widest mb-1">{selectedEntity.group}</div>
               <h2 className="text-lg font-display font-bold text-white break-all">{selectedEntity.label}</h2>
@@ -329,7 +329,7 @@ export default function InvestigationWorkspace() {
             <div className="p-5 flex-1 overflow-y-auto space-y-5 text-xs">
               <div>
                 <div className="text-[10px] font-mono text-zinc-400 uppercase font-semibold mb-1">Entity Rationale</div>
-                <p className="text-zinc-300 glass/5 p-2.5 border border-white/5 leading-relaxed">
+                <p className="text-zinc-300 bg-zinc-800/20 p-2.5 border border-white/5 leading-relaxed">
                   Identified as central hub in the syndicate transaction graph. Direct connections to high-velocity nodes and fiat off-ramps.
                 </p>
               </div>

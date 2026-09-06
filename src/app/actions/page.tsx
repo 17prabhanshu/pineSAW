@@ -103,7 +103,7 @@ export default function ActionCenter() {
                 whileHover={!selectedAction ? { scale: 1.02, z: 120, transition: { duration: 0.2 } } : {}}
                 onClick={() => setSelectedAction(act)}
                 className={clsx(
-                  "absolute w-full  glass rounded-[2rem] p-5 cursor-pointer group shadow-2xl backdrop-blur-md",
+                  "absolute w-full bg-zinc-900/80 border border-white/5 rounded-[2rem] p-5 cursor-pointer group shadow-2xl",
                   isSelected ? "border-gov-blue bg-zinc-800/90" : "border-white/10 hover:border-white/30 /80"
                 )}
                 style={{

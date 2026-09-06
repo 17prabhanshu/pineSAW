@@ -82,14 +82,14 @@ export default function EntitiesPage() {
           <h1 className="font-display text-4xl font-bold tracking-tight mb-2">Entity Intelligence</h1>
           <p className="text-zinc-400 font-mono text-sm">MONITORED ACTORS, ACCOUNTS, WALLETS, AND IDENTIFIERS</p>
         </div>
-        <MagneticButton className="surface-2 border border-white/10 text-white px-4 py-2 rounded-none font-medium text-sm hover:glass/5 transition-colors flex items-center gap-2">
+        <MagneticButton className="surface-2 border border-white/10 text-white px-4 py-2 rounded-none font-medium text-sm hover:bg-zinc-800/30 transition-colors flex items-center gap-2">
           <Funnel /> Filter
         </MagneticButton>
       </header>
 
       <div className=" glass rounded-[2rem] overflow-hidden flex-1 flex flex-col">
         <table className="w-full text-left text-sm flex-1 block overflow-auto">
-          <thead className="sticky top-0 glass/5 border-b border-white/10 w-full table table-fixed">
+          <thead className="sticky top-0 bg-zinc-800/20 border-b border-white/10 w-full table table-fixed">
             <tr className="font-mono text-[10px] uppercase text-zinc-400">
               <th className="px-6 py-4 font-medium w-32">Type</th>
               <th className="px-6 py-4 font-medium">Label</th>
@@ -110,7 +110,7 @@ export default function EntitiesPage() {
               className="divide-y divide-zinc-200 w-full table table-fixed"
             >
               {entities.map(ent => (
-                <motion.tr variants={rowVariants} key={ent.id} className="hover:glass/5 transition-colors group cursor-pointer">
+                <motion.tr variants={rowVariants} key={ent.id} className="hover:bg-zinc-800/30 transition-colors group cursor-pointer">
                   <td className="px-6 py-4 font-mono text-xs text-zinc-400">
                     <Link href={`/entities/${ent.id}`} className="before:absolute before:inset-0 relative block">
                       {ent.type}

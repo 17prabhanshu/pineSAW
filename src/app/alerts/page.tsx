@@ -27,7 +27,7 @@ export default function AlertsPage() {
               key={alert.id} 
               onClick={() => setSelectedAlert(alert)}
               className={clsx(
-                " glass rounded-[2rem] p-5 flex items-start gap-5 transition-colors cursor-pointer group",
+                "bg-zinc-900/60 border border-white/5 rounded-[2rem] p-5 flex items-start gap-5 transition-colors cursor-pointer group",
                 selectedAlert?.id === alert.id ? "border-nexus-cyan/50 " : "hover:"
               )}
             >
@@ -137,7 +137,7 @@ export default function AlertsPage() {
               <button className="flex-1 btn-gov py-2 rounded-2xl text-sm font-medium hover:bg-cyan-400 transition-colors">
                 Acknowledge
               </button>
-              <button className="flex-1 glass/5 text-zinc-300 py-2 rounded-2xl text-sm hover:glass/10 border border-white/10 transition-colors">
+              <button className="flex-1 bg-zinc-800/20 text-zinc-300 py-2 rounded-2xl text-sm hover:bg-zinc-800/40 border border-white/10 transition-colors">
                 Dismiss
               </button>
             </div>

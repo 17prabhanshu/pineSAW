@@ -146,7 +146,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full glass border border-white/10 px-3 py-2 text-xs text-white font-medium focus:outline-none focus:border-gov-blue"
+                className="w-full bg-zinc-900/60 rounded-xl border border-white/10 px-3 py-2 text-xs text-white font-medium focus:outline-none focus:border-gov-blue"
                 placeholder="e.g. Operation Telegram Hydra Cartel"
                 required
                 autoFocus
@@ -187,7 +187,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
                   type="text"
                   value={investigator}
                   onChange={(e) => setInvestigator(e.target.value)}
-                  className="w-full glass border border-white/10 px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-gov-blue"
+                  className="w-full bg-zinc-900/60 rounded-xl border border-white/10 px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-gov-blue"
                   placeholder="OP-7492"
                 />
               </div>
@@ -198,7 +198,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full glass border border-white/10 px-3 py-2 text-xs text-white focus:outline-none focus:border-gov-blue"
+                className="w-full bg-zinc-900/60 rounded-xl border border-white/10 px-3 py-2 text-xs text-white focus:outline-none focus:border-gov-blue"
               >
                 <option value="Darknet Market Ingestion">Darknet Market Crawler (Tor)</option>
                 <option value="Encrypted Telegram Channel">Encrypted Chat Monitor (Telegram)</option>
@@ -217,7 +217,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
             <select
               value={primaryEntityId}
               onChange={(e) => setPrimaryEntityId(e.target.value)}
-              className="w-full glass border border-white/10 px-3 py-2 text-xs text-white focus:outline-none focus:border-gov-blue font-mono"
+              className="w-full bg-zinc-900/60 rounded-xl border border-white/10 px-3 py-2 text-xs text-white focus:outline-none focus:border-gov-blue font-mono"
             >
               <option value="">-- No initial subject linked (Create blank file) --</option>
               {entities.map((ent) => (
@@ -237,7 +237,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
               rows={3}
               value={initialNote}
               onChange={(e) => setInitialNote(e.target.value)}
-              className="w-full glass border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:border-gov-blue font-mono resize-none"
+              className="w-full bg-zinc-900/60 rounded-xl border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:border-gov-blue font-mono resize-none"
               placeholder="e.g. Intercepted PGP communication indicating synthetic opioid distribution across North Indian distribution nodes. Immediate asset discovery and subpoena required."
             ></textarea>
           </div>

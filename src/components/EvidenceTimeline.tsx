@@ -102,7 +102,7 @@ export function EvidenceTimeline({ events = defaultEvents }: EvidenceTimelinePro
             </motion.div>
             
             {/* Content Card */}
-            <div className="flex-1 glass dark:bg-zinc-900 border border-white/5 dark:border-zinc-800 rounded-lg p-4 shadow-sm">
+            <div className="flex-1 bg-zinc-900/60 dark:bg-zinc-900 border border-white/5 dark:border-zinc-800 rounded-2xl p-4 shadow-sm">
               <div className="flex justify-between items-start mb-1">
                 <h4 className="font-semibold text-white dark:text-zinc-100">
                   {event.title}

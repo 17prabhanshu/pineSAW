@@ -55,7 +55,7 @@ function AnimatedKPI({ label, value, color }: { label: string, value: string | n
 
   return (
     <motion.div 
-      className="flex-1 p-4 hover:glass/5 transition-colors cursor-pointer group"
+      className="flex-1 p-4 hover:bg-zinc-800/30 transition-colors cursor-pointer group"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ perspective: 1000 }}
@@ -107,7 +107,7 @@ function AlertFeed({ alerts }: { alerts: any[] }) {
             animate="show"
             exit={{ opacity: 0, scale: 0.95 }}
             layout={!shouldReduceMotion}
-            className="p-3 glass border border-white/5 shadow-sm rounded-sm"
+            className="p-3 bg-zinc-900/60 border border-white/5 shadow-sm rounded-xl"
           >
             <div className="flex justify-between items-start mb-1">
               <span className={clsx("text-[10px] font-mono px-1.5 py-0.5 rounded-sm", 
@@ -253,7 +253,7 @@ export default function CommandCenter() {
                       onClick={() => setSelectedIncident(ent)}
                       className={clsx(
                         "transition-colors cursor-pointer group",
-                        selectedIncident?.id === ent.id ? "bg-gov-blue/10 border-l-2 border-l-gov-blue" : "hover:glass/5 border-l-2 border-l-transparent"
+                        selectedIncident?.id === ent.id ? "bg-gov-blue/10 border-l-2 border-l-gov-blue" : "hover:bg-zinc-800/30 border-l-2 border-l-transparent"
                       )}
                     >
                       <td className="px-4 py-3">
@@ -286,7 +286,7 @@ export default function CommandCenter() {
                 <Lightning className="text-nexus-amber" size={16} /> <CyberText text="Live Alert Feed" />
               </h2>
             </div>
-            <div className="flex-1 overflow-auto p-4 glass/5">
+            <div className="flex-1 overflow-auto p-4 bg-zinc-800/20">
               <AlertFeed alerts={data.recentAlerts || []} />
             </div>
           </div>
@@ -313,7 +313,7 @@ export default function CommandCenter() {
           <div className="flex-1 overflow-auto p-5 space-y-6">
             <section>
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Why Flagged</h3>
-              <div className="text-sm text-zinc-300 leading-relaxed glass/5 border border-white/5 p-3 rounded-[2rem]">
+              <div className="text-sm text-zinc-300 leading-relaxed bg-zinc-800/20 border border-white/5 p-3 rounded-[2rem]">
                 Activity spike and cross-platform overlapping identifiers strongly suggest evasion tactics.
               </div>
             </section>
@@ -332,7 +332,7 @@ export default function CommandCenter() {
             
             <section>
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Pending Actions</h3>
-              <div className="glass/5 border border-white/5 p-3 rounded-[2rem] space-y-2">
+              <div className="bg-zinc-800/20 border border-white/5 p-3 rounded-[2rem] space-y-2">
                 <div className="flex justify-between items-start">
                   <div className="text-sm text-zinc-200">Prepare Bank Request</div>
                   <span className="badge-warning">DRAFT</span>
