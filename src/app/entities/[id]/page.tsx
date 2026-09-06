@@ -66,7 +66,7 @@ export default function EntityIntelligence() {
             </p>
           </div>
           <div className="flex gap-2">
-            <button className="bg-zinc-800/30 hover:bg-zinc-200 border border-white/10 px-4 py-2 rounded-2xl text-sm transition-colors flex items-center gap-2">
+            <button className="bg-zinc-800/30 hover:bg-zinc-700/50 border border-white/10 px-4 py-2 rounded-2xl text-sm transition-colors flex items-center gap-2">
               <Folder weight="fill" /> Add to Case
             </button>
             <button className="btn-gov px-4 py-2 rounded-2xl font-medium text-sm hover:bg-cyan-400 transition-colors flex items-center gap-2">
@@ -99,7 +99,7 @@ export default function EntityIntelligence() {
           <div className="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             <div className="lg:col-span-2 space-y-6">
               {/* Rationale Panel */}
-              <div className="surface-1 nexus-border border-l-2 border-l-nexus-amber rounded-2xl p-5">
+              <div className="bg-zinc-900/60 border-l-2 border-l-nexus-amber border border-white/5 rounded-[2rem] p-5">
                 <h2 className="text-sm font-mono text-nexus-amber flex items-center gap-2 mb-4 uppercase tracking-widest">
                   <ShieldWarning weight="fill" /> Risk Assessment
                 </h2>
@@ -132,7 +132,7 @@ export default function EntityIntelligence() {
               </div>
 
               {/* Linked Investigations */}
-              <div className="surface-1 nexus-border rounded-2xl p-5">
+              <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-5">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-sm font-mono text-zinc-300 uppercase tracking-widest flex items-center gap-2">
                     <Folder className="text-zinc-300" /> Active Investigations ({entity.investigations?.length || 0})
@@ -140,7 +140,7 @@ export default function EntityIntelligence() {
                 </div>
                 <div className="space-y-2">
                   {entity.investigations?.length > 0 ? entity.investigations.map((inv: any) => (
-                    <Link key={inv.investigation.id} href={`/investigations/${inv.investigation.id}`} className="flex justify-between items-center bg-zinc-800/30 px-4 py-3 rounded-2xl hover:bg-zinc-200 transition-colors group">
+                    <Link key={inv.investigation.id} href={`/investigations/${inv.investigation.id}`} className="flex justify-between items-center bg-zinc-800/30 px-4 py-3 rounded-2xl hover:bg-zinc-700/50 transition-colors group">
                       <div className="flex items-center gap-3">
                         <Folder weight="fill" className="text-zinc-400 group-hover:text-nexus-cyan" />
                         <div>
@@ -159,7 +159,7 @@ export default function EntityIntelligence() {
 
             <div className="lg:col-span-1 space-y-6">
               {/* Properties */}
-              <div className="surface-1 nexus-border rounded-2xl p-5">
+              <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-5">
                 <h2 className="text-sm font-mono text-zinc-300 uppercase tracking-widest flex items-center gap-2 mb-4">
                   <IdentificationCard className="text-zinc-300" /> Key Identifiers
                 </h2>
@@ -189,7 +189,7 @@ export default function EntityIntelligence() {
               </div>
 
               {/* Analyst Notes */}
-              <div className="surface-1 nexus-border rounded-2xl flex flex-col">
+              <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] flex flex-col">
                 <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
                   <h2 className="text-xs font-mono text-zinc-300 uppercase tracking-widest flex items-center gap-2">
                     <NotePencil className="text-zinc-300" /> Analyst Notes
@@ -240,7 +240,7 @@ export default function EntityIntelligence() {
 
             <div className="space-y-4">
               {entity.legalReferences?.length > 0 ? entity.legalReferences.map((ref: any) => (
-                <div key={ref.id} className="surface-1 nexus-border rounded-2xl p-5 flex gap-5">
+                <div key={ref.id} className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-5 flex gap-5">
                   <div className="mt-1">
                     <Gavel className="text-2xl text-zinc-400" />
                   </div>
@@ -265,7 +265,7 @@ export default function EntityIntelligence() {
                   </div>
                 </div>
               )) : (
-                <div className="surface-1 nexus-border rounded-2xl p-12 text-center flex flex-col items-center">
+                <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-12 text-center flex flex-col items-center">
                   <Gavel size={48} className="text-zinc-300 mb-4" />
                   <p className="text-zinc-300 mb-2">No legal provisions currently linked.</p>
                   <button className="text-nexus-cyan text-sm">Add initial legal category for review</button>
@@ -283,7 +283,7 @@ export default function EntityIntelligence() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="surface-1 nexus-border rounded-2xl p-6 hover:border-nexus-cyan/50 transition-colors cursor-pointer group">
+              <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-6 hover:border-nexus-cyan/50 transition-colors cursor-pointer group">
                 <div className="flex justify-between items-start mb-4">
                   <HandCoins className="text-3xl text-zinc-400 group-hover:text-nexus-cyan transition-colors" />
                   <span className="px-2 py-0.5 bg-zinc-800 text-zinc-300 rounded-2xl font-mono text-[10px] uppercase">Draft</span>
@@ -295,7 +295,7 @@ export default function EntityIntelligence() {
                 </button>
               </div>
 
-              <div className="surface-1 nexus-border rounded-2xl p-6 hover:border-nexus-amber/50 transition-colors cursor-pointer group">
+              <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-6 hover:border-nexus-amber/50 transition-colors cursor-pointer group">
                 <div className="flex justify-between items-start mb-4">
                   <ShieldWarning className="text-3xl text-zinc-400 group-hover:text-nexus-amber transition-colors" />
                   <span className="px-2 py-0.5 bg-zinc-800 text-zinc-300 rounded-2xl font-mono text-[10px] uppercase">Draft</span>
@@ -309,7 +309,7 @@ export default function EntityIntelligence() {
             </div>
 
             <h3 className="text-sm font-mono text-zinc-300 uppercase tracking-widest mb-4">Logged Actions</h3>
-            <div className="surface-1 nexus-border rounded-2xl">
+            <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem]">
               <table className="w-full text-left text-sm">
                 <thead className="bg-zinc-800/30 border-b border-white/10">
                   <tr className="font-mono text-[10px] uppercase text-zinc-400">

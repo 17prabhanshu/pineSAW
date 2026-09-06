@@ -29,7 +29,7 @@ export default function ActionCenter() {
           </div>
           <div className="flex gap-2">
             {["All", "Critical", "Pending", "Draft", "Completed"].map(f => (
-              <button key={f} className="px-3 py-1  hover:bg-zinc-200 border border-white/10 rounded-2xl text-xs font-medium text-zinc-300 transition-colors">
+              <button key={f} className="px-3 py-1  hover:bg-zinc-700/50 border border-white/10 rounded-2xl text-xs font-medium text-zinc-300 transition-colors">
                 {f}
               </button>
             ))}

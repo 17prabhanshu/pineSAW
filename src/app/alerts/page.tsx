@@ -108,7 +108,7 @@ export default function AlertsPage() {
               <section>
                 <h3 className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3">Related Entities</h3>
                 {selectedAlert.entityId ? (
-                  <Link href={`/entities/${selectedAlert.entityId}`} className="flex items-center gap-3 p-3  hover:bg-zinc-200 border border-white/5 rounded-2xl transition-colors group">
+                  <Link href={`/entities/${selectedAlert.entityId}`} className="flex items-center gap-3 p-3  hover:bg-zinc-700/50 border border-white/5 rounded-2xl transition-colors group">
                     <Users className="text-zinc-400 group-hover:text-nexus-cyan" />
                     <div>
                       <div className="text-sm font-medium text-white group-hover:text-nexus-cyan">Target Actor Found</div>
@@ -123,10 +123,10 @@ export default function AlertsPage() {
               <section>
                 <h3 className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3">Recommended Actions</h3>
                 <div className="space-y-2">
-                  <button className="w-full text-left p-3  hover:bg-zinc-200 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
+                  <button className="w-full text-left p-3  hover:bg-zinc-700/50 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
                     <Folder className="text-nexus-cyan" /> Create Investigation Case
                   </button>
-                  <button className="w-full text-left p-3  hover:bg-zinc-200 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
+                  <button className="w-full text-left p-3  hover:bg-zinc-700/50 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
                     <HandCoins className="text-nexus-amber" /> Inspect linked financial identifiers
                   </button>
                 </div>
