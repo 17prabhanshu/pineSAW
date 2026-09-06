@@ -7,6 +7,27 @@ import { Search, Folder, User, FileText, Settings, X } from "lucide-react";
 import { motionTokens } from "@/lib/motionTokens";
 import { useRouter } from "next/navigation";
 
+
+const containerVariants = {
+  hidden: { opacity: 0, scale: 0.95, y: -50 },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    y: 0,
+    transition: { 
+      type: "spring", stiffness: 400, damping: 30,
+      staggerChildren: 0.05,
+      delayChildren: 0.1
+    }
+  },
+  exit: { opacity: 0, scale: 0.95, y: -20 }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0 }
+};
+
 export function CommandPalette() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -38,14 +59,14 @@ export function CommandPalette() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 backdrop-blur-xl"
             onClick={() => setOpen(false)}
           />
           <motion.div
-            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: -20 }}
-            animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: -20 }}
-            transition={motionTokens.defaultTransition}
+            initial={shouldReduceMotion ? { opacity: 0 } : "hidden"}
+            animate={shouldReduceMotion ? { opacity: 1 } : "visible"}
+            exit={shouldReduceMotion ? { opacity: 0 } : "exit"}
+            variants={containerVariants}
             className="relative w-full max-w-2xl glass border border-white/5 rounded-xl shadow-2xl overflow-hidden"
           >
             <Command className="w-full h-full flex flex-col">
@@ -69,15 +90,19 @@ export function CommandPalette() {
                     onSelect={() => runCommand(() => router.push("/cases/C-2024-001"))}
                     className="flex items-center px-4 py-3 cursor-pointer rounded-lg hover:bg-zinc-900/50 data-[selected=true]:bg-zinc-900/50 text-white"
                   >
-                    <Folder className="w-4 h-4 mr-3 text-blue-500" />
-                    <span>C-2024-001: Operation Iron Thunder</span>
+                    <motion.div variants={itemVariants} className="flex items-center w-full">
+                      <Folder className="w-4 h-4 mr-3 text-blue-500" />
+                      Folder
+                    </motion.div>
                   </Command.Item>
                   <Command.Item 
                     onSelect={() => runCommand(() => router.push("/cases/C-2024-002"))}
                     className="flex items-center px-4 py-3 cursor-pointer rounded-lg hover:bg-zinc-900/50 data-[selected=true]:bg-zinc-900/50 text-white"
                   >
-                    <Folder className="w-4 h-4 mr-3 text-blue-500" />
-                    <span>C-2024-002: Alpha Syndicate</span>
+                    <motion.div variants={itemVariants} className="flex items-center w-full">
+                      <Folder className="w-4 h-4 mr-3 text-blue-500" />
+                      Folder
+                    </motion.div>
                   </Command.Item>
                 </Command.Group>
 
@@ -86,15 +111,19 @@ export function CommandPalette() {
                     onSelect={() => runCommand(() => router.push("/entities/E-9923"))}
                     className="flex items-center px-4 py-3 cursor-pointer rounded-lg hover:bg-zinc-900/50 data-[selected=true]:bg-zinc-900/50 text-white"
                   >
-                    <User className="w-4 h-4 mr-3 text-green-500" />
-                    <span>Vikram Singh (E-9923)</span>
+                    <motion.div variants={itemVariants} className="flex items-center w-full">
+                      <User className="w-4 h-4 mr-3 text-green-500" />
+                      User
+                    </motion.div>
                   </Command.Item>
                   <Command.Item 
                     onSelect={() => runCommand(() => router.push("/entities/E-8841"))}
                     className="flex items-center px-4 py-3 cursor-pointer rounded-lg hover:bg-zinc-900/50 data-[selected=true]:bg-zinc-900/50 text-white"
                   >
-                    <User className="w-4 h-4 mr-3 text-green-500" />
-                    <span>Rajiv Sharma (E-8841)</span>
+                    <motion.div variants={itemVariants} className="flex items-center w-full">
+                      <User className="w-4 h-4 mr-3 text-green-500" />
+                      User
+                    </motion.div>
                   </Command.Item>
                 </Command.Group>
 
@@ -103,15 +132,19 @@ export function CommandPalette() {
                     onSelect={() => runCommand(() => router.push("/reports/new"))}
                     className="flex items-center px-4 py-3 cursor-pointer rounded-lg hover:bg-zinc-900/50 data-[selected=true]:bg-zinc-900/50 text-white"
                   >
-                    <FileText className="w-4 h-4 mr-3 text-zinc-400" />
-                    <span>Create New Report</span>
+                    <motion.div variants={itemVariants} className="flex items-center w-full">
+                      <FileText className="w-4 h-4 mr-3 text-zinc-400" />
+                      FileText
+                    </motion.div>
                   </Command.Item>
                   <Command.Item 
                     onSelect={() => runCommand(() => router.push("/settings"))}
                     className="flex items-center px-4 py-3 cursor-pointer rounded-lg hover:bg-zinc-900/50 data-[selected=true]:bg-zinc-900/50 text-white"
                   >
-                    <Settings className="w-4 h-4 mr-3 text-zinc-400" />
-                    <span>System Settings</span>
+                    <motion.div variants={itemVariants} className="flex items-center w-full">
+                      <Settings className="w-4 h-4 mr-3 text-zinc-400" />
+                      Settings
+                    </motion.div>
                   </Command.Item>
                 </Command.Group>
               </Command.List>
