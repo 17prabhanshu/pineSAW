@@ -61,7 +61,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
-          <div className="creative-glow"></div>
+          <div className="creative-glow cyber-noise"></div>
         </ClientLenis>
         <CommandPalette />
         <SpotlightTour />

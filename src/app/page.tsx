@@ -206,7 +206,7 @@ export default function CommandCenter() {
         </header>
 
         {/* Operational Status KPI Strip */}
-        <div className="glass nexus-border rounded-none flex divide-x divide-zinc-300 mb-8 overflow-hidden shadow-sm">
+        <div className="glow-border glass nexus-border rounded-none flex divide-x divide-zinc-300 mb-8 overflow-hidden shadow-sm">
           {[
             { label: "Active Investigations", value: data.metrics?.investigationCount || data.activeInvestigations || "06", color: "text-white" },
             { label: "Critical Alerts", value: data.recentAlerts?.filter((a:any)=>a.severity==='CRITICAL').length || "03", color: "text-nexus-red" },
