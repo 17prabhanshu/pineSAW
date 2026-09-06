@@ -6,7 +6,8 @@ import { WarningOctagon, Folder, CheckSquareOffset, FileText, MagnifyingGlass, F
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { NewCaseModal } from "@/components/NewCaseModal";
-import { motion, useMotionValue, useTransform, animate, useReducedMotion, AnimatePresence } from "motion/react";
+import { motion, useMotionValue, useTransform, animate, useReducedMotion, AnimatePresence, useSpring } from "motion/react";
+import { CyberText } from "@/components/CyberText";
 import { motionTokens } from "@/lib/motionTokens";
 
 function AnimatedKPI({ label, value, color }: { label: string, value: string | number, color: string }) {
@@ -26,13 +27,47 @@ function AnimatedKPI({ label, value, color }: { label: string, value: string | n
 
   const displayValue = useTransform(rounded, (latest) => latest.toString().padStart(2, '0'));
 
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const mouseXSpring = useSpring(x, motionTokens.awwwardsSpring);
+  const mouseYSpring = useSpring(y, motionTokens.awwwardsSpring);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
-    <div className="flex-1 p-4 hover:glass/5 transition-colors cursor-pointer group">
+    <motion.div 
+      className="flex-1 p-4 hover:glass/5 transition-colors cursor-pointer group"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ perspective: 1000 }}
+    >
       <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1 group-hover:text-zinc-300">{label}</div>
-      <div className={clsx("text-2xl font-display font-semibold", color)}>
+      <motion.div 
+        className={clsx("text-2xl font-display font-semibold", color)}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      >
         <motion.span>{shouldReduceMotion ? (numericValue).toString().padStart(2, '0') : displayValue}</motion.span>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -120,7 +155,7 @@ export default function CommandCenter() {
 
         <header className="mb-6 flex justify-between items-end">
           <div>
-            <h1 className="font-display text-2xl font-semibold text-white tracking-tight">Command Center</h1>
+            <h1 className="font-display text-2xl font-semibold text-white tracking-tight"><CyberText text="Command Center" /></h1>
           </div>
           <div className="flex gap-2">
             <Link href="/actions" className="btn-gov">
@@ -156,7 +191,7 @@ export default function CommandCenter() {
           <div className="flex-[2] flex flex-col min-h-0 glass nexus-border rounded-none shadow-sm overflow-hidden">
             <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
-                <WarningOctagon className="text-nexus-red" size={16} /> Priority Incidents
+                <WarningOctagon className="text-nexus-red" size={16} /> <CyberText text="Priority Incidents" />
               </h2>
               <div className="flex gap-2">
                 <button className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-mono"><Funnel size={14}/> Filter</button>
@@ -212,7 +247,7 @@ export default function CommandCenter() {
           <div className="flex-1 flex flex-col min-h-0 glass nexus-border rounded-none shadow-sm overflow-hidden">
             <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
-                <Lightning className="text-nexus-amber" size={16} /> Live Alert Feed
+                <Lightning className="text-nexus-amber" size={16} /> <CyberText text="Live Alert Feed" />
               </h2>
             </div>
             <div className="flex-1 overflow-auto p-4 glass/5">
