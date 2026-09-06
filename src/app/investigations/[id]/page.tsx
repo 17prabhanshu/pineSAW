@@ -7,6 +7,8 @@ import { NetworkGraph } from "@/components/NetworkGraph";
 import { ShieldWarning, MagnifyingGlass, Funnel, Clock, CaretRight, Info, Eye, DownloadSimple, Printer, Checks, HandCoins, Lightning, Bank, ArrowsClockwise, FileText, CheckCircle } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { BidirectionalBacktracker } from "@/lib/analytics/backtrack";
+import { motion } from "framer-motion";
+import { motionTokens } from "@/lib/motionTokens";
 
 export default function InvestigationWorkspace() {
   const params = useParams();
@@ -307,8 +309,14 @@ export default function InvestigationWorkspace() {
 
         {/* Right Drawer (Entity Details / Action Queue) */}
         {selectedEntity && (
-          <div className="w-96 glass border-l border-white/10 flex flex-col shrink-0 z-20 shadow-xl">
-            <div className="p-5 glass/5 border-b border-white/10 relative">
+          <motion.div 
+            drag
+            initial={{ scale: 0.8, filter: "blur(20px)", opacity: 0 }}
+            animate={{ scale: 1, filter: "blur(0px)", opacity: 1 }}
+            transition={motionTokens.awwwardsSpring}
+            className="absolute top-20 right-6 w-96 glass border border-white/10 flex flex-col shrink-0 z-50 shadow-2xl rounded-xl cursor-grab active:cursor-grabbing"
+          >
+            <div className="p-5 glass/5 border-b border-white/10 relative cursor-default">
               <button onClick={() => setSelectedEntity(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><CaretRight size={18} /></button>
               <div className="text-[10px] font-mono text-gov-blue uppercase font-bold tracking-widest mb-1">{selectedEntity.group}</div>
               <h2 className="text-lg font-display font-bold text-white break-all">{selectedEntity.label}</h2>
@@ -326,13 +334,13 @@ export default function InvestigationWorkspace() {
                 </p>
               </div>
 
-              <div className="space-y-2 pt-2 border-t border-white/5">
+              <div className="space-y-2 pt-2 border-t border-white/5 cursor-default">
                 <Link href={`/entities/${selectedEntity.id}`} className="w-full btn-gov text-center py-2 block">
                   Open Forensic Profile
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
