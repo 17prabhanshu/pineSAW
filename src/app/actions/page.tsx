@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HandCoins, ShieldWarning, FileText, CheckCircle, Clock, CaretRight, ShieldChevron, Export, X } from "@phosphor-icons/react";
 import clsx from "clsx";
+import { motion } from "motion/react";
 
 export default function ActionCenter() {
   const [actions, setActions] = useState<any[]>([]);
   const [selectedAction, setSelectedAction] = useState<any>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     fetch("/api/actions").then(r => r.json()).then(setActions);
@@ -34,59 +36,125 @@ export default function ActionCenter() {
           </div>
         </header>
 
-        <div className="space-y-4">
-          {actions.map((act, idx) => (
-            <div 
-              key={act.id}
-              onClick={() => setSelectedAction(act)}
-              className={clsx(
-                "surface-1 nexus-border rounded-2xl p-5 cursor-pointer group transition-colors",
-                selectedAction?.id === act.id ? "border-gov-blue bg-zinc-800/30" : "hover:bg-zinc-800/30"
-              )}
-            >
-              <div className="flex gap-6">
-                <div className="w-16 shrink-0 border-r border-white/5 pr-4 flex flex-col items-center justify-center">
-                  <div className="text-[10px] font-mono text-zinc-400 mb-1">0{idx+1}</div>
-                  <span className={clsx(
-                    "text-[10px] font-mono font-bold tracking-widest uppercase",
-                    act.priority === 'CRITICAL' ? 'text-nexus-red' : 
-                    act.priority === 'HIGH' ? 'text-nexus-amber' :
-                    act.priority === 'MEDIUM' ? 'text-gov-blue' : 'text-zinc-300'
-                  )}>
-                    {act.priority}
-                  </span>
-                </div>
+        <div 
+          className="relative w-full max-w-3xl mx-auto h-[600px] flex items-center justify-center"
+          style={{ perspective: 1500 }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {actions.map((act, idx) => {
+            const isSelected = selectedAction?.id === act.id;
+            return (
+              <motion.div 
+                key={act.id}
+                custom={idx}
+                variants={{
+                  idle: (i) => ({
+                    rotateX: 60,
+                    rotateY: 0,
+                    rotateZ: -15 + i * 4,
+                    y: i * -15,
+                    z: i * -40,
+                    x: 0,
+                    scale: 1,
+                    opacity: 1,
+                    transition: { type: "spring", stiffness: 200, damping: 20 }
+                  }),
+                  hovered: (i) => ({
+                    rotateX: 10,
+                    rotateY: -5,
+                    rotateZ: 0,
+                    y: (i - (actions.length - 1) / 2) * 120,
+                    z: 50 + i * 10,
+                    x: (i % 2 === 0 ? 15 : -15),
+                    scale: 1,
+                    opacity: 1,
+                    transition: { type: "spring", stiffness: 350, damping: 25, delay: i * 0.04 }
+                  }),
+                  selected: (i) => ({
+                    rotateX: 0,
+                    rotateY: 0,
+                    rotateZ: 0,
+                    y: (i - (actions.length - 1) / 2) * 120,
+                    z: 200,
+                    x: -50,
+                    scale: 1.05,
+                    opacity: 1,
+                    transition: { type: "spring", stiffness: 350, damping: 30 }
+                  }),
+                  unselected: (i) => ({
+                    rotateX: 20,
+                    rotateY: 10,
+                    rotateZ: 0,
+                    y: (i - (actions.length - 1) / 2) * 120,
+                    z: -100,
+                    x: 50,
+                    scale: 0.9,
+                    opacity: 0.4,
+                    transition: { type: "spring", stiffness: 350, damping: 30 }
+                  })
+                }}
+                initial="idle"
+                animate={
+                  selectedAction
+                    ? isSelected ? "selected" : "unselected"
+                    : isHovered ? "hovered" : "idle"
+                }
+                whileHover={!selectedAction ? { scale: 1.02, z: 120, transition: { duration: 0.2 } } : {}}
+                onClick={() => setSelectedAction(act)}
+                className={clsx(
+                  "absolute w-full surface-1 border rounded-2xl p-5 cursor-pointer group shadow-2xl backdrop-blur-md",
+                  isSelected ? "border-gov-blue bg-zinc-800/90" : "border-white/10 hover:border-white/30 bg-zinc-900/80"
+                )}
+                style={{
+                  transformStyle: "preserve-3d",
+                  zIndex: isSelected ? 50 : actions.length - idx
+                }}
+              >
+                <div className="flex gap-6">
+                  <div className="w-16 shrink-0 border-r border-white/10 pr-4 flex flex-col items-center justify-center">
+                    <div className="text-[10px] font-mono text-zinc-400 mb-1">0{idx+1}</div>
+                    <span className={clsx(
+                      "text-[10px] font-mono font-bold tracking-widest uppercase",
+                      act.priority === 'CRITICAL' ? 'text-nexus-red' : 
+                      act.priority === 'HIGH' ? 'text-nexus-amber' :
+                      act.priority === 'MEDIUM' ? 'text-gov-blue' : 'text-zinc-300'
+                    )}>
+                      {act.priority}
+                    </span>
+                  </div>
 
-                <div className="flex-1">
-                  <h3 className="text-lg font-medium text-white mb-2 group-hover:text-gov-blue transition-colors">{act.title}</h3>
-                  <div className="text-sm text-zinc-300 mb-3">{act.reason}</div>
-                  <div className="flex gap-4 text-xs font-mono">
-                    {act.Investigation && (
-                      <span className="text-zinc-400">CASE: <span className="text-gov-blue">{act.Investigation.caseId}</span></span>
-                    )}
-                    {act.Entity && (
-                      <span className="text-zinc-400">ENTITY: <span className="text-zinc-300">{act.Entity.label}</span></span>
-                    )}
+                  <div className="flex-1">
+                    <h3 className="text-lg font-medium text-white mb-2 group-hover:text-gov-blue transition-colors">{act.title}</h3>
+                    <div className="text-sm text-zinc-300 mb-3">{act.reason}</div>
+                    <div className="flex gap-4 text-xs font-mono">
+                      {act.Investigation && (
+                        <span className="text-zinc-400">CASE: <span className="text-gov-blue">{act.Investigation.caseId}</span></span>
+                      )}
+                      {act.Entity && (
+                        <span className="text-zinc-400">ENTITY: <span className="text-zinc-300">{act.Entity.label}</span></span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="shrink-0 w-48 flex flex-col items-end justify-between">
+                    <span className={clsx(
+                      "px-2 py-0.5 rounded-2xl font-mono text-[10px] uppercase border",
+                      act.status === 'PENDING' ? "badge-warning" :
+                      act.status === 'READY' ? "badge-info" :
+                      "bg-zinc-800/30 text-zinc-300 border-white/10"
+                    )}>
+                      {act.status}
+                    </span>
+                    <div className="flex gap-2 mt-4">
+                      <button className="btn-secondary">Review</button>
+                      <button className="btn-gov">Prepare</button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="shrink-0 w-48 flex flex-col items-end justify-between">
-                  <span className={clsx(
-                    "px-2 py-0.5 rounded-2xl font-mono text-[10px] uppercase border",
-                    act.status === 'PENDING' ? "badge-warning" :
-                    act.status === 'READY' ? "badge-info" :
-                    "bg-zinc-800/30 text-zinc-300 border-white/10"
-                  )}>
-                    {act.status}
-                  </span>
-                  <div className="flex gap-2 mt-4">
-                    <button className="btn-secondary">Review</button>
-                    <button className="btn-gov">Prepare</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
