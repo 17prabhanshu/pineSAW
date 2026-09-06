@@ -67,10 +67,10 @@ export default function IngestionSimulator() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto h-full flex flex-col overflow-y-auto space-y-8">
-      <header className="flex justify-between items-end border-b border-zinc-300 pb-4">
+      <header className="flex justify-between items-end border-b border-white/10 pb-4">
         <div>
-          <h1 className="font-display text-2xl font-bold text-zinc-900 tracking-tight mb-1">Ingestion & NLP Pipeline</h1>
-          <p className="text-zinc-600 font-mono text-[10px] uppercase tracking-widest">
+          <h1 className="font-display text-2xl font-bold text-white tracking-tight mb-1">Ingestion & NLP Pipeline</h1>
+          <p className="text-zinc-300 font-mono text-[10px] uppercase tracking-widest">
             Cambridge Cybercrime Lexicon & Stanford SNAP Graph Ingestion Layer
           </p>
         </div>
@@ -87,44 +87,44 @@ export default function IngestionSimulator() {
       </header>
 
       {/* KPI Stats */}
-      <div className="grid grid-cols-4 gap-4 bg-white nexus-border p-4 shadow-sm">
-        <div className="border-r border-zinc-200 pr-4">
-          <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">Tor Nodes Active</div>
-          <div className="text-2xl font-display font-semibold text-zinc-900">08 Crawlers</div>
+      <div className="grid grid-cols-4 gap-4 glass nexus-border p-4 shadow-sm">
+        <div className="border-r border-white/5 pr-4">
+          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Tor Nodes Active</div>
+          <div className="text-2xl font-display font-semibold text-white">08 Crawlers</div>
         </div>
-        <div className="border-r border-zinc-200 pr-4">
-          <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">Records Ingested</div>
+        <div className="border-r border-white/5 pr-4">
+          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Records Ingested</div>
           <div className="text-2xl font-display font-semibold text-gov-blue">{status === "COMPLETE" ? "128" : "42"}</div>
         </div>
-        <div className="border-r border-zinc-200 pr-4">
-          <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">Entities Clustered</div>
-          <div className="text-2xl font-display font-semibold text-zinc-900">{status === "COMPLETE" ? "31" : "14"}</div>
+        <div className="border-r border-white/5 pr-4">
+          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Entities Clustered</div>
+          <div className="text-2xl font-display font-semibold text-white">{status === "COMPLETE" ? "31" : "14"}</div>
         </div>
         <div>
-          <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1">High-Risk Alerts</div>
+          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">High-Risk Alerts</div>
           <div className="text-2xl font-display font-semibold text-red-600">{status === "COMPLETE" ? "04" : "01"}</div>
         </div>
       </div>
 
       {/* SECTION 2: LIVE CAMBRIDGE iCRIME NLP TEXT INSPECTOR */}
-      <div className="bg-white nexus-border shadow-sm">
-        <div className="p-4 bg-zinc-50 border-b border-zinc-300 flex justify-between items-center">
-          <h2 className="text-xs font-semibold text-zinc-800 uppercase tracking-wider flex items-center gap-2">
+      <div className="glass nexus-border shadow-sm">
+        <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex justify-between items-center">
+          <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
             <Sparkle size={16} className="text-gov-blue" /> Cambridge iCrime NLP Live Inspector & Entity Parser
           </h2>
-          <span className="text-[10px] font-mono text-zinc-500 uppercase">Interactive Forensic Tool</span>
+          <span className="text-[10px] font-mono text-zinc-400 uppercase">Interactive Forensic Tool</span>
         </div>
 
         <div className="p-6 space-y-4">
           <div>
-            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1">
+            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">
               Raw Intercepted Text (Darknet Marketplace / Telegram Post / Encrypted Chatter)
             </label>
             <textarea
               rows={4}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="w-full bg-zinc-50 border border-zinc-300 p-3 text-xs text-zinc-900 font-mono focus:bg-white focus:outline-none focus:border-gov-blue resize-none"
+              className="w-full bg-zinc-800/30 border border-white/10 p-3 text-xs text-white font-mono focus:glass focus:outline-none focus:border-gov-blue resize-none"
               placeholder="Paste raw unformatted text to extract narcotics slang, crypto addresses, and handles..."
             ></textarea>
           </div>
@@ -147,7 +147,7 @@ export default function IngestionSimulator() {
               Extract & Auto-Ingest to Graph
             </button>
             {autoIngestedCount !== null && (
-              <span className="text-xs font-mono text-green-700 bg-green-50 px-2 py-1 border border-green-200 flex items-center gap-1">
+              <span className="text-xs font-mono text-green-700 bg-green-50 px-2 py-1 border border-green-800/50 flex items-center gap-1">
                 <CheckCircle size={14} /> Successfully committed {autoIngestedCount} new entities to graph
               </span>
             )}
@@ -155,35 +155,35 @@ export default function IngestionSimulator() {
 
           {/* Render Parsed Results */}
           {nlpResult && (
-            <div className="mt-4 p-4 bg-zinc-50 border border-zinc-300 space-y-4">
-              <div className="flex justify-between items-center border-b border-zinc-200 pb-2">
+            <div className="mt-4 p-4 bg-zinc-800/30 border border-white/10 space-y-4">
+              <div className="flex justify-between items-center border-b border-white/5 pb-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-zinc-900">Classification Result:</span>
+                  <span className="text-xs font-bold text-white">Classification Result:</span>
                   <span className={clsx("text-[10px] font-mono font-bold px-2 py-0.5 border", 
-                    nlpResult.threatLevel === "CRITICAL" ? "bg-red-50 text-red-700 border-red-200" :
-                    nlpResult.threatLevel === "HIGH" ? "bg-amber-50 text-amber-700 border-amber-200" :
-                    "bg-blue-50 text-blue-700 border-blue-200"
+                    nlpResult.threatLevel === "CRITICAL" ? "bg-red-900/40 text-red-400 border-red-800/50" :
+                    nlpResult.threatLevel === "HIGH" ? "bg-amber-900/40 text-amber-400 border-amber-800/50" :
+                    "bg-blue-900/40 text-blue-400 border-blue-800/50"
                   )}>
                     {nlpResult.threatLevel} THREAT
                   </span>
                 </div>
-                <div className="text-[10px] font-mono text-zinc-500">
+                <div className="text-[10px] font-mono text-zinc-400">
                   Confidence: {(nlpResult.confidenceScore * 100).toFixed(0)}%
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                 {/* Narcotics */}
-                <div className="bg-white p-3 border border-zinc-200">
-                  <div className="font-mono text-[10px] font-semibold text-zinc-500 uppercase mb-2">
+                <div className="glass p-3 border border-white/5">
+                  <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
                     Detected Narcotics ({nlpResult.narcotics.length})
                   </div>
                   {nlpResult.narcotics.length > 0 ? (
                     <div className="space-y-2">
                       {nlpResult.narcotics.map((n: any, i: number) => (
-                        <div key={i} className="bg-red-50/50 p-2 border border-red-100">
-                          <div className="font-bold text-red-800">{n.standardizedName}</div>
-                          <div className="text-[10px] text-zinc-600 font-mono">Slang: "{n.detectedSlang}" {n.extractedQuantity ? `| Qty: ${n.extractedQuantity}` : ""}</div>
+                        <div key={i} className="bg-red-950/40 border-red-900 p-2 border border-red-100">
+                          <div className="font-bold text-red-400">{n.standardizedName}</div>
+                          <div className="text-[10px] text-zinc-300 font-mono">Slang: "{n.detectedSlang}" {n.extractedQuantity ? `| Qty: ${n.extractedQuantity}` : ""}</div>
                         </div>
                       ))}
                     </div>
@@ -193,14 +193,14 @@ export default function IngestionSimulator() {
                 </div>
 
                 {/* Crypto Addresses */}
-                <div className="bg-white p-3 border border-zinc-200">
-                  <div className="font-mono text-[10px] font-semibold text-zinc-500 uppercase mb-2">
+                <div className="glass p-3 border border-white/5">
+                  <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
                     Cryptocurrency Addresses ({nlpResult.identifiers.cryptoAddresses.length})
                   </div>
                   {nlpResult.identifiers.cryptoAddresses.length > 0 ? (
                     <div className="space-y-1.5">
                       {nlpResult.identifiers.cryptoAddresses.map((c: any, i: number) => (
-                        <div key={i} className="p-1.5 bg-zinc-100 font-mono text-[11px] break-all border border-zinc-200">
+                        <div key={i} className="p-1.5 bg-zinc-900/50 font-mono text-[11px] break-all border border-white/5">
                           <span className="text-[9px] font-bold text-gov-blue uppercase block">{c.network}</span>
                           {c.address}
                         </div>
@@ -212,14 +212,14 @@ export default function IngestionSimulator() {
                 </div>
 
                 {/* Communication Vectors */}
-                <div className="bg-white p-3 border border-zinc-200">
-                  <div className="font-mono text-[10px] font-semibold text-zinc-500 uppercase mb-2">
+                <div className="glass p-3 border border-white/5">
+                  <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
                     Contact Vectors ({nlpResult.identifiers.communicationHandles.length})
                   </div>
                   {nlpResult.identifiers.communicationHandles.length > 0 ? (
                     <div className="space-y-1.5">
                       {nlpResult.identifiers.communicationHandles.map((h: any, i: number) => (
-                        <div key={i} className="p-1.5 bg-zinc-100 font-mono text-[11px] border border-zinc-200">
+                        <div key={i} className="p-1.5 bg-zinc-900/50 font-mono text-[11px] border border-white/5">
                           <span className="text-[9px] font-bold text-amber-700 uppercase block">{h.platform}</span>
                           {h.handle}
                         </div>
@@ -236,17 +236,17 @@ export default function IngestionSimulator() {
       </div>
 
       {/* SECTION 3: PIPELINE AUDIT LOG STREAM */}
-      <div className="bg-white nexus-border shadow-sm flex flex-col min-h-[260px]">
-        <div className="p-4 bg-zinc-50 border-b border-zinc-300 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold text-zinc-800 uppercase tracking-wider">
+      <div className="glass nexus-border shadow-sm flex flex-col min-h-[260px]">
+        <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-semibold text-zinc-200 uppercase tracking-wider">
             <Terminal size={16} /> Real-Time Ingestion Engine Stream
           </div>
-          <span className="text-[10px] font-mono text-zinc-500 uppercase">SHA-256 Validated</span>
+          <span className="text-[10px] font-mono text-zinc-400 uppercase">SHA-256 Validated</span>
         </div>
         <div className="p-4 font-mono text-xs bg-[#090D16] text-zinc-300 flex-1 overflow-auto leading-relaxed space-y-1.5">
           {logs.map((log, i) => (
-            <div key={i} className="flex gap-3 hover:bg-white/5 px-2 py-0.5 transition-colors">
-              <span className="text-zinc-600 select-none">[{new Date().toISOString().split('T')[1].substring(0,8)}]</span>
+            <div key={i} className="flex gap-3 hover:glass/5 px-2 py-0.5 transition-colors">
+              <span className="text-zinc-300 select-none">[{new Date().toISOString().split('T')[1].substring(0,8)}]</span>
               <span className={clsx(
                 log.type === 'info' && "text-zinc-300",
                 log.type === 'warning' && "text-amber-400",
@@ -257,7 +257,7 @@ export default function IngestionSimulator() {
             </div>
           ))}
           {status === "IDLE" && (
-            <div className="text-zinc-600 italic px-2">Click "TRIGGER TOR INGESTION SIMULATOR" to run synthetic stream test...</div>
+            <div className="text-zinc-300 italic px-2">Click "TRIGGER TOR INGESTION SIMULATOR" to run synthetic stream test...</div>
           )}
           {status === "RUNNING" && (
             <div className="flex gap-2 text-blue-400 animate-pulse px-2">

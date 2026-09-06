@@ -1,24 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gov-blue: #003366; /* Deep official navy */
-  --color-gov-blue-hover: #002244; 
-  --color-gov-blue-light: #e6f0fa;
+  --color-gemini-bg: #09090b; /* Zinc 950 */
+  --color-gemini-bg-secondary: #18181b; /* Zinc 900 */
+  --color-gemini-accent: #3b82f6; /* Blue 500 */
+  --color-gemini-purple: #8b5cf6; /* Violet 500 */
+  --color-gemini-pink: #ec4899; /* Pink 500 */
   
-  --color-nexus-cyan: #0055cc; /* Standard link blue */
-  --color-nexus-amber: #d97706; 
-  --color-nexus-red: #dc2626; 
-  --color-nexus-green: #16a34a; 
+  --color-gov-blue: #3b82f6; 
+  --color-gov-blue-hover: #2563eb; 
+  --color-gov-blue-light: #1e3a8a;
   
-  --font-display: var(--font-inter), "Inter", "Segoe UI", sans-serif;
-  --font-mono: var(--font-mono), "Consolas", "Courier New", monospace;
-  --font-sans: var(--font-inter), "Inter", "Segoe UI", sans-serif;
+  --color-nexus-cyan: #22d3ee;
+  --color-nexus-amber: #fbbf24;
+  --color-nexus-red: #f87171;
+  --color-nexus-green: #4ade80;
+  
+  --font-display: var(--font-outfit), "Outfit", sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", monospace;
+  --font-sans: var(--font-inter), "Inter", sans-serif;
 }
 
 @layer base {
   :root {
-    --background: #f0f2f5;
-    --foreground: #111827;
+    --background: #09090b;
+    --foreground: #f4f4f5;
   }
   
   body {
@@ -26,42 +32,137 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /* Soft dark gradient like gemini */
+    background: radial-gradient(circle at top right, rgba(24,24,27,1) 0%, rgba(9,9,11,1) 100%);
+    min-height: 100vh;
   }
 }
 
-/* Institutional borders */
-.nexus-border { border: 1px solid #cbd5e1; }
-.nexus-border-t { border-top: 1px solid #cbd5e1; }
-.nexus-border-b { border-bottom: 1px solid #cbd5e1; }
-.nexus-border-l { border-left: 1px solid #cbd5e1; }
-.nexus-border-r { border-right: 1px solid #cbd5e1; }
+/* Beautiful borders */
+.nexus-border { border: 1px solid rgba(255,255,255,0.1); }
+.nexus-border-t { border-top: 1px solid rgba(255,255,255,0.1); }
+.nexus-border-b { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.nexus-border-l { border-left: 1px solid rgba(255,255,255,0.1); }
+.nexus-border-r { border-right: 1px solid rgba(255,255,255,0.1); }
 
-/* Utility classes for quick buttons */
+/* Glassmorphism utility */
+.glass {
+  background: rgba(24, 24, 27, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Beautiful Buttons */
 .btn-gov {
-  @apply bg-gov-blue text-white px-4 py-2 font-semibold text-xs uppercase tracking-wider transition-none hover:bg-gov-blue-hover border border-gov-blue shadow-none rounded-none;
+  @apply bg-zinc-800 text-white px-5 py-2.5 font-medium text-sm rounded-full tracking-wide transition-all duration-300 hover:bg-zinc-700 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] border border-zinc-700;
 }
 .btn-secondary {
-  @apply bg-zinc-100 text-zinc-800 px-4 py-2 font-semibold text-xs uppercase tracking-wider transition-none hover:bg-zinc-200 border border-zinc-300 shadow-none rounded-none;
+  @apply bg-transparent text-zinc-300 px-5 py-2.5 font-medium text-sm rounded-full tracking-wide transition-all duration-300 hover:bg-zinc-800 hover:text-white border border-zinc-700;
 }
+
 .badge-critical {
-  @apply bg-red-50 text-red-700 border border-red-200 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+  @apply bg-red-900/30 text-red-400 border border-red-800/50 px-2 py-0.5 rounded-full font-mono text-xs uppercase font-medium;
 }
 .badge-warning {
-  @apply bg-amber-50 text-amber-700 border border-amber-200 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+  @apply bg-amber-900/30 text-amber-400 border border-amber-800/50 px-2 py-0.5 rounded-full font-mono text-xs uppercase font-medium;
 }
 .badge-info {
-  @apply bg-blue-50 text-blue-700 border border-blue-200 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+  @apply bg-blue-900/30 text-blue-400 border border-blue-800/50 px-2 py-0.5 rounded-full font-mono text-xs uppercase font-medium;
 }
 .badge-neutral {
-  @apply bg-zinc-100 text-zinc-600 border border-zinc-300 px-1 py-0 font-mono text-[10px] uppercase font-bold;
+  @apply bg-zinc-800/50 text-zinc-400 border border-zinc-700/50 px-2 py-0.5 rounded-full font-mono text-xs uppercase font-medium;
 }
 
-/* Animations (Removed for institutional feel) */
+/* Animations */
 .drawer-animate {
-  /* No animation for absolute speed */
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Print */
-@media print {
-  body { background: white !important; color: black !important; }
+.gemini-text-gradient {
+  background: linear-gradient(to right, #a855f7, #ec4899, #ef4444);
+  -webkit-background-clip: text;
+  color: transparent;
 }
+
+/* Lenis Recommended CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Creative Aesthetic Background */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  z-index: -1;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: -20%; left: -10%;
+  width: 50%; height: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -2;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.creative-glow {
+  position: fixed;
+  bottom: -20%; right: -10%;
+  width: 50%; height: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -2;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+
+/* Apple Liquid Glass */
+.liquid-glass {
+  background: rgba(20, 20, 23, 0.45);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+

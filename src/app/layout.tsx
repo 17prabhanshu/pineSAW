@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import { Inter, IBM_Plex_Mono } from "next/font/google";
+import { Inter, Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
+import { ClientLenis } from "@/components/ClientLenis";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const plexMono = IBM_Plex_Mono({ weight: ["400", "500", "600"], subsets: ["latin"], variable: "--font-mono" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
   title: "pineSAW | Investigative Intelligence System",
-  description: "Government intelligence terminal and police investigation workstation.",
+  description: "Advanced intelligence terminal.",
 };
 
 export default function RootLayout({
@@ -17,51 +19,48 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${plexMono.variable} antialiased bg-zinc-100 text-foreground h-screen flex flex-col overflow-hidden`}>
-        {/* Institutional Header */}
-        <header className="h-12 bg-[#002244] border-b border-zinc-300 shrink-0 flex items-center justify-between px-4 z-50 rounded-none">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white text-[#002244] flex items-center justify-center font-serif font-bold italic border border-zinc-300 rounded-none">
-                CP
+    <html lang="en" className="dark">
+      <body className={`${inter.variable} ${outfit.variable} ${space.variable} antialiased bg-gemini-bg text-foreground min-h-screen flex flex-col selection:bg-gemini-purple/30`}>
+        <ClientLenis>
+          {/* Aesthetic Liquid Glass Header */}
+          <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-16 liquid-glass rounded-full flex items-center justify-between px-6 z-50 transition-all">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3 group cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-gemini-purple to-gemini-accent flex items-center justify-center font-display font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all group-hover:shadow-[0_0_35px_rgba(139,92,246,0.6)]">
+                  CP
+                </div>
+                <div className="leading-tight">
+                  <div className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest">Chandigarh Police</div>
+                  <div className="text-sm font-display font-semibold text-zinc-100 tracking-wide group-hover:text-white transition-colors">CYBER INTELLIGENCE</div>
+                </div>
               </div>
-              <div className="leading-tight">
-                <div className="text-[10px] text-zinc-300 font-mono uppercase tracking-widest">Chandigarh Police</div>
-                <div className="text-sm font-semibold text-white tracking-wide">CYBER CRIME & INTELLIGENCE UNIT</div>
-              </div>
-            </div>
-            <div className="w-px h-6 bg-zinc-600 hidden md:block"></div>
-            <div className="hidden md:flex flex-col justify-center">
-              <div className="text-xs font-semibold text-zinc-100 tracking-wider">pineSAW</div>
-              <div className="text-[9px] font-mono text-zinc-300 uppercase">Investigative Intelligence System</div>
-            </div>
-            <div className="px-2 py-0.5 bg-amber-500 text-black text-[9px] font-mono uppercase ml-4 font-bold rounded-none">
-              Synthetic Data / Demo Environment
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-6">
-            <div className="text-right hidden sm:block">
-              <div className="text-[10px] font-mono text-zinc-300 uppercase">System Status</div>
-              <div className="text-xs text-green-400 font-bold flex items-center justify-end gap-1">
-                SECURE & ACTIVE
+              <div className="w-px h-6 bg-white/10 hidden md:block"></div>
+              <div className="hidden md:flex flex-col justify-center">
+                <div className="text-xs font-semibold text-zinc-100 tracking-wider">pineSAW</div>
+                <div className="text-[9px] font-mono text-zinc-400 uppercase">Nexus Network</div>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-[10px] font-mono text-zinc-300 uppercase">Investigator ID</div>
-              <div className="text-xs font-mono text-white font-bold">OP-7492</div>
+            
+            <div className="flex items-center gap-6">
+              <div className="px-4 py-1.5 rounded-full bg-gemini-purple/20 border border-gemini-purple/30 text-gemini-purple text-[10px] font-mono uppercase font-bold tracking-widest hidden sm:block shadow-[inset_0_0_10px_rgba(139,92,246,0.2)]">
+                Secure Terminal
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] font-mono text-zinc-400 uppercase">Investigator</div>
+                <div className="text-sm font-mono text-white font-bold">OP-7492</div>
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        {/* Main Application Area */}
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 overflow-hidden bg-zinc-100 relative">
-            {children}
-          </main>
-        </div>
+          {/* Main Application Area */}
+          <div className="flex flex-1 w-full max-w-[1600px] mx-auto relative pt-28">
+            <Sidebar />
+            <main className="flex-1 min-w-0 pl-0 md:pl-72 pb-6 px-4 md:px-8 relative">
+              {children}
+            </main>
+          </div>
+          <div className="creative-glow"></div>
+        </ClientLenis>
       </body>
     </html>
   );

@@ -93,13 +93,13 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px] p-4 animate-in fade-in duration-100">
       <div 
-        className="bg-white border border-zinc-300 w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] rounded-none animate-in zoom-in-95 duration-150"
+        className="glass border border-white/10 w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] rounded-2xl animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="bg-[#002244] text-white px-6 py-4 flex justify-between items-center shrink-0 border-b border-zinc-400">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 bg-white text-[#002244] flex items-center justify-center font-bold text-sm">
+            <div className="w-7 h-7 glass text-[#002244] flex items-center justify-center font-bold text-sm">
               <FolderPlus size={18} weight="bold" />
             </div>
             <div>
@@ -117,9 +117,9 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5 text-zinc-900">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5 text-white">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2">
+            <div className="p-3 bg-red-50 border border-red-800/50 text-red-400 text-xs flex items-center gap-2">
               <WarningOctagon size={16} className="shrink-0 text-red-600" />
               <span>{error}</span>
             </div>
@@ -127,26 +127,26 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-1">
-              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1">Case Number</label>
+              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">Case Number</label>
               <input
                 type="text"
                 value={caseId}
                 onChange={(e) => setCaseId(e.target.value)}
-                className="w-full bg-zinc-100 border border-zinc-300 px-3 py-2 text-xs font-mono text-zinc-900 focus:bg-white focus:outline-none focus:border-gov-blue"
+                className="w-full bg-zinc-900/50 border border-white/10 px-3 py-2 text-xs font-mono text-white focus:glass focus:outline-none focus:border-gov-blue"
                 placeholder="INV-2026-XXXX"
                 required
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1">
+              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">
                 Operation Title / Codename <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full bg-white border border-zinc-300 px-3 py-2 text-xs text-zinc-900 font-medium focus:outline-none focus:border-gov-blue"
+                className="w-full glass border border-white/10 px-3 py-2 text-xs text-white font-medium focus:outline-none focus:border-gov-blue"
                 placeholder="e.g. Operation Telegram Hydra Cartel"
                 required
                 autoFocus
@@ -156,7 +156,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
 
           {/* Priority Selection */}
           <div>
-            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1.5">Priority Classification</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1.5">Priority Classification</label>
             <div className="grid grid-cols-4 gap-2">
               {(["LOW", "MEDIUM", "HIGH", "CRITICAL"] as const).map((lvl) => (
                 <button
@@ -170,7 +170,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
                         lvl === "HIGH" ? "bg-amber-600 text-white border-amber-700" :
                         lvl === "MEDIUM" ? "bg-gov-blue text-white border-blue-800" :
                         "bg-zinc-800 text-white border-zinc-900"
-                      : "bg-zinc-50 text-zinc-700 border-zinc-300 hover:bg-zinc-100"
+                      : "bg-zinc-800/30 text-zinc-300 border-white/10 hover:bg-zinc-900/50"
                   )}
                 >
                   {lvl}
@@ -181,24 +181,24 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1">Lead Officer ID</label>
+              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">Lead Officer ID</label>
               <div className="relative">
                 <input
                   type="text"
                   value={investigator}
                   onChange={(e) => setInvestigator(e.target.value)}
-                  className="w-full bg-white border border-zinc-300 px-3 py-2 text-xs font-mono text-zinc-900 focus:outline-none focus:border-gov-blue"
+                  className="w-full glass border border-white/10 px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-gov-blue"
                   placeholder="OP-7492"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1">Intelligence Source / Trigger</label>
+              <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">Intelligence Source / Trigger</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-white border border-zinc-300 px-3 py-2 text-xs text-zinc-900 focus:outline-none focus:border-gov-blue"
+                className="w-full glass border border-white/10 px-3 py-2 text-xs text-white focus:outline-none focus:border-gov-blue"
               >
                 <option value="Darknet Market Ingestion">Darknet Market Crawler (Tor)</option>
                 <option value="Encrypted Telegram Channel">Encrypted Chat Monitor (Telegram)</option>
@@ -211,13 +211,13 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
 
           {/* Primary Subject Selection */}
           <div>
-            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1">
+            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">
               Link Primary Suspect / Target Entity (Optional)
             </label>
             <select
               value={primaryEntityId}
               onChange={(e) => setPrimaryEntityId(e.target.value)}
-              className="w-full bg-white border border-zinc-300 px-3 py-2 text-xs text-zinc-900 focus:outline-none focus:border-gov-blue font-mono"
+              className="w-full glass border border-white/10 px-3 py-2 text-xs text-white focus:outline-none focus:border-gov-blue font-mono"
             >
               <option value="">-- No initial subject linked (Create blank file) --</option>
               {entities.map((ent) => (
@@ -230,20 +230,20 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
 
           {/* Initial Briefing / Notes */}
           <div>
-            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-600 mb-1">
+            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">
               Preliminary Case Synopsis & Actionable Objective
             </label>
             <textarea
               rows={3}
               value={initialNote}
               onChange={(e) => setInitialNote(e.target.value)}
-              className="w-full bg-white border border-zinc-300 p-2.5 text-xs text-zinc-900 focus:outline-none focus:border-gov-blue font-mono resize-none"
+              className="w-full glass border border-white/10 p-2.5 text-xs text-white focus:outline-none focus:border-gov-blue font-mono resize-none"
               placeholder="e.g. Intercepted PGP communication indicating synthetic opioid distribution across North Indian distribution nodes. Immediate asset discovery and subpoena required."
             ></textarea>
           </div>
 
           {/* Footer */}
-          <div className="pt-4 border-t border-zinc-300 flex justify-end items-center gap-3">
+          <div className="pt-4 border-t border-white/10 flex justify-end items-center gap-3">
             <button
               type="button"
               onClick={onClose}

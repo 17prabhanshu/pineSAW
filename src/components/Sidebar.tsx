@@ -31,7 +31,6 @@ const navSections = [
   {
     title: "INTELLIGENCE",
     items: [
-      { href: "/console", label: "21st.dev Dark Console", icon: Pulse, badge: "LIVE", badgeColor: "bg-violet-600 text-white" },
       { href: "/entities", label: "Entities Directory", icon: Users },
       { href: "/search", label: "Global Search", icon: MagnifyingGlass, shortcut: "⌘K" },
     ]
@@ -72,14 +71,14 @@ export function Sidebar() {
   }, [router]);
 
   return (
-    <aside className="w-60 bg-white nexus-border-r flex flex-col h-full shrink-0 shadow-sm z-20">
-      <div className="flex-1 overflow-y-auto py-5">
+    <aside className="hidden md:flex w-64 liquid-glass rounded-[2rem] flex-col fixed top-28 bottom-6 left-6 z-40 overflow-hidden shadow-2xl border border-white/10">
+      <div className="flex-1 overflow-y-auto py-6 custom-scrollbar">
         {navSections.map((section, idx) => (
-          <div key={idx} className="mb-5">
-            <h3 className="px-5 text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5 font-bold">
+          <div key={idx} className="mb-6">
+            <h3 className="px-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2 font-semibold">
               {section.title}
             </h3>
-            <ul className="space-y-0.5">
+            <ul className="space-y-1 px-4">
               {section.items.map((item: any) => {
                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                 return (
@@ -87,26 +86,26 @@ export function Sidebar() {
                     <Link
                       href={item.href}
                       className={clsx(
-                        "flex items-center justify-between px-5 py-2 text-xs transition-none border-l-2",
+                        "flex items-center justify-between px-4 py-2.5 text-sm transition-all rounded-xl",
                         isActive
-                          ? "border-gov-blue bg-blue-50/70 text-gov-blue font-bold"
-                          : "border-transparent text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100"
+                          ? "bg-gemini-purple/20 text-white font-medium shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_0_10px_rgba(139,92,246,0.3)] border border-gemini-purple/30"
+                          : "text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent"
                       )}
                     >
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-3">
                         <item.icon
-                          weight={isActive ? "fill" : "bold"}
-                          className={clsx("text-base", isActive ? "text-gov-blue" : "text-zinc-500")}
+                          weight={isActive ? "fill" : "regular"}
+                          className={clsx("text-lg", isActive ? "text-gemini-purple" : "text-zinc-500")}
                         />
                         <span>{item.label}</span>
                       </div>
                       {item.badge && (
-                        <span className={clsx("text-[10px] font-mono px-1.5 py-0.2 font-bold", item.badgeColor || "bg-zinc-200 text-zinc-800")}>
+                        <span className={clsx("text-[10px] font-mono px-2 py-0.5 rounded-full font-bold", item.badgeColor || "bg-black/50 text-zinc-300 border border-white/10")}>
                           {item.badge}
                         </span>
                       )}
                       {item.shortcut && (
-                        <kbd className="text-[9px] font-mono bg-zinc-100 border border-zinc-300 px-1 py-0.5 text-zinc-500">
+                        <kbd className="text-[10px] font-mono bg-black/50 border border-white/10 px-1.5 py-0.5 rounded-lg text-zinc-500 shadow-inner">
                           {item.shortcut}
                         </kbd>
                       )}
@@ -120,24 +119,24 @@ export function Sidebar() {
       </div>
       
       {/* System Telemetry Footer */}
-      <div className="p-3 border-t border-zinc-200 bg-zinc-50 text-[10px] font-mono text-zinc-600 space-y-1.5">
+      <div className="p-5 border-t border-white/5 bg-black/20 text-xs font-mono text-zinc-500 space-y-3 backdrop-blur-md">
         <div className="flex justify-between items-center">
-          <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-            Tor Crawlers
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-gemini-purple rounded-full shadow-[0_0_10px_#8b5cf6] animate-pulse"></span>
+            Tor Nodes
           </span>
-          <span className="font-bold text-zinc-800">8 Active</span>
+          <span className="font-medium text-zinc-300">8 Active</span>
         </div>
         <div className="flex justify-between items-center">
-          <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-            FIU-IND Node
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-gemini-accent rounded-full shadow-[0_0_10px_#3b82f6]"></span>
+            FIU-IND
           </span>
-          <span className="font-bold text-emerald-700">Online</span>
+          <span className="font-medium text-gemini-accent">Online</span>
         </div>
-        <div className="flex justify-between items-center pt-1 border-t border-zinc-200 text-[9px] text-zinc-400">
-          <span>pineSAW v2.0 (Phase 2)</span>
-          <span>RESTRICTED</span>
+        <div className="flex justify-between items-center pt-3 mt-1 border-t border-white/5 text-[10px] text-zinc-600">
+          <span>pineSAW v2.5</span>
+          <span className="bg-white/5 px-2 py-0.5 rounded border border-white/5">SECURE</span>
         </div>
       </div>
     </aside>
