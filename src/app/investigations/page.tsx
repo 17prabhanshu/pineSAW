@@ -107,7 +107,7 @@ export default function InvestigationsPage() {
         }}
       />
 
-      <div className="glow-border glass rounded-[2rem] overflow-hidden flex-1 flex flex-col">
+      <div className=" glass rounded-[2rem] overflow-hidden flex-1 flex flex-col">
         <table className="w-full text-left text-sm flex-1 block overflow-auto">
           <thead className="sticky top-0 glass/5 border-b border-white/10 w-full table table-fixed z-10">
             <tr className="font-mono text-[10px] uppercase text-zinc-400">

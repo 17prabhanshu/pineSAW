@@ -27,7 +27,7 @@ export default function AlertsPage() {
               key={alert.id} 
               onClick={() => setSelectedAlert(alert)}
               className={clsx(
-                "glow-border glass rounded-[2rem] p-5 flex items-start gap-5 transition-colors cursor-pointer group",
+                " glass rounded-[2rem] p-5 flex items-start gap-5 transition-colors cursor-pointer group",
                 selectedAlert?.id === alert.id ? "border-nexus-cyan/50 " : "hover:"
               )}
             >

@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${outfit.variable} ${space.variable} antialiased bg-black text-foreground min-h-screen flex flex-col selection:bg-gemini-purple/30`}>
         <ClientLenis>
           {/* Aesthetic Liquid Glass Header */}
-          <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-16 liquid-glass glow-border rounded-full flex items-center justify-between px-6 z-50 transition-all">
+          <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-16 liquid-glass  rounded-full flex items-center justify-between px-6 z-50 transition-all">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3 group cursor-pointer">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-gemini-purple to-gemini-accent flex items-center justify-center font-display font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all group-hover:shadow-[0_0_35px_rgba(139,92,246,0.6)]">
@@ -61,7 +61,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
-          <div className="creative-glow cyber-noise"></div>
+          <div className="static-glow cyber-noise"></div>
         </ClientLenis>
         <CommandPalette />
         <SpotlightTour />
