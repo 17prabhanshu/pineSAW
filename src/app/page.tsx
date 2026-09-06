@@ -2,11 +2,96 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { WarningOctagon, Folder, CheckSquareOffset, FileText, MagnifyingGlass, Funnel, Clock, CaretRight, X } from "@phosphor-icons/react";
+import { WarningOctagon, Folder, CheckSquareOffset, FileText, MagnifyingGlass, Funnel, Clock, CaretRight, X, Activity } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { NewCaseModal } from "@/components/NewCaseModal";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, useMotionValue, useTransform, animate, useReducedMotion, AnimatePresence } from "motion/react";
+import { motionTokens } from "@/lib/motionTokens";
+
+function AnimatedKPI({ label, value, color }: { label: string, value: string | number, color: string }) {
+  const shouldReduceMotion = useReducedMotion();
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, Math.round);
+  const numericValue = typeof value === 'string' ? parseInt(value, 10) : (typeof value === 'number' ? value : 0);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      count.set(numericValue);
+    } else {
+      const controls = animate(count, numericValue, { duration: 1.5, ...motionTokens.springSmooth });
+      return () => controls.stop();
+    }
+  }, [numericValue, shouldReduceMotion, count]);
+
+  const displayValue = useTransform(rounded, (latest) => latest.toString().padStart(2, '0'));
+
+  return (
+    <div className="flex-1 p-4 hover:glass/5 transition-colors cursor-pointer group">
+      <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1 group-hover:text-zinc-300">{label}</div>
+      <div className={clsx("text-2xl font-display font-semibold", color)}>
+        <motion.span>{shouldReduceMotion ? (numericValue).toString().padStart(2, '0') : displayValue}</motion.span>
+      </div>
+    </div>
+  );
+}
+
+function AlertFeed({ alerts }: { alerts: any[] }) {
+  const shouldReduceMotion = useReducedMotion();
+  const [visibleAlerts, setVisibleAlerts] = useState<any[]>([]);
+
+  useEffect(() => {
+    let timeoutIds: any[] = [];
+    if (alerts && alerts.length > 0) {
+      alerts.forEach((alert, idx) => {
+        const tid = setTimeout(() => {
+          setVisibleAlerts(prev => {
+            if (prev.find(a => a.id === alert.id)) return prev;
+            return [alert, ...prev].slice(0, 10);
+          });
+        }, idx * 1200 + 500);
+        timeoutIds.push(tid);
+      });
+    }
+    return () => timeoutIds.forEach(clearTimeout);
+  }, [alerts]);
+
+  return (
+    <motion.div 
+      className="space-y-3"
+      variants={shouldReduceMotion ? undefined : motionTokens.listContainer}
+      initial="hidden"
+      animate="show"
+    >
+      <AnimatePresence mode="popLayout">
+        {visibleAlerts.map((alert) => (
+          <motion.div
+            key={alert.id}
+            variants={shouldReduceMotion ? undefined : motionTokens.listItem}
+            initial="hidden"
+            animate="show"
+            exit={{ opacity: 0, scale: 0.95 }}
+            layout={!shouldReduceMotion}
+            className="p-3 glass border border-white/5 shadow-sm rounded-sm"
+          >
+            <div className="flex justify-between items-start mb-1">
+              <span className={clsx("text-[10px] font-mono px-1.5 py-0.5 rounded-sm", 
+                alert.severity === 'CRITICAL' ? 'bg-nexus-red/10 text-nexus-red' : 
+                alert.severity === 'WARNING' ? 'bg-nexus-amber/10 text-nexus-amber' : 
+                'bg-zinc-900/50 text-zinc-400')}>
+                {alert.severity}
+              </span>
+              <span className="text-[10px] font-mono text-zinc-400">just now</span>
+            </div>
+            <div className="text-sm text-zinc-200 font-medium">{alert.title || alert.type}</div>
+            <div className="text-xs text-zinc-400 mt-1 truncate">{alert.description || "System flagged anomalous behavior."}</div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 
 export default function CommandCenter() {
   const router = useRouter();
@@ -18,206 +103,184 @@ export default function CommandCenter() {
     fetch("/api/dashboard").then(r => r.json()).then(setData);
   }, []);
 
-  if (!data) return (
-    <div className="p-8 h-[80vh] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-t-2 border-gemini-purple rounded-full animate-spin"></div>
-        <div className="text-sm font-mono text-zinc-400 animate-pulse tracking-widest">INITIALIZING SECURE TERMINAL...</div>
-      </div>
-    </div>
-  );
+  if (!data) return <div className="p-8 text-sm font-mono text-zinc-400">INITIALIZING SECURE TERMINAL...</div>;
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="flex flex-col min-h-full relative pb-20"
-    >
+    <div className="flex h-full overflow-hidden relative">
       <NewCaseModal 
         isOpen={isNewCaseOpen}
         onClose={() => setIsNewCaseOpen(false)}
       />
-      
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-6 uppercase tracking-widest">
-        <span>pineSAW</span> <CaretRight /> <span className="text-zinc-300">Command Center</span>
-      </div>
-
-      <header className="mb-10 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
-        <div>
-          <h1 className="font-display text-4xl font-semibold text-white tracking-tight mb-2">
-            Command Center
-          </h1>
-          <p className="text-zinc-400 font-medium">Real-time intelligence and threat monitoring</p>
+      <div className={clsx("flex-1 overflow-auto flex flex-col p-8 transition-all duration-150", selectedIncident ? "mr-[400px]" : "")}>
+        
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-2 uppercase tracking-wider">
+          <span>pineSAW</span> <CaretRight /> <span className="text-zinc-300">Command Center</span>
         </div>
-        <div className="flex gap-3">
-          <Link href="/actions" className="btn-secondary">
-            <CheckSquareOffset size={16} className="inline mr-2" /> Action Center
-          </Link>
-          <button 
-            onClick={() => setIsNewCaseOpen(true)}
-            className="btn-gov shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]"
-          >
-            <Folder size={16} className="inline mr-2" /> New Case
-          </button>
+
+        <header className="mb-6 flex justify-between items-end">
+          <div>
+            <h1 className="font-display text-2xl font-semibold text-white tracking-tight">Command Center</h1>
+          </div>
+          <div className="flex gap-2">
+            <Link href="/actions" className="btn-gov">
+              <CheckSquareOffset size={16} /> Action Center
+            </Link>
+            <button 
+              onClick={() => setIsNewCaseOpen(true)}
+              className="btn-secondary flex items-center gap-2"
+            >
+              <Folder size={16} /> New Case
+            </button>
+          </div>
+        </header>
+
+        {/* Operational Status KPI Strip */}
+        <div className="glass nexus-border rounded-none flex divide-x divide-zinc-300 mb-8 overflow-hidden shadow-sm">
+          {[
+            { label: "Active Investigations", value: data.metrics?.investigationCount || data.activeInvestigations || "06", color: "text-white" },
+            { label: "Critical Alerts", value: data.recentAlerts?.filter((a:any)=>a.severity==='CRITICAL').length || "03", color: "text-nexus-red" },
+            { label: "Pending Actions", value: "11", color: "text-nexus-amber" },
+            { label: "Entities Under Review", value: data.metrics?.entityCount || data.totalEntities || "42", color: "text-white" },
+            { label: "Reports Pending", value: "04", color: "text-white" },
+            { label: "Escalations Drafted", value: "02", color: "text-gov-blue" }
+          ].map((kpi, i) => (
+            <AnimatedKPI key={i} label={kpi.label} value={kpi.value} color={kpi.color} />
+          ))}
         </div>
-      </header>
 
-      {/* Operational Status KPI Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
-        {[
-          { label: "Active Investigations", value: data.activeInvestigations || "06", color: "text-white" },
-          { label: "Critical Alerts", value: data.recentAlerts?.filter((a:any)=>a.severity==='CRITICAL').length || "03", color: "text-red-400" },
-          { label: "Pending Actions", value: "11", color: "text-amber-400" },
-          { label: "Entities Under Review", value: data.totalEntities || "42", color: "text-white" },
-          { label: "Reports Pending", value: "04", color: "text-zinc-300" },
-          { label: "Escalations Drafted", value: "02", color: "text-gemini-accent" }
-        ].map((kpi, i) => (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.05 }}
-            key={i} 
-            className="glass rounded-2xl p-5 hover:bg-zinc-800/40 transition-all cursor-pointer group"
-          >
-            <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-3 group-hover:text-zinc-300 transition-colors">{kpi.label}</div>
-            <div className={clsx("text-3xl font-display font-semibold", kpi.color)}>{kpi.value.toString().padStart(2, '0')}</div>
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="flex gap-6 h-[600px]">
-        {/* Priority Incidents Table */}
-        <div className={clsx(
-          "flex-1 flex flex-col min-h-0 glass rounded-2xl overflow-hidden shadow-2xl transition-all duration-500",
-          selectedIncident ? "w-2/3" : "w-full"
-        )}>
-          <div className="p-5 border-b border-white/5 bg-[#18181b]/50 backdrop-blur-md flex justify-between items-center">
-            <h2 className="text-sm font-display font-semibold text-white tracking-wide flex items-center gap-2">
-              <WarningOctagon className="text-red-400" size={18} /> Priority Incidents
-            </h2>
-            <div className="flex gap-3">
-              <button className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-mono transition-colors"><Funnel size={14}/> Filter</button>
+        {/* Main Content Area */}
+        <div className="flex-1 flex gap-6 min-h-0">
+          
+          {/* Priority Incidents Table */}
+          <div className="flex-[2] flex flex-col min-h-0 glass nexus-border rounded-none shadow-sm overflow-hidden">
+            <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
+              <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
+                <WarningOctagon className="text-nexus-red" size={16} /> Priority Incidents
+              </h2>
+              <div className="flex gap-2">
+                <button className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-mono"><Funnel size={14}/> Filter</button>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-auto">
+              <table className="w-full text-left text-sm whitespace-nowrap">
+                <thead className="bg-zinc-900/50 sticky top-0 z-10 border-b border-white/10">
+                  <tr className="font-mono text-[10px] uppercase text-zinc-400">
+                    <th className="px-4 py-3 font-semibold">Priority</th>
+                    <th className="px-4 py-3 font-semibold">Entity</th>
+                    <th className="px-4 py-3 font-semibold">Risk</th>
+                    <th className="px-4 py-3 font-semibold">Primary Reason</th>
+                    <th className="px-4 py-3 font-semibold">Case</th>
+                    <th className="px-4 py-3 font-semibold text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-200">
+                  {data.topEntities?.slice(0,8).map((ent: any) => (
+                    <tr 
+                      key={ent.id} 
+                      onClick={() => setSelectedIncident(ent)}
+                      className={clsx(
+                        "transition-colors cursor-pointer group",
+                        selectedIncident?.id === ent.id ? "bg-gov-blue/10 border-l-2 border-l-gov-blue" : "hover:glass/5 border-l-2 border-l-transparent"
+                      )}
+                    >
+                      <td className="px-4 py-3">
+                        <span className={ent.priorityScore >= 80 ? "badge-critical" : "badge-warning"}>
+                          {ent.priorityScore >= 80 ? 'CRITICAL' : 'HIGH'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 font-medium text-zinc-200 group-hover:text-white">{ent.label}</td>
+                      <td className="px-4 py-3 font-mono text-xs">{ent.priorityScore}</td>
+                      <td className="px-4 py-3 text-zinc-400 truncate max-w-[200px] text-xs">
+                        {ent.riskFactors ? JSON.parse(ent.riskFactors)[0] : "Multiple indicators"}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-gov-blue">INV-2026-0042</td>
+                      <td className="px-4 py-3 text-right">
+                        <button className="text-xs font-semibold text-gov-blue hover:text-white transition-colors">
+                          Investigate
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
           
-          <div className="flex-1 overflow-auto custom-scrollbar">
-            <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-[#09090b]/80 sticky top-0 z-10 border-b border-white/5 backdrop-blur-md">
-                <tr className="font-mono text-[10px] uppercase text-zinc-400">
-                  <th className="px-6 py-4 font-semibold tracking-wider">Priority</th>
-                  <th className="px-6 py-4 font-semibold tracking-wider">Entity</th>
-                  <th className="px-6 py-4 font-semibold tracking-wider">Risk Score</th>
-                  <th className="px-6 py-4 font-semibold tracking-wider">Primary Reason</th>
-                  <th className="px-6 py-4 font-semibold tracking-wider text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {data.topEntities?.slice(0,8).map((ent: any) => (
-                  <tr 
-                    key={ent.id} 
-                    onClick={() => setSelectedIncident(ent)}
-                    className={clsx(
-                      "transition-all cursor-pointer group hover:bg-zinc-800/30",
-                      selectedIncident?.id === ent.id ? "bg-gemini-purple/10" : ""
-                    )}
-                  >
-                    <td className="px-6 py-4">
-                      <span className={ent.priorityScore >= 80 ? "badge-critical" : "badge-warning"}>
-                        {ent.priorityScore >= 80 ? 'CRITICAL' : 'HIGH'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 font-medium text-zinc-200 group-hover:text-white transition-colors">{ent.label}</td>
-                    <td className="px-6 py-4 font-mono text-xs text-zinc-300">{ent.priorityScore}</td>
-                    <td className="px-6 py-4 text-zinc-400 truncate max-w-[200px] text-xs">
-                      {ent.riskFactors ? JSON.parse(ent.riskFactors)[0] : "Multiple indicators"}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="text-xs font-semibold text-gemini-accent hover:text-white transition-colors">
-                        Investigate &rarr;
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Real-time Alert Feed */}
+          <div className="flex-1 flex flex-col min-h-0 glass nexus-border rounded-none shadow-sm overflow-hidden">
+            <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
+              <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
+                <Activity className="text-nexus-amber" size={16} /> Live Alert Feed
+              </h2>
+            </div>
+            <div className="flex-1 overflow-auto p-4 glass/5">
+              <AlertFeed alerts={data.recentAlerts || []} />
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Slide-out Drawer */}
-        <AnimatePresence>
-          {selectedIncident && (
-            <motion.div 
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 100 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="w-1/3 glass rounded-2xl flex flex-col shadow-2xl relative overflow-hidden"
-            >
-              <div className="p-6 border-b border-white/5 bg-gradient-to-br from-[#18181b]/80 to-[#09090b]/80 relative backdrop-blur-xl">
-                <button 
-                  onClick={() => setSelectedIncident(null)} 
-                  className="absolute top-6 right-6 text-zinc-400 hover:text-white transition-colors bg-zinc-800/50 p-2 rounded-full"
-                >
-                  <X size={16}/>
-                </button>
-                <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">ENTITY INCIDENT</div>
-                <h2 className="text-2xl font-display font-semibold text-white mb-4 tracking-tight">{selectedIncident.label}</h2>
-                <div className="flex gap-2">
-                  <span className={selectedIncident.priorityScore >= 80 ? "badge-critical" : "badge-warning"}>
-                    RISK SCORE: {selectedIncident.priorityScore}
-                  </span>
-                  <span className="badge-neutral">
-                    {selectedIncident.type}
-                  </span>
+      {/* Slide-out Drawer */}
+      {selectedIncident && (
+        <div className="absolute top-0 right-0 bottom-0 w-[400px] glass border-l border-white/10 shadow-md flex flex-col drawer-animate z-30">
+          <div className="p-5 border-b border-white/10 bg-zinc-900/50 relative">
+            <button onClick={() => setSelectedIncident(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><X size={16}/></button>
+            <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">ENTITY INCIDENT</div>
+            <h2 className="text-xl font-display font-semibold text-white mb-2">{selectedIncident.label}</h2>
+            <div className="flex gap-2">
+              <span className={selectedIncident.priorityScore >= 80 ? "badge-critical" : "badge-warning"}>
+                RISK: {selectedIncident.priorityScore}
+              </span>
+              <span className="badge-neutral">
+                {selectedIncident.type}
+              </span>
+            </div>
+          </div>
+          
+          <div className="flex-1 overflow-auto p-5 space-y-6">
+            <section>
+              <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Why Flagged</h3>
+              <div className="text-sm text-zinc-300 leading-relaxed glass/5 border border-white/5 p-3 rounded-none">
+                Activity spike and cross-platform overlapping identifiers strongly suggest evasion tactics.
+              </div>
+            </section>
+            
+            <section>
+              <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Risk Contribution</h3>
+              <div className="space-y-1">
+                {(selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors) : ["Suspicious Activity"]).map((risk: string, i: number) => (
+                  <div key={i} className="flex justify-between items-center text-xs bg-zinc-900/50 px-2 py-1.5 rounded-none border border-white/5">
+                    <span className="text-zinc-300">{risk}</span>
+                    <span className="text-nexus-amber font-mono">+{(selectedIncident.priorityScore / (selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors).length : 1)).toFixed(0)}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+            
+            <section>
+              <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Pending Actions</h3>
+              <div className="glass/5 border border-white/5 p-3 rounded-none space-y-2">
+                <div className="flex justify-between items-start">
+                  <div className="text-sm text-zinc-200">Prepare Bank Request</div>
+                  <span className="badge-warning">DRAFT</span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <div className="text-sm text-zinc-200">Review Financial Links</div>
+                  <span className="badge-critical">PENDING</span>
                 </div>
               </div>
-              
-              <div className="flex-1 overflow-auto p-6 space-y-8 custom-scrollbar">
-                <section>
-                  <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-3 font-semibold">Why Flagged</h3>
-                  <div className="text-sm text-zinc-300 leading-relaxed bg-black/20 border border-white/5 p-4 rounded-xl shadow-inner">
-                    Activity spike and cross-platform overlapping identifiers strongly suggest evasion tactics and possible illicit trade facilitation.
-                  </div>
-                </section>
-                
-                <section>
-                  <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-3 font-semibold">Risk Contribution</h3>
-                  <div className="space-y-2">
-                    {(selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors) : ["Suspicious Activity"]).map((risk: string, i: number) => (
-                      <div key={i} className="flex justify-between items-center text-xs bg-black/20 px-4 py-3 rounded-xl border border-white/5">
-                        <span className="text-zinc-300">{risk}</span>
-                        <span className="text-amber-400 font-mono font-medium">+{(selectedIncident.priorityScore / (selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors).length : 1)).toFixed(0)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-                
-                <section>
-                  <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-3 font-semibold">Pending Actions</h3>
-                  <div className="bg-black/20 border border-white/5 p-4 rounded-xl space-y-3">
-                    <div className="flex justify-between items-center pb-3 border-b border-white/5">
-                      <div className="text-sm text-zinc-300">Prepare Bank Request</div>
-                      <span className="badge-warning">DRAFT</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm text-zinc-300">Review Financial Links</div>
-                      <span className="badge-critical">PENDING</span>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              
-              <div className="p-6 border-t border-white/5 bg-[#18181b]/50 backdrop-blur-md">
-                <button onClick={() => router.push(`/investigations/${selectedIncident.id}`)} className="w-full btn-gov shadow-lg">
-                  Open Investigation
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.div>
+            </section>
+          </div>
+          
+          <div className="p-5 border-t border-white/10 bg-zinc-900/50 flex gap-2">
+            <button onClick={() => router.push(`/entities/${selectedIncident.id}`)} className="btn-gov flex-1 text-center">
+              Open Investigation
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

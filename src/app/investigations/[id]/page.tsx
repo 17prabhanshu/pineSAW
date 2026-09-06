@@ -48,7 +48,7 @@ export default function InvestigationWorkspace() {
       <header className="h-16 glass border-b border-white/10 px-6 flex items-center justify-between shrink-0 z-10 shadow-sm">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2 py-0.5 font-mono text-[10px] bg-blue-50 text-gov-blue border border-blue-800/50 font-bold">{investigation.caseId}</span>
+            <span className="px-2 py-0.5 font-mono text-[10px] bg-blue-50 text-gov-blue border border-blue-200 font-bold">{investigation.caseId}</span>
             <span className="px-2 py-0.5 bg-zinc-900/50 text-zinc-300 font-mono text-[10px] border border-white/10 font-semibold">{investigation.status}</span>
             <span className={clsx(
               "px-2 py-0.5 font-mono text-[10px] font-bold border",
@@ -107,7 +107,7 @@ export default function InvestigationWorkspace() {
         <div className="w-80 glass border-r border-white/10 flex flex-col shrink-0 z-10 overflow-y-auto p-5 space-y-6">
           <div className="space-y-2">
             <h2 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest font-semibold">Executive Intelligence Summary</h2>
-            <p className="text-xs text-zinc-300 leading-relaxed bg-zinc-800/30 p-3 border border-white/5">
+            <p className="text-xs text-zinc-300 leading-relaxed glass/5 p-3 border border-white/5">
               Syndicate identified as <strong className="text-white">{investigation.entities?.[0]?.entity?.label || "ShadowBroker"}</strong> operates across GenesisMarket (.onion) and Telegram. Automated on-chain tracing confirms fund flows to 4 domestic Indian bank accounts and an offshore Swiss deposit.
             </p>
           </div>
@@ -124,13 +124,13 @@ export default function InvestigationWorkspace() {
                 <div className="absolute w-2 h-2 bg-gov-blue -left-[5px] top-1"></div>
                 <div className="text-[10px] font-mono text-zinc-400 mb-0.5">Phase 2 Verified</div>
                 <div className="font-semibold text-white">Bidirectional Backtracking Completed</div>
-                <div className="text-[11px] text-zinc-300">Off-ramp choke points identified at HDFC and Swissquote.</div>
+                <div className="text-[11px] text-zinc-400">Off-ramp choke points identified at HDFC and Swissquote.</div>
               </div>
               <div className="relative pl-4 border-l-2 border-white/10 pb-2">
                 <div className="absolute w-2 h-2 bg-zinc-400 -left-[5px] top-1"></div>
                 <div className="text-[10px] font-mono text-zinc-400 mb-0.5">Case Opening</div>
                 <div className="font-semibold text-zinc-200">Investigation File Registered</div>
-                <div className="text-[11px] text-zinc-300">Automated darknet ingestion alert triaged.</div>
+                <div className="text-[11px] text-zinc-400">Automated darknet ingestion alert triaged.</div>
               </div>
             </div>
           </div>
@@ -176,20 +176,20 @@ export default function InvestigationWorkspace() {
 
                 {/* Flow Diagram Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs mb-6">
-                  <div className="bg-red-50 border border-red-800/50 p-3 flex flex-col justify-between">
+                  <div className="bg-red-50 border border-red-200 p-3 flex flex-col justify-between">
                     <div>
                       <div className="text-[9px] font-mono text-red-600 font-bold uppercase">1. Origin Point</div>
                       <div className="font-bold text-white mt-1">GenesisMarket Listing #8492</div>
-                      <div className="text-[11px] text-zinc-300 mt-1">Synthetic Opioid Listing</div>
+                      <div className="text-[11px] text-zinc-400 mt-1">Synthetic Opioid Listing</div>
                     </div>
                     <span className="text-[10px] font-mono text-red-700 mt-3 font-semibold">Tor .onion</span>
                   </div>
 
-                  <div className="bg-amber-50 border border-amber-800/50 p-3 flex flex-col justify-between">
+                  <div className="bg-amber-50 border border-amber-200 p-3 flex flex-col justify-between">
                     <div>
                       <div className="text-[9px] font-mono text-amber-700 font-bold uppercase">2. Crypto Deposit</div>
                       <div className="font-bold text-white mt-1 break-all">0x742d...f44e</div>
-                      <div className="text-[11px] text-zinc-300 mt-1">14.5 ETH Received</div>
+                      <div className="text-[11px] text-zinc-400 mt-1">14.5 ETH Received</div>
                     </div>
                     <span className="text-[10px] font-mono text-amber-700 mt-3 font-semibold">Ethereum Ledger</span>
                   </div>
@@ -198,16 +198,16 @@ export default function InvestigationWorkspace() {
                     <div>
                       <div className="text-[9px] font-mono text-purple-700 font-bold uppercase">3. Mixer Layer</div>
                       <div className="font-bold text-white mt-1">Liquidity Pool Mixer</div>
-                      <div className="text-[11px] text-zinc-300 mt-1">Smart Contract Obfuscation</div>
+                      <div className="text-[11px] text-zinc-400 mt-1">Smart Contract Obfuscation</div>
                     </div>
                     <span className="text-[10px] font-mono text-purple-700 mt-3 font-semibold">Tumbled Output</span>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-800/50 p-3 flex flex-col justify-between">
+                  <div className="bg-blue-50 border border-blue-200 p-3 flex flex-col justify-between">
                     <div>
                       <div className="text-[9px] font-mono text-blue-700 font-bold uppercase">4. Exchange Deposit</div>
                       <div className="font-bold text-white mt-1">Deposit Hot Wallet #99104</div>
-                      <div className="text-[11px] text-zinc-300 mt-1">Binance / Gateway KYC</div>
+                      <div className="text-[11px] text-zinc-400 mt-1">Binance / Gateway KYC</div>
                     </div>
                     <span className="text-[10px] font-mono text-blue-700 mt-3 font-semibold">Regulated KYC Link</span>
                   </div>
@@ -216,14 +216,14 @@ export default function InvestigationWorkspace() {
                     <div>
                       <div className="text-[9px] font-mono text-emerald-800 font-bold uppercase">5. Fiat Off-Ramps</div>
                       <div className="font-bold text-white mt-1">HDFC, SBI & Swissquote</div>
-                      <div className="text-[11px] text-zinc-300 mt-1">INR 2.1M + CHF 25K</div>
+                      <div className="text-[11px] text-zinc-400 mt-1">INR 2.1M + CHF 25K</div>
                     </div>
                     <span className="text-[10px] font-mono text-emerald-800 mt-3 font-semibold">Bank Wire Target</span>
                   </div>
                 </div>
 
                 {/* Evidentiary Box */}
-                <div className="p-4 bg-zinc-800/30 border border-white/10 text-xs space-y-2">
+                <div className="p-4 glass/5 border border-white/10 text-xs space-y-2">
                   <div className="font-bold text-white font-mono text-[11px] uppercase">
                     Forensic Choke-Point Verification
                   </div>
@@ -308,7 +308,7 @@ export default function InvestigationWorkspace() {
         {/* Right Drawer (Entity Details / Action Queue) */}
         {selectedEntity && (
           <div className="w-96 glass border-l border-white/10 flex flex-col shrink-0 z-20 shadow-xl">
-            <div className="p-5 bg-zinc-800/30 border-b border-white/10 relative">
+            <div className="p-5 glass/5 border-b border-white/10 relative">
               <button onClick={() => setSelectedEntity(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><CaretRight size={18} /></button>
               <div className="text-[10px] font-mono text-gov-blue uppercase font-bold tracking-widest mb-1">{selectedEntity.group}</div>
               <h2 className="text-lg font-display font-bold text-white break-all">{selectedEntity.label}</h2>
@@ -321,7 +321,7 @@ export default function InvestigationWorkspace() {
             <div className="p-5 flex-1 overflow-y-auto space-y-5 text-xs">
               <div>
                 <div className="text-[10px] font-mono text-zinc-400 uppercase font-semibold mb-1">Entity Rationale</div>
-                <p className="text-zinc-300 bg-zinc-800/30 p-2.5 border border-white/5 leading-relaxed">
+                <p className="text-zinc-300 glass/5 p-2.5 border border-white/5 leading-relaxed">
                   Identified as central hub in the syndicate transaction graph. Direct connections to high-velocity nodes and fiat off-ramps.
                 </p>
               </div>

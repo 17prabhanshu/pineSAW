@@ -3,6 +3,8 @@ import { Inter, Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { ClientLenis } from "@/components/ClientLenis";
+import { CommandPalette } from "@/components/CommandPalette";
+import { SpotlightTour } from "@/components/SpotlightTour";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -61,6 +63,8 @@ export default function RootLayout({
           </div>
           <div className="creative-glow"></div>
         </ClientLenis>
+        <CommandPalette />
+        <SpotlightTour />
       </body>
     </html>
   );
