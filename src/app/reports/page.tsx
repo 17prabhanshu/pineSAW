@@ -82,7 +82,7 @@ export default function ReportsPage() {
       </div>
 
       {reportReady && (
-        <div className="surface-1 nexus-border rounded-2xl p-10 flex-1 overflow-auto glass text-black animate-in fade-in slide-in-from-bottom-4 shadow-md relative">
+        <div className="surface-1 nexus-border rounded-2xl p-10 flex-1 overflow-auto glass text-zinc-200 animate-in fade-in slide-in-from-bottom-4 shadow-md relative">
           
           {/* Print specific branding */}
           <div className="hidden print:block absolute inset-0 pointer-events-none opacity-[0.03] flex items-center justify-center">
@@ -98,7 +98,7 @@ export default function ReportsPage() {
                 <div className="text-xs text-zinc-300 font-mono uppercase tracking-widest font-semibold">Chandigarh Police</div>
                 <div className="text-lg font-bold text-white tracking-wide mb-1">CYBER CRIME & INTELLIGENCE UNIT</div>
                 <div className="flex items-center gap-3">
-                  <span className="font-display font-bold text-lg tracking-widest text-white">pineSAW</span>
+                  <span className="font-display font-bold text-lg tracking-widest text-white">DARKINT</span>
                   <span className="text-xs font-mono text-zinc-400 uppercase">Intelligence Report: {selectedCase}</span>
                 </div>
               </div>

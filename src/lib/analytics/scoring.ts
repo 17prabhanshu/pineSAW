@@ -1,5 +1,5 @@
 /**
- * Deterministic Risk Scoring Engine (pineSAW Phase 2)
+ * Deterministic Risk Scoring Engine (DARKINT Phase 2)
  * 
  * Replaces opaque black-box AI with an unalterable, explainable mathematical formulation
  * suitable for Indian court scrutiny under Section 65B of the Indian Evidence Act.

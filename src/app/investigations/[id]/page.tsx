@@ -281,7 +281,7 @@ export default function InvestigationWorkspace() {
                     1. Investigative Scope & Background
                   </h3>
                   <p className="text-xs text-zinc-300 leading-relaxed">
-                    Target syndicate operating under persona "ShadowBroker" engages in multi-jurisdictional synthetic narcotics distribution. The pineSAW platform has linked the entity's GenesisMarket storefront to unencrypted Telegram communication vectors and identified 4 domestic accounts (HDFC, SBI, ICICI, Axis) used for fiat liquidation.
+                    Target syndicate operating under persona "ShadowBroker" engages in multi-jurisdictional synthetic narcotics distribution. The DARKINT platform has linked the entity's GenesisMarket storefront to unencrypted Telegram communication vectors and identified 4 domestic accounts (HDFC, SBI, ICICI, Axis) used for fiat liquidation.
                   </p>
                 </section>
 

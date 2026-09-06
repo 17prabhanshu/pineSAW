@@ -185,7 +185,7 @@ export default function CommandCenter() {
         
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-2 uppercase tracking-wider">
-          <span>pineSAW</span> <CaretRight /> <span className="text-zinc-300">Command Center</span>
+          <span>DARKINT</span> <CaretRight /> <span className="text-zinc-300">Command Center</span>
         </div>
 
         <header className="mb-6 flex justify-between items-end">

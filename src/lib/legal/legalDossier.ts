@@ -68,7 +68,7 @@ SUBJECT: REQUISITION OF ACCOUNT HOLDER KYC, IP LOGS, AND TRANSACTION RECORDS UND
 
 WHEREAS, an investigation into organized cyber-narcotics trafficking and illicit financial routing is being actively conducted under Case Reference ${req.caseId};
 
-AND WHEREAS, forensic intelligence gathered by the pineSAW Threat Platform has established direct linkage to Account / Reference: "${req.accountNumber || req.targetEntityLabel}" operated within your institution;
+AND WHEREAS, forensic intelligence gathered by the DARKINT Threat Platform has established direct linkage to Account / Reference: "${req.accountNumber || req.targetEntityLabel}" operated within your institution;
 
 YOU ARE HEREBY REQUIRED AND DIRECTED UNDER SECTION 91 OF THE CODE OF CRIMINAL PROCEDURE, 1973 to produce within 48 HOURS of receipt the following certified electronic records:
 1. Complete Account Opening Form (AOF), KYC documentation, Aadhaar/PAN linkage, and registered mobile numbers.

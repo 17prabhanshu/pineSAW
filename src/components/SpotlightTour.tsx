@@ -7,7 +7,7 @@ import { X, ChevronRight, ChevronLeft } from "lucide-react";
 
 const steps = [
   {
-    title: "Welcome to pineSAW",
+    title: "Welcome to DARKINT",
     content: "This is the Investigative Intelligence System. Press Cmd+K (or Ctrl+K) to open the Command Palette at any time.",
   },
   {
@@ -26,7 +26,7 @@ export function SpotlightTour() {
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const hasSeenTour = localStorage.getItem("pineSAW_tour_completed");
+    const hasSeenTour = localStorage.getItem("DARKINT_tour_completed");
     if (!hasSeenTour) {
       const timer = setTimeout(() => setIsOpen(true), 1000);
       return () => clearTimeout(timer);
@@ -35,7 +35,7 @@ export function SpotlightTour() {
 
   const handleClose = () => {
     setIsOpen(false);
-    localStorage.setItem("pineSAW_tour_completed", "true");
+    localStorage.setItem("DARKINT_tour_completed", "true");
   };
 
   const handleNext = () => {

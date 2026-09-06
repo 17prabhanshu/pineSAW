@@ -144,7 +144,7 @@ export function Sidebar() {
           <span className="font-medium text-gemini-accent">Online</span>
         </div>
         <div className="flex justify-between items-center pt-3 mt-1 border-t border-white/5 text-[10px] text-zinc-600">
-          <span>pineSAW v2.5</span>
+          <span>DARKINT v2.5</span>
           <span className="bg-white/5 px-2 py-0.5 rounded border border-white/5">SECURE</span>
         </div>
       </div>

@@ -11,7 +11,7 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 const space = Space_Grotesk({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "pineSAW | Investigative Intelligence System",
+  title: "DARKINT | Investigative Intelligence System",
   description: "Advanced intelligence terminal.",
 };
 
@@ -38,7 +38,7 @@ export default function RootLayout({
               </div>
               <div className="w-px h-6 bg-white/10 hidden md:block"></div>
               <div className="hidden md:flex flex-col justify-center">
-                <div className="text-xs font-semibold text-zinc-100 tracking-wider">pineSAW</div>
+                <div className="text-xs font-semibold text-zinc-100 tracking-wider">DARKINT</div>
                 <div className="text-[9px] font-mono text-zinc-400 uppercase">Nexus Network</div>
               </div>
             </div>
