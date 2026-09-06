@@ -72,7 +72,7 @@ export function Sidebar() {
   }, [router]);
 
   return (
-    <aside className="hidden md:flex w-64 liquid-glass rounded-[2rem] flex-col fixed top-28 bottom-6 left-6 z-40 overflow-hidden shadow-2xl border border-white/10">
+    <aside className="hidden md:flex w-64 liquid-glass glow-border rounded-[2rem] flex-col fixed top-28 bottom-6 left-6 z-40 overflow-hidden shadow-2xl border border-white/10">
       <div className="flex-1 overflow-y-auto py-6 custom-scrollbar">
         {navSections.map((section, idx) => (
           <div key={idx} className="mb-6">

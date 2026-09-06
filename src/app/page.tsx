@@ -113,7 +113,7 @@ function AlertFeed({ alerts }: { alerts: any[] }) {
               <span className={clsx("text-[10px] font-mono px-1.5 py-0.5 rounded-sm", 
                 alert.severity === 'CRITICAL' ? 'bg-nexus-red/10 text-nexus-red' : 
                 alert.severity === 'WARNING' ? 'bg-nexus-amber/10 text-nexus-amber' : 
-                'bg-zinc-900/50 text-zinc-400')}>
+                ' text-zinc-400')}>
                 {alert.severity}
               </span>
               <span className="text-[10px] font-mono text-zinc-400">just now</span>
@@ -225,7 +225,7 @@ export default function CommandCenter() {
           
           {/* Priority Incidents Table */}
           <div className="flex-[2] flex flex-col min-h-0 glass nexus-border rounded-[2rem] shadow-sm overflow-hidden">
-            <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
+            <div className="p-4 nexus-border-b  flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <WarningOctagon className="text-nexus-red" size={16} /> <CyberText text="Priority Incidents" />
               </h2>
@@ -236,7 +236,7 @@ export default function CommandCenter() {
             
             <div className="flex-1 overflow-auto">
               <table className="w-full text-left text-sm whitespace-nowrap">
-                <thead className="bg-zinc-900/50 sticky top-0 z-10 border-b border-white/10">
+                <thead className=" sticky top-0 z-10 border-b border-white/10">
                   <tr className="font-mono text-[10px] uppercase text-zinc-400">
                     <th className="px-4 py-3 font-semibold">Priority</th>
                     <th className="px-4 py-3 font-semibold">Entity</th>
@@ -281,7 +281,7 @@ export default function CommandCenter() {
           
           {/* Real-time Alert Feed */}
           <div className="flex-1 flex flex-col min-h-0 glass nexus-border rounded-[2rem] shadow-sm overflow-hidden">
-            <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
+            <div className="p-4 nexus-border-b  flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
                 <Lightning className="text-nexus-amber" size={16} /> <CyberText text="Live Alert Feed" />
               </h2>
@@ -296,7 +296,7 @@ export default function CommandCenter() {
       {/* Slide-out Drawer */}
       {selectedIncident && (
         <div className="absolute top-0 right-0 bottom-0 w-[400px] glass rounded-l-[2.5rem] border-l border-white/10 shadow-md flex flex-col drawer-animate z-30">
-          <div className="p-5 border-b border-white/10 bg-zinc-900/50 relative">
+          <div className="p-5 border-b border-white/10  relative">
             <button onClick={() => setSelectedIncident(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><X size={16}/></button>
             <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">ENTITY INCIDENT</div>
             <h2 className="text-xl font-display font-semibold text-white mb-2">{selectedIncident.label}</h2>
@@ -322,7 +322,7 @@ export default function CommandCenter() {
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Risk Contribution</h3>
               <div className="space-y-1">
                 {(selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors) : ["Suspicious Activity"]).map((risk: string, i: number) => (
-                  <div key={i} className="flex justify-between items-center text-xs bg-zinc-900/50 px-2 py-1.5 rounded-[2rem] border border-white/5">
+                  <div key={i} className="flex justify-between items-center text-xs  px-2 py-1.5 rounded-[2rem] border border-white/5">
                     <span className="text-zinc-300">{risk}</span>
                     <span className="text-nexus-amber font-mono">+{(selectedIncident.priorityScore / (selectedIncident.riskFactors ? JSON.parse(selectedIncident.riskFactors).length : 1)).toFixed(0)}</span>
                   </div>
@@ -345,7 +345,7 @@ export default function CommandCenter() {
             </section>
           </div>
           
-          <div className="p-5 border-t border-white/10 bg-zinc-900/50 flex gap-2">
+          <div className="p-5 border-t border-white/10  flex gap-2">
             <button onClick={() => router.push(`/entities/${selectedIncident.id}`)} className="btn-gov flex-1 text-center">
               Open Investigation
             </button>

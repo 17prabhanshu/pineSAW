@@ -29,7 +29,7 @@ export default function ActionCenter() {
           </div>
           <div className="flex gap-2">
             {["All", "Critical", "Pending", "Draft", "Completed"].map(f => (
-              <button key={f} className="px-3 py-1 bg-zinc-800/30 hover:bg-zinc-200 border border-white/10 rounded-2xl text-xs font-medium text-zinc-300 transition-colors">
+              <button key={f} className="px-3 py-1  hover:bg-zinc-200 border border-white/10 rounded-2xl text-xs font-medium text-zinc-300 transition-colors">
                 {f}
               </button>
             ))}
@@ -103,8 +103,8 @@ export default function ActionCenter() {
                 whileHover={!selectedAction ? { scale: 1.02, z: 120, transition: { duration: 0.2 } } : {}}
                 onClick={() => setSelectedAction(act)}
                 className={clsx(
-                  "absolute w-full surface-1 border rounded-2xl p-5 cursor-pointer group shadow-2xl backdrop-blur-md",
-                  isSelected ? "border-gov-blue bg-zinc-800/90" : "border-white/10 hover:border-white/30 bg-zinc-900/80"
+                  "absolute w-full glow-border glass rounded-[2rem] p-5 cursor-pointer group shadow-2xl backdrop-blur-md",
+                  isSelected ? "border-gov-blue bg-zinc-800/90" : "border-white/10 hover:border-white/30 /80"
                 )}
                 style={{
                   transformStyle: "preserve-3d",
@@ -142,7 +142,7 @@ export default function ActionCenter() {
                       "px-2 py-0.5 rounded-2xl font-mono text-[10px] uppercase border",
                       act.status === 'PENDING' ? "badge-warning" :
                       act.status === 'READY' ? "badge-info" :
-                      "bg-zinc-800/30 text-zinc-300 border-white/10"
+                      " text-zinc-300 border-white/10"
                     )}>
                       {act.status}
                     </span>
@@ -160,8 +160,8 @@ export default function ActionCenter() {
 
       {/* Detail Drawer */}
       {selectedAction && (
-        <div className="absolute top-0 right-0 bottom-0 w-[450px] glass border-l border-white/10 shadow-md flex flex-col drawer-animate z-30">
-          <div className="p-6 border-b border-white/10 bg-zinc-900/50 relative">
+        <div className="absolute top-0 right-0 bottom-0 w-[450px] glass rounded-l-[2.5rem] border-l border-white/10 shadow-md flex flex-col drawer-animate z-30">
+          <div className="p-6 border-b border-white/10  relative">
             <button onClick={() => setSelectedAction(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><X size={16}/></button>
             <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">ACTION DETAILS</div>
             <h2 className="text-xl font-display font-medium text-white leading-tight mb-4">{selectedAction.title}</h2>
@@ -170,7 +170,7 @@ export default function ActionCenter() {
                 "px-2 py-0.5 rounded-2xl font-mono text-[10px] uppercase border",
                 selectedAction.status === 'PENDING' ? "badge-warning" :
                 selectedAction.status === 'READY' ? "badge-info" :
-                "bg-zinc-800/30 text-zinc-300 border-white/10"
+                " text-zinc-300 border-white/10"
               )}>
                 {selectedAction.status}
               </span>
@@ -181,7 +181,7 @@ export default function ActionCenter() {
           <div className="flex-1 overflow-auto p-6 space-y-6">
             <section>
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Why This Action?</h3>
-              <div className="text-sm text-zinc-300 leading-relaxed p-3 bg-zinc-800/30 border border-white/5 rounded-2xl">
+              <div className="text-sm text-zinc-300 leading-relaxed p-3  border border-white/5 rounded-2xl">
                 {selectedAction.reason}
               </div>
             </section>
@@ -189,7 +189,7 @@ export default function ActionCenter() {
             {(selectedAction.Investigation || selectedAction.Entity) && (
               <section className="space-y-3">
                 {selectedAction.Investigation && (
-                  <div className="flex justify-between items-center p-3 border border-white/5 bg-zinc-900/50 rounded-2xl">
+                  <div className="flex justify-between items-center p-3 border border-white/5  rounded-2xl">
                     <div>
                       <div className="text-[10px] font-mono text-zinc-400 uppercase">Case</div>
                       <div className="text-sm text-white font-medium">{selectedAction.Investigation.caseId}</div>
@@ -198,7 +198,7 @@ export default function ActionCenter() {
                   </div>
                 )}
                 {selectedAction.Entity && (
-                  <div className="flex justify-between items-center p-3 border border-white/5 bg-zinc-900/50 rounded-2xl">
+                  <div className="flex justify-between items-center p-3 border border-white/5  rounded-2xl">
                     <div>
                       <div className="text-[10px] font-mono text-zinc-400 uppercase">Target Entity</div>
                       <div className="text-sm text-white font-medium">{selectedAction.Entity.label}</div>
@@ -228,7 +228,7 @@ export default function ActionCenter() {
               </ul>
             </section>
 
-            <section className="bg-zinc-800/30 p-4 rounded-2xl border border-white/5">
+            <section className=" p-4 rounded-2xl border border-white/5">
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Generate Simulated Document</h3>
               <div className="space-y-2 mt-3">
                 <button className="w-full btn-gov py-2 flex items-center justify-center gap-2">

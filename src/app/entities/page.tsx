@@ -87,7 +87,7 @@ export default function EntitiesPage() {
         </MagneticButton>
       </header>
 
-      <div className="surface-1 nexus-border rounded-none overflow-hidden flex-1 flex flex-col">
+      <div className="glow-border glass rounded-[2rem] overflow-hidden flex-1 flex flex-col">
         <table className="w-full text-left text-sm flex-1 block overflow-auto">
           <thead className="sticky top-0 glass/5 border-b border-white/10 w-full table table-fixed">
             <tr className="font-mono text-[10px] uppercase text-zinc-400">

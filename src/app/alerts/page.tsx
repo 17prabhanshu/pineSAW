@@ -27,8 +27,8 @@ export default function AlertsPage() {
               key={alert.id} 
               onClick={() => setSelectedAlert(alert)}
               className={clsx(
-                "surface-1 nexus-border rounded-2xl p-5 flex items-start gap-5 transition-colors cursor-pointer group",
-                selectedAlert?.id === alert.id ? "border-nexus-cyan/50 bg-zinc-800/30" : "hover:bg-zinc-800/30"
+                "glow-border glass rounded-[2rem] p-5 flex items-start gap-5 transition-colors cursor-pointer group",
+                selectedAlert?.id === alert.id ? "border-nexus-cyan/50 " : "hover:"
               )}
             >
               <div className="mt-1 shrink-0">
@@ -63,12 +63,12 @@ export default function AlertsPage() {
 
       {/* Detail Drawer */}
       <div className={clsx(
-        "fixed right-0 top-0 bottom-0 w-[450px] glass border-l border-white/10 shadow-md transition-transform duration-300 z-50 flex flex-col",
+        "fixed right-0 top-0 bottom-0 w-[450px] glass rounded-l-[2.5rem] border-l border-white/10 shadow-md transition-transform duration-300 z-50 flex flex-col",
         selectedAlert ? "translate-x-0" : "translate-x-full"
       )}>
         {selectedAlert && (
           <>
-            <div className="p-6 border-b border-white/10 bg-zinc-900/50 relative overflow-hidden">
+            <div className="p-6 border-b border-white/10  relative overflow-hidden">
               <div className="absolute right-0 top-0 w-32 h-32 bg-nexus-red/10 rounded-2xl-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
               <button 
                 onClick={() => setSelectedAlert(null)}
@@ -91,7 +91,7 @@ export default function AlertsPage() {
             <div className="flex-1 overflow-auto p-6 space-y-8">
               <section>
                 <h3 className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3">Why was this triggered?</h3>
-                <div className="text-sm text-zinc-300 leading-relaxed p-4 bg-zinc-800/30 border border-white/5 rounded-2xl">
+                <div className="text-sm text-zinc-300 leading-relaxed p-4  border border-white/5 rounded-2xl">
                   Activity increased 3.4× above the synthetic 14-day baseline. Overlapping platform identifiers indicate coordinated operational burst.
                 </div>
               </section>
@@ -108,7 +108,7 @@ export default function AlertsPage() {
               <section>
                 <h3 className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3">Related Entities</h3>
                 {selectedAlert.entityId ? (
-                  <Link href={`/entities/${selectedAlert.entityId}`} className="flex items-center gap-3 p-3 bg-zinc-800/30 hover:bg-zinc-200 border border-white/5 rounded-2xl transition-colors group">
+                  <Link href={`/entities/${selectedAlert.entityId}`} className="flex items-center gap-3 p-3  hover:bg-zinc-200 border border-white/5 rounded-2xl transition-colors group">
                     <Users className="text-zinc-400 group-hover:text-nexus-cyan" />
                     <div>
                       <div className="text-sm font-medium text-white group-hover:text-nexus-cyan">Target Actor Found</div>
@@ -123,17 +123,17 @@ export default function AlertsPage() {
               <section>
                 <h3 className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-3">Recommended Actions</h3>
                 <div className="space-y-2">
-                  <button className="w-full text-left p-3 bg-zinc-800/30 hover:bg-zinc-200 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
+                  <button className="w-full text-left p-3  hover:bg-zinc-200 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
                     <Folder className="text-nexus-cyan" /> Create Investigation Case
                   </button>
-                  <button className="w-full text-left p-3 bg-zinc-800/30 hover:bg-zinc-200 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
+                  <button className="w-full text-left p-3  hover:bg-zinc-200 border border-white/5 rounded-2xl text-sm transition-colors flex items-center gap-3">
                     <HandCoins className="text-nexus-amber" /> Inspect linked financial identifiers
                   </button>
                 </div>
               </section>
             </div>
             
-            <div className="p-6 border-t border-white/10 bg-zinc-900/50 flex gap-3">
+            <div className="p-6 border-t border-white/10  flex gap-3">
               <button className="flex-1 btn-gov py-2 rounded-2xl text-sm font-medium hover:bg-cyan-400 transition-colors">
                 Acknowledge
               </button>
