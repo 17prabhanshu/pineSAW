@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { WarningOctagon, Folder, CheckSquareOffset, FileText, MagnifyingGlass, Funnel, Clock, CaretRight, X, Activity } from "@phosphor-icons/react";
+import { WarningOctagon, Folder, CheckSquareOffset, FileText, MagnifyingGlass, Funnel, Clock, CaretRight, X, Lightning } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { NewCaseModal } from "@/components/NewCaseModal";
@@ -212,7 +212,7 @@ export default function CommandCenter() {
           <div className="flex-1 flex flex-col min-h-0 glass nexus-border rounded-none shadow-sm overflow-hidden">
             <div className="p-4 nexus-border-b bg-zinc-900/50 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
-                <Activity className="text-nexus-amber" size={16} /> Live Alert Feed
+                <Lightning className="text-nexus-amber" size={16} /> Live Alert Feed
               </h2>
             </div>
             <div className="flex-1 overflow-auto p-4 glass/5">

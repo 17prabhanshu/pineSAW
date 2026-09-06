@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic';
 import { useCallback, useRef, useEffect, useState } from 'react';
 import { MagnifyingGlassPlus, MagnifyingGlassMinus, ArrowsOutSimple, X } from '@phosphor-icons/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
 

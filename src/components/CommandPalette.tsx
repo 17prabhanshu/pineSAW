@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Command } from "cmdk";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Search, Folder, User, FileText, Settings, X } from "lucide-react";
-import { transitionSpring } from "@/lib/motionTokens";
+import { motionTokens } from "@/lib/motionTokens";
 import { useRouter } from "next/navigation";
 
 export function CommandPalette() {
@@ -45,7 +45,7 @@ export function CommandPalette() {
             initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: -20 }}
             animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: -20 }}
-            transition={transitionSpring}
+            transition={motionTokens.defaultTransition}
             className="relative w-full max-w-2xl glass border border-white/5 rounded-xl shadow-2xl overflow-hidden"
           >
             <Command className="w-full h-full flex flex-col">

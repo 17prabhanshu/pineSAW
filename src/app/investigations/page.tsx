@@ -5,14 +5,14 @@ import Link from "next/link";
 import { Folder, Plus } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { NewCaseModal } from "@/components/NewCaseModal";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { defaultSpring } from "@/lib/motionTokens";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { motionTokens } from "@/lib/motionTokens";
 
 function MagneticButton({ children, className, onClick }: any) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const springX = useSpring(x, defaultSpring);
-  const springY = useSpring(y, defaultSpring);
+  const springX = useSpring(x, motionTokens.defaultTransition);
+  const springY = useSpring(y, motionTokens.defaultTransition);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();

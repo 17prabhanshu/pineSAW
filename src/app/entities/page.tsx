@@ -3,14 +3,14 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { User, Funnel } from "@phosphor-icons/react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { defaultSpring } from "@/lib/motionTokens";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { motionTokens } from "@/lib/motionTokens";
 
 function MagneticButton({ children, className, onClick }: any) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const springX = useSpring(x, defaultSpring);
-  const springY = useSpring(y, defaultSpring);
+  const springX = useSpring(x, motionTokens.defaultTransition);
+  const springY = useSpring(y, motionTokens.defaultTransition);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();

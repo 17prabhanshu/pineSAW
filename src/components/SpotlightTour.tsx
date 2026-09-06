@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { transitionSpring } from "@/lib/motionTokens";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motionTokens } from "@/lib/motionTokens";
 import { X, ChevronRight, ChevronLeft } from "lucide-react";
 
 const steps = [
@@ -69,7 +69,7 @@ export function SpotlightTour() {
             initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.9, y: 20 }}
             animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.9, y: 20 }}
-            transition={transitionSpring}
+            transition={motionTokens.defaultTransition}
             className="relative glass border border-white/5 rounded-xl shadow-2xl p-6 w-full max-w-md pointer-events-auto flex flex-col"
           >
             <button 
