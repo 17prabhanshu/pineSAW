@@ -76,7 +76,7 @@ export default function FinancialPage() {
       </header>
 
       <div className="flex-1 flex overflow-hidden relative">
-        <div className={clsx("flex-1 overflow-auto p-8 transition-all duration-150", selectedAccount ? "mr-[450px]" : "")}>
+        <div className={clsx("flex-1 overflow-auto p-8 transition-[margin] duration-150", selectedAccount ? "mr-[450px]" : "")}>
           <div className="glass nexus-border rounded-2xl shadow-sm flex flex-col min-h-0">
             <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
@@ -89,7 +89,7 @@ export default function FinancialPage() {
             
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm whitespace-nowrap">
-                <thead className="bg-zinc-900/50 border-b border-white/10 sticky top-0 z-10">
+                <thead className="bg-black border-b border-white/10 sticky top-0 z-10">
                   <tr className="font-mono text-[10px] uppercase text-zinc-300">
                     <th className="px-4 py-3 font-semibold">Asset ID / Label</th>
                     <th className="px-4 py-3 font-semibold">Asset Type</th>

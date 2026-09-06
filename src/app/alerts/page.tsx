@@ -15,7 +15,7 @@ export default function AlertsPage() {
 
   return (
     <div className="flex h-full overflow-hidden">
-      <div className={clsx("flex-1 p-8 flex flex-col transition-all duration-300", selectedAlert ? "mr-[450px]" : "mr-0")}>
+      <div className={clsx("flex-1 p-8 flex flex-col transition-[margin] duration-300", selectedAlert ? "mr-[450px]" : "mr-0")}>
         <header className="mb-8">
           <h1 className="font-display text-4xl font-bold tracking-tight mb-2">Alerts</h1>
           <p className="text-zinc-300 font-mono text-sm">SYSTEM-GENERATED INTELLIGENCE EVENTS</p>

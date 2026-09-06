@@ -236,7 +236,7 @@ export default function CommandCenter() {
             
             <div className="flex-1 overflow-auto">
               <table className="w-full text-left text-sm whitespace-nowrap">
-                <thead className=" sticky top-0 z-10 border-b border-white/10">
+                <thead className="bg-black sticky top-0 z-10 border-b border-white/10">
                   <tr className="font-mono text-[10px] uppercase text-zinc-400">
                     <th className="px-4 py-3 font-semibold">Priority</th>
                     <th className="px-4 py-3 font-semibold">Entity</th>

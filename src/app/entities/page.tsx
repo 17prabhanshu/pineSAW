@@ -89,7 +89,7 @@ export default function EntitiesPage() {
 
       <div className=" glass rounded-[2rem] overflow-hidden flex-1 flex flex-col">
         <table className="w-full text-left text-sm flex-1 block overflow-auto">
-          <thead className="sticky top-0 bg-zinc-800/20 border-b border-white/10 w-full table table-fixed">
+          <thead className="sticky top-0 bg-black border-b border-white/10 w-full table table-fixed">
             <tr className="font-mono text-[10px] uppercase text-zinc-400">
               <th className="px-6 py-4 font-medium w-32">Type</th>
               <th className="px-6 py-4 font-medium">Label</th>
