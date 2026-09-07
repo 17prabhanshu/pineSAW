@@ -276,13 +276,29 @@ export default function IngestionPanel() {
                 </div>
 
                 {csvHeaders.length > 0 && (
-                  <div>
+                  <div className="flex-1 min-h-0 flex flex-col">
                     <h3 className="text-[10px] font-mono text-zinc-500 tracking-widest uppercase mb-4 flex items-center gap-2">
-                      <FileText size={16} /> Raw Payload Header
+                      <Database size={16} /> Parsed CSV Telemetry
                     </h3>
-                    <div className="text-xs font-mono text-zinc-300 bg-zinc-900/50 p-4 rounded-xl border border-white/5 overflow-x-auto select-all leading-loose">
-                      {csvHeaders.slice(0, 5).join(" | ")}
-                      {csvHeaders.length > 5 && " | ..."}
+                    <div className="overflow-x-auto flex-1">
+                      <table className="w-full text-left text-[10px] font-mono text-zinc-400">
+                        <thead>
+                          <tr className="border-b border-white/10 text-white">
+                            {csvHeaders.slice(0, 4).map((h, i) => (
+                              <th key={i} className="py-2 pr-4 font-normal uppercase tracking-widest">{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5">
+                          {csvPreview.slice(0, 5).map((row, i) => (
+                            <tr key={i} className="hover:bg-white/5 transition-colors">
+                              {csvHeaders.slice(0, 4).map((h, j) => (
+                                <td key={j} className="py-2 pr-4 truncate max-w-[120px]">{row[h] || "-"}</td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 )}
