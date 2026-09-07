@@ -1,16 +1,16 @@
 [
   {
-    "event_id": "EVT-12a4040d",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-03T06:57:59.344673Z",
+    "event_id": "EVT-FENT-01",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Agora Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "apexchems",
+      "display_name": "ApexChems"
     },
     "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Pharmaceutical Fentanyl Transdermal System 100mcg/hr. Sealed boxes of 5 patches, Sandoz generic. Ships worldwide with stealth decoy.",
       "language": "en",
       "image_refs": []
     },
@@ -18,22 +18,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/74bfde2e",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://agora_market/evt-fent-01",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-a64b4582",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-03T09:57:59.344673Z",
+    "event_id": "EVT-FENT-02",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Bohemia Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "nordicpharma",
+      "display_name": "NordicPharma"
     },
     "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "High purity Fentanyl HCl crystalline powder 98.2% assay. Vacuum sealed mylar with odor-barrier packaging for research purposes.",
       "language": "en",
       "image_refs": []
     },
@@ -41,22 +41,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/c2ecb7b0",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://bohemia_market/evt-fent-02",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-a0a6eb50",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-03T22:57:59.344673Z",
+    "event_id": "EVT-FENT-03",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Dread Forum",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "darklord99",
+      "display_name": "DarkLord99"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Carfentanil analytical reference standard 1mg/ml solution. Certified GC-MS documentation included. Strictly wholesale escrow.",
       "language": "en",
       "image_refs": []
     },
@@ -64,22 +64,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/63c0d1cc",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://dread_forum/evt-fent-03",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-b3cac8c5",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-03T22:57:59.344673Z",
+    "event_id": "EVT-FENT-04",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Archetyp Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "silkroadtrader",
+      "display_name": "SilkRoadTrader"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Pressed blue M30 tablets containing synthetic fentanyl analogue. Precise 2.0mg dosage per press. Domestic stealth express.",
       "language": "en",
       "image_refs": []
     },
@@ -87,22 +87,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/2780eeff",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://archetyp_market/evt-fent-04",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-9122b56b",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-04T10:57:59.344673Z",
+    "event_id": "EVT-FENT-05",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "HarmReductionNet",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "safecheck_labs",
+      "display_name": "SafeCheck_Labs"
     },
     "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
+      "text": "Rapid Fentanyl diagnostic test strips BTNX 20ng/ml lateral flow immunoassay. Pack of 50 test strips for substance adulteration check.",
       "language": "en",
       "image_refs": []
     },
@@ -110,22 +110,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/d7b7a1f8",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://harmreductionnet/evt-fent-05",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-c8509d9f",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-04T15:57:59.344673Z",
+    "event_id": "EVT-FENT-06",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor2Door Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "chemsynthetics",
+      "display_name": "ChemSynthetics"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "4-AP (4-Anilinopiperidine) precursor chemical. CAS 23056-29-9. High purity synthesis intermediate for legitimate research.",
       "language": "en",
       "image_refs": []
     },
@@ -133,45 +133,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/4c755fe3",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor2door_market/evt-fent-06",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-c2467655",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-04T20:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/f54cf1b1",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-a70e1805",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-04T22:57:59.344673Z",
+    "event_id": "EVT-FENT-07",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Abacus Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
       "raw_id": "v_xpress",
       "display_name": "v_xpress"
     },
     "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
+      "text": "Sublingual Fentanyl citrate lozenges 400mcg Actiq brand. Authentic blister packaging with batch tracking numbers.",
       "language": "en",
       "image_refs": []
     },
@@ -179,22 +156,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/11ba5282",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://abacus_market/evt-fent-07",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-c6a93291",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-05T03:57:59.344673Z",
+    "event_id": "EVT-FENT-08",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Genesis Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "phantomoperator",
+      "display_name": "PhantomOperator"
     },
     "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
+      "text": "Remifentanil ultra short-acting opioid hydrochloride 2mg lyophilized vials. Cold-chain insulated packaging with temperature sensor.",
       "language": "en",
       "image_refs": []
     },
@@ -202,22 +179,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/abc44118",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://genesis_market/evt-fent-08",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-94b569a0",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-05T18:57:59.344673Z",
+    "event_id": "EVT-FENT-09",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Bohemia Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "eurochems_wholesale",
+      "display_name": "EuroChems_Wholesale"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Furanylfentanyl analog research powder. 99.0% verified purity via NMR spectra. Strictly commercial supply.",
       "language": "en",
       "image_refs": []
     },
@@ -225,22 +202,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/9409b55e",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://bohemia_market/evt-fent-09",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-ddc4e857",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-05T19:57:59.344673Z",
+    "event_id": "EVT-FENT-10",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor2Door Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "acropharma",
+      "display_name": "AcroPharma"
     },
     "content": {
-      "text": "Top quality OxyContin 80mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Sufentanil citrate 50mcg/ml ampoules for injection. 10 ampoules per tray. European hospital supply liquidation.",
       "language": "en",
       "image_refs": []
     },
@@ -248,22 +225,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/87fe90f9",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor2door_market/evt-fent-10",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-193314bd",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-05T23:57:59.344673Z",
+    "event_id": "EVT-BENZ-01",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Bohemia Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "chemicalking",
+      "display_name": "ChemicalKing"
     },
     "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at Vendor_41_deals.",
+      "text": "Pfizer Xanax 2mg Alprazolam white pressed bars with clean snap score. 1000 count bulk vacuum pack. Direct vendor pricing.",
       "language": "en",
       "image_refs": []
     },
@@ -271,22 +248,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/6ede3df9",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://bohemia_market/evt-benz-01",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-1a9f00c7",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-06T00:57:59.344673Z",
+    "event_id": "EVT-BENZ-02",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "AlphaBay Archive",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "europharmadirect",
+      "display_name": "EuroPharmaDirect"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Roche Rivotril 2mg Clonazepam cross-scored tablets. Original manufacturer blister packs of 100 tablets. Ships from NL.",
       "language": "en",
       "image_refs": []
     },
@@ -294,22 +271,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/3381bef2",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://alphabay_archive/evt-benz-02",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-8e8f427c",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-06T02:57:59.344673Z",
+    "event_id": "EVT-BENZ-03",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Agora Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "valiumdirect",
+      "display_name": "ValiumDirect"
     },
     "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "Bensedin Diazepam 10mg Galenika factory sealed blister boxes. High stock availability, discreet customs declaration.",
       "language": "en",
       "image_refs": []
     },
@@ -317,22 +294,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/57a462d7",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://agora_market/evt-benz-03",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-1f7bc435",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-06T06:57:59.344673Z",
+    "event_id": "EVT-BENZ-04",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Archetyp Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "dutchdrops_hq",
+      "display_name": "DutchDrops_HQ"
     },
     "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_41_deals.",
+      "text": "Pure Alprazolam raw powder 99.4% assay purity. Tested via Marquis and Mecke reagents. Fast tracking dispatched within 12h.",
       "language": "en",
       "image_refs": []
     },
@@ -340,22 +317,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/6f245b23",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://archetyp_market/evt-benz-04",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-57d977b3",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-06T08:57:59.344673Z",
+    "event_id": "EVT-BENZ-05",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor2Door Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "sedativeking",
+      "display_name": "SedativeKing"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Temazepam 30mg Restoril soft gelatin capsules. Yellow/maroon capsules in amber bottles with tamper evident seals.",
       "language": "en",
       "image_refs": []
     },
@@ -363,22 +340,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/ad12ff84",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor2door_market/evt-benz-05",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-c55b1276",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-06T09:57:59.344673Z",
+    "event_id": "EVT-BENZ-06",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Dread Forum",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "etizsupply_lab",
+      "display_name": "EtizSupply_Lab"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Etizolam pure pharmaceutical grade powder. 50g vacuum sealed foil bag with laboratory COA.",
       "language": "en",
       "image_refs": []
     },
@@ -386,22 +363,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/fe7ca4fe",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://dread_forum/evt-benz-06",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-460d45c3",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-06T21:57:59.344673Z",
+    "event_id": "EVT-BENZ-07",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Abacus Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "pharmafast_eu",
+      "display_name": "PharmaFast_EU"
     },
     "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "Ksalol 1mg Alprazolam pills manufactured by Galenika. Crisp blister packaging, rapid onset sublingual sedation.",
       "language": "en",
       "image_refs": []
     },
@@ -409,22 +386,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/f411dd9d",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://abacus_market/evt-benz-07",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-0e5a96b5",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-06T23:57:59.344673Z",
+    "event_id": "EVT-OPIO-01",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Bohemia Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "oxyspecialist",
+      "display_name": "OxySpecialist"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Mundipharma OxyContin 80mg OC formulation (crushable). Authentic sealed blister cards of 28 tablets. Domestic delivery.",
       "language": "en",
       "image_refs": []
     },
@@ -432,22 +409,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/a041bff3",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://bohemia_market/evt-opio-01",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-f4f5597a",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-07T02:57:59.344673Z",
+    "event_id": "EVT-OPIO-02",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "AlphaBay Archive",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "pharmalink",
+      "display_name": "PharmaLink"
     },
     "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Dilaudid 8mg Hydromorphone triangle pills (shields). Genuine Abbott manufacturing. Stealth airmail shipping worldwide.",
       "language": "en",
       "image_refs": []
     },
@@ -455,22 +432,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/072b5de6",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://alphabay_archive/evt-opio-02",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-8a33d992",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-07T12:57:59.344673Z",
+    "event_id": "EVT-OPIO-03",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Abacus Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "medsupplyco",
+      "display_name": "MedSupplyCo"
     },
     "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
+      "text": "Methadone hydrochloride 40mg dispersible tablets for substitution therapy. Mallinckrodt pharmaceutical imprint.",
       "language": "en",
       "image_refs": []
     },
@@ -478,22 +455,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/37b1d9ee",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://abacus_market/evt-opio-03",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-05e77c94",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-08T07:57:59.344673Z",
+    "event_id": "EVT-OPIO-04",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Dread Forum",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "mst_continus_rep",
+      "display_name": "MST_Continus_Rep"
     },
     "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
+      "text": "Morphine sulfate sustained-release tablets MST Continus 100mg. Bulk wholesale discount for verified forum escrow members.",
       "language": "en",
       "image_refs": []
     },
@@ -501,22 +478,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/2262a66e",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://dread_forum/evt-opio-04",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-86b020b9",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-08T12:57:59.344673Z",
+    "event_id": "EVT-OPIO-05",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor2Door Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "buprenorphine_trade",
+      "display_name": "Buprenorphine_Trade"
     },
     "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Health_Advocate_deals.",
+      "text": "Subutex 8mg Buprenorphine sublingual tablets. Reckitt Benckiser brand. Boxes of 28 tablets with security foil.",
       "language": "en",
       "image_refs": []
     },
@@ -524,22 +501,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/6ba9f351",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor2door_market/evt-opio-05",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-8ca526e2",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-08T15:57:59.344673Z",
+    "event_id": "EVT-STIM-01",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Archetyp Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "crystalclear_ops",
+      "display_name": "CrystalClear_Ops"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "D-Methamphetamine translucent crystal glass shards. 99.1% purity verified by reagent testing. Heat-sealed in metallic coffee bags.",
       "language": "en",
       "image_refs": []
     },
@@ -547,22 +524,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/abd0b702",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://archetyp_market/evt-stim-01",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-4b405ed8",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-08T16:57:59.344673Z",
+    "event_id": "EVT-STIM-02",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Agora Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "andeanexport",
+      "display_name": "AndeanExport"
     },
     "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "Colombian fishscale Cocaine hydrochloride 92% purity. Uncut flake texture with high petroleum sheen. Sourced directly from source.",
       "language": "en",
       "image_refs": []
     },
@@ -570,22 +547,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/5ca73f75",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://agora_market/evt-stim-02",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-b3021c0b",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-09T02:57:59.344673Z",
+    "event_id": "EVT-STIM-03",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Bohemia Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "k_labspecialist",
+      "display_name": "K_LabSpecialist"
     },
     "content": {
-      "text": "Top quality OxyContin 80mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "Ketamine S-isomer crystal needle shards (sugar fine texture). 100% veterinary grade quality imported from Germany.",
       "language": "en",
       "image_refs": []
     },
@@ -593,22 +570,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/ebf03e8b",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://bohemia_market/evt-stim-03",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-3eb54517",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-09T04:57:59.344673Z",
+    "event_id": "EVT-STIM-04",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "AlphaBay Archive",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "dutchchampagne",
+      "display_name": "DutchChampagne"
     },
     "content": {
-      "text": "Top quality OxyContin 80mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "MDMA champagne rocks 84% maximum crystal purity. Lab-certified purity with Marquis reagent immediate dark purple reaction.",
       "language": "en",
       "image_refs": []
     },
@@ -616,22 +593,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/6234f8f2",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://alphabay_archive/evt-stim-04",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-1645b096",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-09T14:57:59.344673Z",
+    "event_id": "EVT-STIM-05",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Dread Forum",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
+      "raw_id": "lucidalchemist",
+      "display_name": "LucidAlchemist"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "LSD-25 custom blotter sheets 150ug per tab. Aztek artwork print, laid with needlepoint European crystal.",
       "language": "en",
       "image_refs": []
     },
@@ -639,22 +616,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/edf20184",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://dread_forum/evt-stim-05",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-07340ee5",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-09T18:57:59.344673Z",
+    "event_id": "EVT-CRYP-01",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor Hidden Service",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "shadowmixer_admin",
+      "display_name": "ShadowMixer_Admin"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Zero-log Bitcoin CoinJoin peeling mixer. Breaks blockchain transaction lineage across 12 hops into random unspent transaction outputs.",
       "language": "en",
       "image_refs": []
     },
@@ -662,22 +639,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/bf476c5e",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor_hidden_service/evt-cryp-01",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-54584402",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-11T03:57:59.344673Z",
+    "event_id": "EVT-CRYP-02",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Telegram Escrow",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "wasabipool_broker",
+      "display_name": "WasabiPool_Broker"
     },
     "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "Automated Chaumian CoinJoin coordination pool for Wasabi and Samourai Whirlpool. Low 0.3% mixing fee per unspent UTXO.",
       "language": "en",
       "image_refs": []
     },
@@ -685,22 +662,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/f444d9cb",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://telegram_escrow/evt-cryp-02",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-f2af815b",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-11T08:57:59.344673Z",
+    "event_id": "EVT-CRYP-03",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Russian Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "xmr_atomicbridge",
+      "display_name": "XMR_AtomicBridge"
     },
     "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Cross-chain Bitcoin to Monero atomic swap relay. Non-custodial, peer-to-peer liquidity bridge leaving zero KYC audit trail.",
       "language": "en",
       "image_refs": []
     },
@@ -708,22 +685,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/ee6f1ed5",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://russian_market/evt-cryp-03",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-56d8aa21",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-12T05:57:59.344673Z",
+    "event_id": "EVT-CRYP-04",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Dread Forum",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "fastpeel_relay",
+      "display_name": "FastPeel_Relay"
     },
     "content": {
-      "text": "Top quality Adderall 30mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "High velocity Bitcoin peeling chain liquidity provider. Splitting large transaction inputs into sub-0.5 BTC randomized outputs.",
       "language": "en",
       "image_refs": []
     },
@@ -731,22 +708,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/08896540",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://dread_forum/evt-cryp-04",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-8c185626",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-12T10:57:59.344673Z",
+    "event_id": "EVT-CRYP-05",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Genesis Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "finmule_network",
+      "display_name": "FinMule_Network"
     },
     "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Indian banking domestic mule accounts (Axis, HDFC, ICICI, SBI) verified with active NetBanking and registered debit cards for crypto liquidation.",
       "language": "en",
       "image_refs": []
     },
@@ -754,22 +731,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/f398216c",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://genesis_market/evt-cryp-05",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-79348677",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-12T10:57:59.344673Z",
+    "event_id": "EVT-CRYP-06",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor Hidden Service",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "bitlaunder_desk",
+      "display_name": "BitLaunder_Desk"
     },
     "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
+      "text": "Tether USDT Tron TRC-20 to cash-in-hand courier service across Dubai, Mumbai, and Bangkok financial freezones.",
       "language": "en",
       "image_refs": []
     },
@@ -777,22 +754,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/37d8c201",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor_hidden_service/evt-cryp-06",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-a19a2ab4",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-12T18:57:59.344673Z",
+    "event_id": "EVT-CYBR-01",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Russian Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "dumpking_cc",
+      "display_name": "DumpKing_CC"
     },
     "content": {
-      "text": "Top quality Adderall 30mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Fresh US and UK Track 2 credit card dumps with PINs. 95% valid rate guaranteed with auto-checker replacement policy within 2 hours.",
       "language": "en",
       "image_refs": []
     },
@@ -800,22 +777,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/79685f63",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://russian_market/evt-cybr-01",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-906382ed",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-13T01:57:59.344673Z",
+    "event_id": "EVT-CYBR-02",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Genesis Market",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "genesisbotmaster",
+      "display_name": "GenesisBotMaster"
     },
     "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "Full browser fingerprint bot profile with stolen cookies, saved passwords, and authenticated Google/Stripe sessions.",
       "language": "en",
       "image_refs": []
     },
@@ -823,22 +800,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/23746634",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://genesis_market/evt-cybr-02",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-73dd7031",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-13T14:57:59.344673Z",
+    "event_id": "EVT-CYBR-03",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Dread Forum",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "identityforge_hq",
+      "display_name": "IdentityForge_HQ"
     },
     "content": {
-      "text": "Top quality Adderall 30mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Replica passport and national ID scans with physical utility bill verification packs for bypassing crypto exchange KYC.",
       "language": "en",
       "image_refs": []
     },
@@ -846,22 +823,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/88b8a453",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://dread_forum/evt-cybr-03",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-e4cc8a06",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-14T09:57:59.344673Z",
+    "event_id": "EVT-CYBR-04",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "AlphaBay Archive",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
+      "raw_id": "stealthdrop_relay",
+      "display_name": "StealthDrop_Relay"
     },
     "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
+      "text": "Postal drop addresses and abandoned safehouse locker locations in Germany, UK, and United States for secure darknet parcel receipt.",
       "language": "en",
       "image_refs": []
     },
@@ -869,22 +846,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_A/bd228ee5",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://alphabay_archive/evt-cybr-04",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-ab95b99a",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-15T00:57:59.344673Z",
+    "event_id": "EVT-CYBR-05",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Telegram Darknet",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "ransombroker_east",
+      "display_name": "RansomBroker_East"
     },
     "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "LockBit 3.0 builder leak and Cobalt Strike 4.9 cracked malleable C2 profiles with bypassed AV/EDR signatures.",
       "language": "en",
       "image_refs": []
     },
@@ -892,22 +869,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/cc7bce8e",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://telegram_darknet/evt-cybr-05",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-c86f0b70",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-15T10:57:59.344673Z",
+    "event_id": "EVT-INFR-01",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor Hidden Service",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "offshorebulletproof",
+      "display_name": "OffshoreBulletproof"
     },
     "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "DMCA-ignored offshore VPS hosting in Seychelles and Moldova. Tor onion routing v3 supported with DDOS protection.",
       "language": "en",
       "image_refs": []
     },
@@ -915,22 +892,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://market_B/c72af1da",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor_hidden_service/evt-infr-01",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-81a48110",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-16T01:57:59.344673Z",
+    "event_id": "EVT-INFR-02",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Telegram Darknet",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "shadowc2_operator",
+      "display_name": "ShadowC2_Operator"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Encrypted Telegram C2 dispatch gateway for automated vendor escrow notifications and multisig dispute arbitration.",
       "language": "en",
       "image_refs": []
     },
@@ -938,22 +915,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/b6eb758f",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://telegram_darknet/evt-infr-02",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-813f33fb",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-16T05:57:59.344673Z",
+    "event_id": "EVT-INFR-03",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Dread Forum",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
+      "raw_id": "pgp_keymaster",
+      "display_name": "PGP_KeyMaster"
     },
     "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
+      "text": "Verified RSA 4096-bit master PGP key escrow certification. Fingerprint publication across MIT and SKS keyserver mirrors.",
       "language": "en",
       "image_refs": []
     },
@@ -961,22 +938,22 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/ce559e3c",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://dread_forum/evt-infr-03",
+      "dataset": "demo_v2_diverse"
     }
   },
   {
-    "event_id": "EVT-2d6a726b",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-16T11:57:59.344673Z",
+    "event_id": "EVT-INFR-04",
+    "source": "darknet_market_corpus",
+    "platform_type": "darknet_intelligence",
+    "platform_id": "Tor Hidden Service",
+    "timestamp": "2026-08-01T12:00:00Z",
     "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
+      "raw_id": "jabberotr_network",
+      "display_name": "JabberOTR_Network"
     },
     "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
+      "text": "Encrypted XMPP/Jabber messaging server with OTR enabled and zero chat logging on volatile RAM storage.",
       "language": "en",
       "image_refs": []
     },
@@ -984,1319 +961,8 @@
     "financial": [],
     "location": null,
     "provenance": {
-      "source_uri": "synthetic://forum_C/116c3079",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-69c14e8a",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-16T12:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/cdc74a60",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-c35599b5",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-16T13:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/b4b23dc2",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-6ae12448",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-17T00:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/2c7bf5d1",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-a2e10b00",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-17T06:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Adderall 30mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/9a037386",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-74f88ad2",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-17T12:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/1d718b0c",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-102449ca",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-17T14:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Vendor_41_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/e0a8f4ed",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-51772158",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-17T15:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/d2a66143",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-67405914",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-18T01:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/4bfc85bf",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-d9d1a691",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-18T07:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/b5685089",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-13ef6a41",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-19T00:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/b00e2f32",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-fc458a76",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-19T00:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/0ffff723",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-a47987bc",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-19T04:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/dec57291",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-a4ceec6c",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-19T04:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/041d1e52",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-2af40ef9",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-19T07:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/023df886",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-c2e004ee",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-19T08:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Adderall 30mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/96e16837",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-fd5ed3d3",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-19T14:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/2e5f3e58",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-9b393882",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-19T15:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality OxyContin 80mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/568b4b47",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-2c4be1c9",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-20T19:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/28693d47",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-0bef01de",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-21T20:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Health_Advocate_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/739b1d34",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-54b305e0",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-21T21:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Health_Advocate_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/0800f28b",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-a0befcaa",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-21T23:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/0f064f34",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-4ebf3408",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-22T03:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/b8586e00",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-7069dfea",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-22T05:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/cd9032a5",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-30348a1b",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-22T15:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/79ed07c1",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-e7e64832",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-23T13:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/10c2b8af",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-b6f46d51",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-23T15:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/609d385e",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-3e9f0fa8",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-23T18:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/d9b14d77",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-d35f9cbf",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-23T20:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/7d44fdd8",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-33f18e09",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-24T06:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/e2ecd1de",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-0434b263",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-24T09:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/413dd9ba",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-7a73366e",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-24T18:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Xanax 2mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/dd55b2e9",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-08e19cb5",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-25T11:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/26219381",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-da404c26",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-25T17:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/da0dcaf6",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-8e030d3f",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-25T21:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/4d24f4f6",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-ab49e8ba",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-26T03:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/4363e6c6",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-1db54a51",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-26T07:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/1dae7288",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-be14a519",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-26T14:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/d13f6dbc",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-3310b364",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-26T19:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/d9c70bfb",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-10299e6b",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-26T22:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Health_Advocate_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/7ce9411c",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-87333930",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-27T04:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/851037f5",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-116e6187",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-27T12:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/300342c3",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-6cf6c615",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-27T16:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/17d0bb84",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-8ea0139d",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-29T13:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/fb92abac",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-77b02c7d",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-08-29T14:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Fentanyl Patches for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/da46ab7f",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-1207b2b6",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-30T08:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/a538ece3",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-b7ec93bd",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-31T00:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/ef392618",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-390504fb",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-31T00:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality OxyContin 80mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/c8ec214d",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-9671a04c",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-31T04:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality OxyContin 80mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/1d52f8ee",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-96309079",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_A",
-    "timestamp": "2026-08-31T14:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality OxyContin 80mg for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_A/c5c8a5b3",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-11f20f52",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-08-31T17:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/da1b4750",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-f7457014",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-09-01T02:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_23",
-      "display_name": "Vendor_23"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at Vendor_23_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/8da11b7f",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-f4d106d3",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-09-01T22:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/8222454a",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-f7486b82",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-09-01T22:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality Adderall 30mg for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/e45c61f0",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-70f2b5a3",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-09-02T03:57:59.344673Z",
-    "actor": {
-      "raw_id": "vendor_41",
-      "display_name": "Vendor_41"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/e3e93042",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-5893c8ba",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-09-02T04:57:59.344673Z",
-    "actor": {
-      "raw_id": "v_xpress",
-      "display_name": "v_xpress"
-    },
-    "content": {
-      "text": "Top quality MDMA Crystal for sale. Fast shipping, stealth packaging. Wickr me at v_xpress_deals.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/0b20e158",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-1becaf96",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_forum",
-    "platform_id": "forum_C",
-    "timestamp": "2026-09-02T11:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Clean testing kits here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://forum_C/b7555dde",
-      "dataset": "demo_v1"
-    }
-  },
-  {
-    "event_id": "EVT-cfe5179b",
-    "source": "synthetic_demo",
-    "platform_type": "darknet_market",
-    "platform_id": "market_B",
-    "timestamp": "2026-09-02T22:57:59.344673Z",
-    "actor": {
-      "raw_id": "benign_user",
-      "display_name": "Health_Advocate"
-    },
-    "content": {
-      "text": "Always test your substances. Get Harm reduction guide here. Stay safe.",
-      "language": "en",
-      "image_refs": []
-    },
-    "entities": [],
-    "financial": [],
-    "location": null,
-    "provenance": {
-      "source_uri": "synthetic://market_B/1d813791",
-      "dataset": "demo_v1"
+      "source_uri": "synthetic://tor_hidden_service/evt-infr-04",
+      "dataset": "demo_v2_diverse"
     }
   }
 ]

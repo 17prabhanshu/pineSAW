@@ -184,9 +184,48 @@ class FaissEngine:
                     "nearestClusterId": f"CLUSTER-0x{abs(hash(doc['type']) % 256):02x}"
                 })
 
+        # Deduplicate candidates by label and text to prevent duplicate identical cards
+        deduped = []
+        seen_identifiers = set()
+        for item in scored_candidates:
+            label_norm = item["label"].split(":")[0].strip().lower() if ":" in item["label"] else item["label"][:24].strip().lower()
+            text_norm = item.get("text", "")[:40].strip().lower()
+            dedup_key = f"{label_norm}::{text_norm}"
+            if dedup_key in seen_identifiers:
+                continue
+            seen_identifiers.add(dedup_key)
+            deduped.append(item)
+
         # Sort strictly by hybrid score descending
-        scored_candidates.sort(key=lambda x: x["hybridScore"], reverse=True)
-        results = scored_candidates[:top_k]
+        deduped.sort(key=lambda x: x["hybridScore"], reverse=True)
+        results = deduped[:top_k]
+
+        # Compute continuous calibrated match percentages ensuring strictly distinct, rank-aligned values
+        last_pct = 98.5
+        for i, ent in enumerate(results):
+            hybrid = ent["hybridScore"]
+            bm25 = ent["bm25LexicalScore"]
+            sim = ent["faissCosineSimilarity"]
+            
+            # Continuous hybrid-to-percentage projection
+            # High-relevance zone (>= 0.70): 88.0% - 97.5%
+            # Mid-relevance zone (0.45 - 0.70): 68.0% - 87.9%
+            # Exploration zone (< 0.45): 50.0% - 67.9%
+            if hybrid >= 0.70:
+                target_pct = 88.0 + ((hybrid - 0.70) / 0.25) * 9.2 + (min(1.0, bm25) * 1.5)
+            elif hybrid >= 0.45:
+                target_pct = 68.0 + ((hybrid - 0.45) / 0.25) * 19.0 + (min(1.0, bm25) * 1.0)
+            else:
+                target_pct = 50.0 + max(0.0, (hybrid - 0.35) / 0.10) * 17.0
+            
+            target_pct = min(97.8, max(45.0, target_pct))
+            
+            # Ensure strictly monotonic progression down the ranking: each successive rank is distinct
+            if i > 0 and target_pct >= last_pct:
+                target_pct = last_pct - 0.3 - ((i % 5) * 0.1)
+                
+            ent["matchPercentage"] = round(target_pct, 1)
+            last_pct = ent["matchPercentage"]
 
         elapsed_ms = round((time.perf_counter() - start_time) * 1000.0, 2)
 

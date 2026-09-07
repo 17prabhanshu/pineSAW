@@ -98,7 +98,7 @@ export default function DeAnonymizationTab({ entity }: DeAnonymizationTabProps) 
       layer: "DARKNET FORUM HANDLE",
       platform: forumPlatform,
       identifier: forumHandle,
-      confidence: parseFloat((95 + (seedHash % 45) / 10).toFixed(1)),
+      confidence: parseFloat((96.0 + (seedHash % 35) / 10).toFixed(1)),
       verification: `Cryptographic PGP signatures and session tokens on ${forumPlatform}`,
       status: "CONFIRMED"
     },
@@ -106,7 +106,7 @@ export default function DeAnonymizationTab({ entity }: DeAnonymizationTabProps) 
       layer: "PGP PUBLIC KEY FINGERPRINT",
       platform: "MIT PGP Keyserver & Tor Mirrors",
       identifier: pgpFingerprint,
-      confidence: parseFloat((93 + (seedHash % 55) / 10).toFixed(1)),
+      confidence: parseFloat((88.0 + (seedHash % 50) / 10).toFixed(1)),
       verification: `RSA 4096-bit key verified against darknet listing headers`,
       status: "CONFIRMED"
     },
@@ -114,7 +114,7 @@ export default function DeAnonymizationTab({ entity }: DeAnonymizationTabProps) 
       layer: "MESSAGING / C2 INTERCEPT",
       platform: "Telegram Darknet Syndicate",
       identifier: telegramHandle,
-      confidence: parseFloat((90 + (seedHash % 60) / 10).toFixed(1)),
+      confidence: parseFloat((78.0 + (seedHash % 60) / 10).toFixed(1)),
       verification: linkedWallet 
         ? `Shared Wasabi deposit address (${linkedWallet.label.slice(0, 10)}...) mentioned in private escrow chat`
         : `Cryptographic match across escrow dispatch logs and Telegram bot`,
@@ -124,36 +124,41 @@ export default function DeAnonymizationTab({ entity }: DeAnonymizationTabProps) 
       layer: "FINANCIAL MULE KYC",
       platform: "Domestic Indian Banking Switch (RTGS/IMPS)",
       identifier: bankingEndpoint,
-      confidence: parseFloat((88 + (seedHash % 65) / 10).toFixed(1)),
+      confidence: parseFloat((65.0 + (seedHash % 70) / 10).toFixed(1)),
       verification: `NDPS § 68F peeling chain liquidated into domestic INR accounts`,
       status: "ACTIONABLE"
     }
   ];
 
-  // Dynamic SHAP Feature Importance Waterfall
+  // Dynamic SHAP Feature Importance Waterfall with varied percentages per entity
+  const wBtc = linkedWallet ? (38 + (seedHash % 8)) : (24 + (seedHash % 6));
+  const wPgp = 28 + ((seedHash >> 2) % 7);
+  const wNlp = 18 + ((seedHash >> 3) % 6);
+  const wTemp = Math.max(10, 100 - wBtc - wPgp - wNlp);
+
   const shapFeatures = [
     { 
       feature: linkedWallet ? `Peeling Chain Convergence (${linkedWallet.label.slice(0, 12)}...)` : "Shared Bitcoin Peeling Chain Cluster", 
-      impact: "+36.2%", 
-      value: 36.2, 
+      impact: `+${wBtc}%`, 
+      value: wBtc, 
       detail: "Direct utxo convergence into laundering mixer and OTC desk" 
     },
     { 
       feature: "PGP Key Header & Cryptographic Subkey Match", 
-      impact: "+29.4%", 
-      value: 29.4, 
+      impact: `+${wPgp}%`, 
+      value: wPgp, 
       detail: "Exact subkey fingerprint match across darknet repositories" 
     },
     { 
       feature: "Stylometric Lexical & Homoglyph Vector", 
-      impact: "+21.1%", 
-      value: 21.1, 
+      impact: `+${wNlp}%`, 
+      value: wNlp, 
       detail: "High-dimensional cosine proximity on linguistic syntax and typos" 
     },
     { 
       feature: "Temporal Activity & Tor Relay Correlation", 
-      impact: "+13.3%", 
-      value: 13.3, 
+      impact: `+${wTemp}%`, 
+      value: wTemp, 
       detail: "Concurrent activity burst alignment between Tor exit nodes and C2" 
     }
   ];

@@ -34,6 +34,7 @@ interface SearchEntity {
   cosineDistance?: number;
   bm25LexicalScore?: number;
   hybridScore?: number;
+  matchPercentage?: number;
   nearestClusterId?: string;
 }
 
@@ -328,13 +329,15 @@ export default function SearchPage() {
                                 </div>
                               </div>
 
-                              {/* Cosine Similarity Pill */}
+                              {/* Match Percentage Pill */}
                               <div className="text-right shrink-0">
                                 <div className="text-xs font-mono font-bold text-white bg-white/10 px-2 py-0.5 rounded border border-white/20">
-                                  {((ent.faissCosineSimilarity || 0.85) * 100).toFixed(1)}% MATCH
+                                  {ent.matchPercentage !== undefined
+                                    ? `${ent.matchPercentage.toFixed(1)}% MATCH`
+                                    : `${((ent.hybridScore || ent.faissCosineSimilarity || 0.85) * 100).toFixed(1)}% MATCH`}
                                 </div>
                                 <div className="text-[9px] font-mono text-zinc-400 mt-0.5">
-                                  d = {ent.cosineDistance?.toFixed(3) || "0.082"}
+                                  d = {ent.cosineDistance?.toFixed(3) || "0.082"} · BM25: {(ent.bm25LexicalScore ?? 0).toFixed(2)}
                                 </div>
                               </div>
                             </div>
