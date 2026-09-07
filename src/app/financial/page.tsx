@@ -2,13 +2,15 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { Bank, Users, MagnifyingGlass, Funnel, CaretRight, X, TrendUp, Link as LinkIcon, Printer, Copy, ShieldCheck, Check } from "@phosphor-icons/react";
+import { Bank, Users, MagnifyingGlass, Funnel, CaretRight, X, TrendUp, Link as LinkIcon, Printer, Copy, ShieldCheck, Check, GitCommit, Table } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { toast } from "sonner";
+import { ChainalysisReactorFlow } from "@/components/ChainalysisReactorFlow";
 
 export default function FinancialPage() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<any>(null);
+  const [viewMode, setViewMode] = useState<"REACTOR" | "LEDGER">("REACTOR");
   const [assetFilter, setAssetFilter] = useState<"ALL" | "BANK" | "WALLET">("ALL");
   const [queryingFIU, setQueryingFIU] = useState(false);
 
@@ -90,8 +92,41 @@ export default function FinancialPage() {
               NDSS MFScope Bidirectional Backtracking & NDPS Act Sec 68F Freeze Engine
             </p>
           </div>
-          <div className="flex gap-2">
-            <div className="flex bg-zinc-900 border border-white/10 rounded-xl p-0.5">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* View Mode Toggle: Reactor Flow vs Ledger */}
+            <div className="flex bg-zinc-950 border border-white/10 rounded-xl p-1 shadow-inner">
+              <button
+                onClick={() => {
+                  setViewMode("REACTOR");
+                  toast.info("Switched to Chainalysis Reactor Flow");
+                }}
+                className={clsx(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
+                  viewMode === "REACTOR"
+                    ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+                    : "text-zinc-400 hover:text-white"
+                )}
+              >
+                <GitCommit size={14} weight="bold" /> Reactor Flow
+              </button>
+              <button
+                onClick={() => {
+                  setViewMode("LEDGER");
+                  toast.info("Switched to Asset Ledger View");
+                }}
+                className={clsx(
+                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
+                  viewMode === "LEDGER"
+                    ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)]"
+                    : "text-zinc-400 hover:text-white"
+                )}
+              >
+                <Table size={14} weight="bold" /> Ledger
+              </button>
+            </div>
+
+            {viewMode === "LEDGER" && (
+              <div className="flex bg-zinc-900 border border-white/10 rounded-xl p-0.5">
               {(["ALL", "BANK", "WALLET"] as const).map((f) => (
                 <button
                   key={f}
@@ -107,7 +142,8 @@ export default function FinancialPage() {
                   {f}
                 </button>
               ))}
-            </div>
+              </div>
+            )}
 
             <button 
               onClick={handleQueryFIU}
@@ -121,8 +157,21 @@ export default function FinancialPage() {
         </div>
       </header>
 
-      <div className="flex-1 flex overflow-hidden relative">
-        <div className={clsx("flex-1 overflow-auto p-8 transition-[margin] duration-150", selectedAccount ? "mr-[450px]" : "")}>
+      {viewMode === "REACTOR" ? (
+        <div className="flex-1 p-6 md:p-8 overflow-y-auto">
+          <ChainalysisReactorFlow
+            onSelectHopAction={(noticeType, hop) => {
+              setSelectedAccount({
+                label: `${hop.entityName} (${hop.amount})`,
+                id: hop.id
+              });
+              handleGenerateNotice(noticeType);
+            }}
+          />
+        </div>
+      ) : (
+        <div className="flex-1 flex overflow-hidden relative">
+          <div className={clsx("flex-1 overflow-auto p-8 transition-[margin] duration-150", selectedAccount ? "mr-[450px]" : "")}>
           <div className="glass nexus-border rounded-2xl shadow-sm flex flex-col min-h-0">
             <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
@@ -285,7 +334,8 @@ export default function FinancialPage() {
             </div>
           </div>
         )}
-      </div>
+        </div>
+      )}
 
       {/* LEGAL NOTICE GENERATION MODAL */}
       {legalModalOpen && (
