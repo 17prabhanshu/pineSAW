@@ -340,27 +340,12 @@ export default function IngestionPanel() {
             transition={{ duration: 0.4 }}
             className="z-10 flex flex-col items-center justify-center w-full my-auto py-24"
           >
-            {/* Concentric Rotating Radar Rings */}
-            <div className="relative flex items-center justify-center mb-14 w-60 h-60">
-              <motion.div 
-                animate={{ rotate: 360, scale: [1, 1.08, 1] }} 
-                transition={{ repeat: Infinity, duration: 4, ease: "linear" }} 
-                className="absolute inset-0 border-[0.5px] border-white/20 rounded-full border-t-white" 
-              />
-              <motion.div 
-                animate={{ rotate: -360, scale: [1, 1.15, 1] }} 
-                transition={{ repeat: Infinity, duration: 6, ease: "linear" }} 
-                className="absolute inset-4 border-[0.5px] border-white/10 rounded-full border-b-white" 
-              />
-              <motion.div 
-                animate={{ rotate: 360 }} 
-                transition={{ repeat: Infinity, duration: 3, ease: "linear" }} 
-                className="absolute inset-8 border border-white/5 rounded-full" 
-                style={{ borderStyle: 'dashed' }} 
-              />
-              <div className="w-20 h-20 bg-white shadow-[0_0_40px_white] rounded-full flex items-center justify-center relative z-10">
+            {/* Simplified Safe Radar */}
+            <div className="relative flex items-center justify-center mb-14 w-40 h-40">
+              <div className="w-20 h-20 bg-white shadow-[0_0_40px_white] rounded-full flex items-center justify-center relative z-10 animate-pulse">
                 <Fingerprint size={38} className="text-black" weight="fill" />
               </div>
+              <div className="absolute inset-0 rounded-full border-2 border-white/20 animate-ping opacity-20"></div>
             </div>
 
             <h2 className="text-white font-mono text-sm sm:text-base tracking-[0.25em] font-bold mb-3 uppercase text-center px-4">
