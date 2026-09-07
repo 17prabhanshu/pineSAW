@@ -55,11 +55,11 @@ const rowVariants = {
 
 const SkeletonRow = () => (
   <tr className="border-b border-white/5">
-    <td className="px-6 py-4"><div className="h-4 bg-zinc-200/50 animate-pulse rounded w-16"></div></td>
-    <td className="px-6 py-4"><div className="h-4 bg-zinc-200/50 animate-pulse rounded w-32"></div></td>
-    <td className="px-6 py-4"><div className="h-4 bg-zinc-200/50 animate-pulse rounded w-16"></div></td>
-    <td className="px-6 py-4"><div className="h-4 bg-zinc-200/50 animate-pulse rounded w-16"></div></td>
-    <td className="px-6 py-4 text-right"><div className="h-4 bg-zinc-200/50 animate-pulse rounded w-20 ml-auto"></div></td>
+    <td className="px-6 py-4"><div className="h-4 bg-zinc-800/60 animate-pulse rounded w-16"></div></td>
+    <td className="px-6 py-4"><div className="h-4 bg-zinc-800/60 animate-pulse rounded w-32"></div></td>
+    <td className="px-6 py-4"><div className="h-4 bg-zinc-800/60 animate-pulse rounded w-16"></div></td>
+    <td className="px-6 py-4"><div className="h-4 bg-zinc-800/60 animate-pulse rounded w-16"></div></td>
+    <td className="px-6 py-4 text-right"><div className="h-4 bg-zinc-800/60 animate-pulse rounded w-20 ml-auto"></div></td>
   </tr>
 );
 
@@ -84,17 +84,17 @@ export default function InvestigationsPage() {
   }, []);
 
   return (
-    <div className="p-8 max-w-6xl mx-auto h-full flex flex-col">
-      <header className="mb-8 flex justify-between items-end">
+    <div className="max-w-6xl mx-auto h-full flex flex-col">
+      <header className="mb-6 flex justify-between items-end border-b border-white/10 pb-6">
         <div>
-          <h1 className="font-display text-4xl font-bold tracking-tight mb-2">Investigations</h1>
-          <p className="text-zinc-400 font-mono text-sm">ACTIVE AND HISTORICAL INTELLIGENCE CASES</p>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1">Investigations</h1>
+          <p className="text-zinc-400 font-mono text-xs uppercase tracking-wider">Active and Historical Intelligence Cases</p>
         </div>
         <MagneticButton 
           onClick={() => setIsModalOpen(true)}
-          className="btn-gov px-4 py-2 rounded-none font-medium text-sm flex items-center gap-2"
+          className="btn-gov px-4 py-2 font-medium text-xs flex items-center gap-2 cursor-pointer"
         >
-          <Plus size={16} weight="bold" /> New Case
+          <Plus size={15} weight="bold" /> New Case
         </MagneticButton>
       </header>
 
@@ -107,7 +107,7 @@ export default function InvestigationsPage() {
         }}
       />
 
-      <div className=" glass rounded-[2rem] overflow-hidden flex-1 flex flex-col">
+      <div className="glass rounded-xl border border-white/10 overflow-hidden flex-1 flex flex-col">
         <table className="w-full text-left text-sm flex-1 block overflow-auto">
           <thead className="sticky top-0 bg-black border-b border-white/10 w-full table table-fixed z-10">
             <tr className="font-mono text-[10px] uppercase text-zinc-400">

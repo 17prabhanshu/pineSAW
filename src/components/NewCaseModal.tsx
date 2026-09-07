@@ -119,7 +119,7 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5 text-white">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-800/50 text-red-400 text-xs flex items-center gap-2">
+            <div className="p-3 bg-red-950/40 border border-red-500/30 text-red-300 text-xs rounded-lg flex items-center gap-2">
               <WarningOctagon size={16} className="shrink-0 text-red-600" />
               <span>{error}</span>
             </div>

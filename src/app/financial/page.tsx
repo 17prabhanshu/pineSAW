@@ -83,82 +83,77 @@ export default function FinancialPage() {
   }, [accounts, assetFilter]);
 
   return (
-    <div className="flex h-full overflow-hidden flex-col">
-      <header className="px-8 py-6 glass border-b border-white/10 shrink-0">
-        <div className="flex justify-between items-end">
-          <div>
-            <h1 className="font-display text-2xl font-bold tracking-tight mb-1 text-white">Asset Review & Fiat Tracing</h1>
-            <p className="text-zinc-300 font-mono text-[10px] uppercase tracking-widest">
-              NDSS MFScope Bidirectional Backtracking & NDPS Act Sec 68F Freeze Engine
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {/* View Mode Toggle: Reactor Flow vs Ledger */}
-            <div className="flex bg-zinc-950 border border-white/10 rounded-xl p-1 shadow-inner">
-              <button
-                onClick={() => {
-                  setViewMode("REACTOR");
-                  toast.info("Switched to Chainalysis Reactor Flow");
-                }}
-                className={clsx(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
-                  viewMode === "REACTOR"
-                    ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)]"
-                    : "text-zinc-400 hover:text-white"
-                )}
-              >
-                <GitCommit size={14} weight="bold" /> Reactor Flow
-              </button>
-              <button
-                onClick={() => {
-                  setViewMode("LEDGER");
-                  toast.info("Switched to Asset Ledger View");
-                }}
-                className={clsx(
-                  "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
-                  viewMode === "LEDGER"
-                    ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)]"
-                    : "text-zinc-400 hover:text-white"
-                )}
-              >
-                <Table size={14} weight="bold" /> Ledger
-              </button>
-            </div>
-
-            {viewMode === "LEDGER" && (
-              <div className="flex bg-zinc-900 border border-white/10 rounded-xl p-0.5">
-              {(["ALL", "BANK", "WALLET"] as const).map((f) => (
-                <button
-                  key={f}
-                  onClick={() => {
-                    setAssetFilter(f);
-                    toast.info(`Filtered: ${f === 'ALL' ? 'All Assets' : f === 'BANK' ? 'Bank Accounts' : 'Crypto Wallets'}`);
-                  }}
-                  className={clsx(
-                    "px-3 py-1 text-xs font-mono rounded-lg transition-colors cursor-pointer",
-                    assetFilter === f ? "bg-white text-black font-semibold" : "text-zinc-400 hover:text-white"
-                  )}
-                >
-                  {f}
-                </button>
-              ))}
-              </div>
-            )}
-
-            <button 
-              onClick={handleQueryFIU}
-              disabled={queryingFIU}
-              className="btn-gov flex items-center gap-2 text-xs cursor-pointer disabled:opacity-50"
+    <div className="flex h-full flex-col">
+      <header className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/10 pb-6 shrink-0">
+        <div>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-1 text-white">Asset Review & Fiat Tracing</h1>
+          <p className="text-zinc-400 font-mono text-xs uppercase tracking-wider">
+            NDSS MFScope Bidirectional Backtracking & NDPS Act Sec 68F Freeze Engine
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* View Mode Toggle: Reactor Flow vs Ledger */}
+          <div className="flex bg-zinc-950 border border-white/10 rounded-lg p-0.5 shadow-inner">
+            <button
+              onClick={() => {
+                setViewMode("REACTOR");
+                toast.info("Switched to Chainalysis Reactor Flow");
+              }}
+              className={clsx(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
+                viewMode === "REACTOR"
+                  ? "bg-white text-black font-bold shadow-sm"
+                  : "text-zinc-400 hover:text-white"
+              )}
             >
-              <MagnifyingGlass size={14} /> 
-              {queryingFIU ? "Pinging FIU-IND..." : "Query FIU-IND Gateway"}
+              <GitCommit size={14} weight="bold" /> Reactor Flow
+            </button>
+            <button
+              onClick={() => {
+                setViewMode("LEDGER");
+                toast.info("Switched to Asset Ledger View");
+              }}
+              className={clsx(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
+                viewMode === "LEDGER"
+                  ? "bg-white text-black font-bold shadow-sm"
+                  : "text-zinc-400 hover:text-white"
+              )}
+            >
+              <Table size={14} weight="bold" /> Ledger
             </button>
           </div>
+
+          {viewMode === "LEDGER" && (
+            <div className="flex bg-zinc-950 border border-white/10 rounded-lg p-0.5">
+            {(["ALL", "BANK", "WALLET"] as const).map((f) => (
+              <button
+                key={f}
+                onClick={() => setAssetFilter(f)}
+                className={clsx(
+                  "px-2.5 py-1 rounded text-[10px] font-mono transition-colors cursor-pointer",
+                  assetFilter === f ? "bg-white text-black font-bold" : "text-zinc-400 hover:text-white"
+                )}
+              >
+                {f}
+              </button>
+            ))}
+            </div>
+          )}
+
+          <button 
+            onClick={handleQueryFIU}
+            disabled={queryingFIU}
+            className="btn-gov flex items-center gap-2 text-xs cursor-pointer disabled:opacity-50"
+          >
+            <MagnifyingGlass size={14} /> 
+            {queryingFIU ? "Pinging FIU-IND..." : "Query FIU-IND Gateway"}
+          </button>
         </div>
       </header>
 
       {viewMode === "REACTOR" ? (
-        <div className="flex-1 p-6 md:p-8 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto">
           <ChainalysisReactorFlow
             onSelectHopAction={(noticeType, hop) => {
               setSelectedAccount({
@@ -171,7 +166,7 @@ export default function FinancialPage() {
         </div>
       ) : (
         <div className="flex-1 flex overflow-hidden relative">
-          <div className={clsx("flex-1 overflow-auto p-8 transition-[margin] duration-150", selectedAccount ? "mr-[450px]" : "")}>
+          <div className="flex-1 overflow-auto">
           <div className="glass nexus-border rounded-2xl shadow-sm flex flex-col min-h-0">
             <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex justify-between items-center">
               <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
@@ -248,7 +243,12 @@ export default function FinancialPage() {
 
         {/* Detail Drawer */}
         {selectedAccount && (
-          <div className="absolute top-0 right-0 bottom-0 w-[450px] glass border-l border-white/10 shadow-xl flex flex-col z-30">
+          <>
+            <div 
+              onClick={() => setSelectedAccount(null)} 
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40"
+            />
+            <div className="fixed top-14 right-0 bottom-0 w-full sm:w-[450px] bg-zinc-950 border-l border-white/10 shadow-2xl flex flex-col z-50">
             <div className="p-6 border-b border-white/10 bg-zinc-800/30 relative">
               <button onClick={() => setSelectedAccount(null)} className="absolute top-4 right-4 text-zinc-400 hover:text-white"><X size={16}/></button>
               <div className="text-[10px] font-mono text-zinc-300 uppercase tracking-widest mb-1 font-semibold">FINANCIAL ASSET PROFILE</div>
@@ -333,6 +333,7 @@ export default function FinancialPage() {
               </section>
             </div>
           </div>
+          </>
         )}
         </div>
       )}

@@ -106,7 +106,7 @@ export default function EntitiesPage() {
         </div>
       </header>
 
-      <div className="glass rounded-3xl border border-white/10 overflow-hidden flex-1 flex flex-col shadow-xl">
+      <div className="glass rounded-xl border border-white/10 overflow-hidden flex-1 flex flex-col shadow-xl">
         <table className="w-full text-left text-sm flex-1 block overflow-y-auto">
           <thead className="sticky top-0 bg-black/90 border-b border-white/10 w-full table table-fixed z-10">
             <tr className="font-mono text-[10px] uppercase text-zinc-400">

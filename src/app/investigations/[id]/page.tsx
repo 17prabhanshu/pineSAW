@@ -51,7 +51,7 @@ export default function InvestigationWorkspace() {
       <header className="h-16 glass border-b border-white/10 px-6 flex items-center justify-between shrink-0 z-10 shadow-sm">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2 py-0.5 font-mono text-[10px] bg-blue-50 text-gov-blue border border-blue-200 font-bold">{investigation.caseId}</span>
+            <span className="px-2 py-0.5 font-mono text-[10px] bg-white/10 text-white border border-white/20 font-bold">{investigation.caseId}</span>
             <span className="px-2 py-0.5 bg-zinc-900/50 text-zinc-300 font-mono text-[10px] border border-white/10 font-semibold">{investigation.status}</span>
             <span className={clsx(
               "px-2 py-0.5 font-mono text-[10px] font-bold border",
@@ -179,49 +179,49 @@ export default function InvestigationWorkspace() {
 
                 {/* Flow Diagram Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs mb-6">
-                  <div className="bg-red-50 border border-red-200 p-3 flex flex-col justify-between">
+                  <div className="bg-zinc-950 border border-red-500/30 rounded-lg p-3 flex flex-col justify-between">
                     <div>
-                      <div className="text-[9px] font-mono text-red-600 font-bold uppercase">1. Origin Point</div>
+                      <div className="text-[9px] font-mono text-red-400 font-bold uppercase">1. Origin Point</div>
                       <div className="font-bold text-white mt-1">GenesisMarket Listing #8492</div>
                       <div className="text-[11px] text-zinc-400 mt-1">Synthetic Opioid Listing</div>
                     </div>
-                    <span className="text-[10px] font-mono text-red-700 mt-3 font-semibold">Tor .onion</span>
+                    <span className="text-[10px] font-mono text-red-400 mt-3 font-semibold">Tor .onion</span>
                   </div>
 
-                  <div className="bg-amber-50 border border-amber-200 p-3 flex flex-col justify-between">
+                  <div className="bg-zinc-950 border border-amber-500/30 rounded-lg p-3 flex flex-col justify-between">
                     <div>
-                      <div className="text-[9px] font-mono text-amber-700 font-bold uppercase">2. Crypto Deposit</div>
+                      <div className="text-[9px] font-mono text-amber-300 font-bold uppercase">2. Crypto Deposit</div>
                       <div className="font-bold text-white mt-1 break-all">0x742d...f44e</div>
                       <div className="text-[11px] text-zinc-400 mt-1">14.5 ETH Received</div>
                     </div>
-                    <span className="text-[10px] font-mono text-amber-700 mt-3 font-semibold">Ethereum Ledger</span>
+                    <span className="text-[10px] font-mono text-amber-300 mt-3 font-semibold">Ethereum Ledger</span>
                   </div>
 
-                  <div className="bg-purple-50 border border-purple-200 p-3 flex flex-col justify-between">
+                  <div className="bg-zinc-950 border border-purple-500/30 rounded-lg p-3 flex flex-col justify-between">
                     <div>
-                      <div className="text-[9px] font-mono text-purple-700 font-bold uppercase">3. Mixer Layer</div>
+                      <div className="text-[9px] font-mono text-purple-300 font-bold uppercase">3. Mixer Layer</div>
                       <div className="font-bold text-white mt-1">Liquidity Pool Mixer</div>
                       <div className="text-[11px] text-zinc-400 mt-1">Smart Contract Obfuscation</div>
                     </div>
-                    <span className="text-[10px] font-mono text-purple-700 mt-3 font-semibold">Tumbled Output</span>
+                    <span className="text-[10px] font-mono text-purple-300 mt-3 font-semibold">Tumbled Output</span>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-200 p-3 flex flex-col justify-between">
+                  <div className="bg-zinc-950 border border-white/20 rounded-lg p-3 flex flex-col justify-between">
                     <div>
-                      <div className="text-[9px] font-mono text-blue-700 font-bold uppercase">4. Exchange Deposit</div>
+                      <div className="text-[9px] font-mono text-zinc-300 font-bold uppercase">4. Exchange Deposit</div>
                       <div className="font-bold text-white mt-1">Deposit Hot Wallet #99104</div>
                       <div className="text-[11px] text-zinc-400 mt-1">Binance / Gateway KYC</div>
                     </div>
-                    <span className="text-[10px] font-mono text-blue-700 mt-3 font-semibold">Regulated KYC Link</span>
+                    <span className="text-[10px] font-mono text-zinc-300 mt-3 font-semibold">Regulated KYC Link</span>
                   </div>
 
-                  <div className="bg-emerald-50 border border-emerald-300 p-3 flex flex-col justify-between">
+                  <div className="bg-zinc-950 border border-emerald-500/30 rounded-lg p-3 flex flex-col justify-between">
                     <div>
-                      <div className="text-[9px] font-mono text-emerald-800 font-bold uppercase">5. Fiat Off-Ramps</div>
+                      <div className="text-[9px] font-mono text-emerald-400 font-bold uppercase">5. Fiat Off-Ramps</div>
                       <div className="font-bold text-white mt-1">HDFC, SBI & Swissquote</div>
                       <div className="text-[11px] text-zinc-400 mt-1">INR 2.1M + CHF 25K</div>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-800 mt-3 font-semibold">Bank Wire Target</span>
+                    <span className="text-[10px] font-mono text-emerald-400 mt-3 font-semibold">Bank Wire Target</span>
                   </div>
                 </div>
 

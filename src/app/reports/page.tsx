@@ -63,11 +63,11 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="p-8 max-w-5xl mx-auto h-full flex flex-col">
-      <header className="mb-6 flex justify-between items-end print:hidden">
+    <div className="max-w-5xl mx-auto h-full flex flex-col">
+      <header className="mb-6 flex justify-between items-end border-b border-white/10 pb-6 print:hidden">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight mb-1 text-white">Statutory Report Generator</h1>
-          <p className="text-zinc-400 font-mono text-xs uppercase tracking-widest">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-1 text-white">Statutory Report Generator</h1>
+          <p className="text-zinc-400 font-mono text-xs uppercase tracking-wider">
             Cryptographic Evidence Packages & Court Production Orders
           </p>
         </div>
@@ -81,12 +81,12 @@ export default function ReportsPage() {
       {/* Pre-Approved Statutory Templates Carousel */}
       <ReportTemplateCarousel onSelectTemplate={handleSelectTemplate} />
 
-      <div className="surface-1 nexus-border rounded-2xl p-6 mb-8 print:hidden bg-zinc-950/60">
+      <div className="surface-1 nexus-border rounded-xl p-6 mb-8 print:hidden bg-zinc-950/60">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
           <div>
             <label className="block text-xs font-mono text-zinc-300 uppercase mb-2">Target Investigation</label>
             <select 
-              className="w-full bg-zinc-900 border border-white/10 rounded-2xl px-3 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-white transition-colors"
+              className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-white transition-colors"
               value={selectedCase}
               onChange={e => setSelectedCase(e.target.value)}
             >
@@ -97,7 +97,7 @@ export default function ReportsPage() {
           </div>
           <div>
             <label className="block text-xs font-mono text-zinc-300 uppercase mb-2">Time Range</label>
-            <select className="w-full bg-zinc-900 border border-white/10 rounded-2xl px-3 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-white transition-colors">
+            <select className="w-full bg-zinc-900 border border-white/10 rounded-lg px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-white transition-colors">
               <option>Last 30 Days (Standard Judicial Scope)</option>
               <option>Last 90 Days</option>
               <option>Year to Date</option>

@@ -32,8 +32,8 @@ export default function ActionCenter() {
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
   const [isStackHovered, setIsStackHovered] = useState(false);
   
-  // Controls
-  const [viewMode, setViewMode] = useState<"3D" | "MATRIX" | "PIPELINE">("3D");
+  // Controls (Default MATRIX for clear unblocked visibility)
+  const [viewMode, setViewMode] = useState<"3D" | "MATRIX" | "PIPELINE">("MATRIX");
   const [filter, setFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -397,21 +397,21 @@ export default function ActionCenter() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5"
           >
             {filteredActions.map((act, i) => (
               <motion.div
                 key={act.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                transition={{ delay: i * 0.04 }}
+                whileHover={{ y: -2, transition: { duration: 0.15 } }}
                 onClick={() => setSelectedAction(act)}
                 className={clsx(
-                  "bg-zinc-950/90 border rounded-3xl p-6 cursor-pointer transition-all flex flex-col justify-between group",
+                  "bg-zinc-950 border rounded-xl p-4.5 cursor-pointer transition-all flex flex-col justify-between group",
                   selectedAction?.id === act.id
-                    ? "border-white shadow-[0_0_30px_rgba(255,255,255,0.15)] bg-zinc-900"
-                    : "border-white/10 hover:border-white/30 hover:shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+                    ? "border-white shadow-[0_0_20px_rgba(255,255,255,0.15)] bg-zinc-900"
+                    : "border-white/10 hover:border-white/25 hover:bg-zinc-900/40"
                 )}
               >
                 <div>

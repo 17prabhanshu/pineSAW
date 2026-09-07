@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "motion/react";
@@ -14,8 +14,6 @@ import {
   Database,
   Bank,
   CheckSquareOffset,
-  Circle,
-  Pulse
 } from "@phosphor-icons/react";
 import clsx from "clsx";
 
@@ -25,7 +23,7 @@ const navSections = [
     items: [
       { href: "/", label: "Command Center", icon: ShieldChevron },
       { href: "/actions", label: "Action Center", icon: CheckSquareOffset, badge: "11" },
-      { href: "/alerts", label: "Alerts", icon: WarningOctagon, badge: "03", badgeColor: "bg-red-600 text-white" },
+      { href: "/alerts", label: "Alerts", icon: WarningOctagon, badge: "03", badgeColor: "bg-red-950/60 text-red-400 border border-red-500/30" },
       { href: "/investigations", label: "Investigations", icon: FolderOpen },
     ]
   },
@@ -72,14 +70,14 @@ export function Sidebar() {
   }, [router]);
 
   return (
-    <aside className="hidden md:flex w-64 liquid-glass  rounded-[2rem] flex-col fixed top-28 bottom-6 left-6 z-40 overflow-hidden shadow-2xl border border-white/10">
-      <div className="flex-1 overflow-y-auto py-6 custom-scrollbar">
+    <aside className="hidden md:flex w-60 shrink-0 border-r border-white/[0.08] bg-zinc-950/70 backdrop-blur-xl flex-col sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto custom-scrollbar z-30 select-none">
+      <div className="flex-1 py-5">
         {navSections.map((section, idx) => (
-          <div key={idx} className="mb-6">
-            <h3 className="px-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2 font-semibold">
+          <div key={idx} className="mb-5">
+            <h3 className="px-5 text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1.5 font-semibold">
               {section.title}
             </h3>
-            <ul className="space-y-1 px-4">
+            <ul className="space-y-0.5 px-3">
               {section.items.map((item: any) => {
                 const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                 return (
@@ -87,34 +85,34 @@ export function Sidebar() {
                     <Link
                       href={item.href}
                       className={clsx(
-                        "relative flex items-center justify-between px-4 py-2.5 text-sm transition-all rounded-xl",
+                        "relative flex items-center justify-between px-3 py-2 text-xs transition-all rounded-lg",
                         isActive
                           ? "text-white font-medium"
-                          : "text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent"
+                          : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
                       )}
                     >
                       {isActive && (
                         <motion.div
                           layoutId="activeTab"
-                          className="absolute inset-0 bg-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_0_10px_rgba(255,255,255,0.2)] border border-white/20 rounded-xl"
+                          className="absolute inset-0 bg-white/10 border border-white/15 rounded-lg"
                           initial={false}
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 32 }}
                         />
                       )}
-                      <div className="relative z-10 flex items-center gap-3">
+                      <div className="relative z-10 flex items-center gap-2.5">
                         <item.icon
                           weight={isActive ? "fill" : "regular"}
-                          className={clsx("text-lg", isActive ? "text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" : "text-zinc-500")}
+                          className={clsx("text-base", isActive ? "text-white" : "text-zinc-400")}
                         />
                         <span>{item.label}</span>
                       </div>
                       {item.badge && (
-                        <span className={clsx("relative z-10 text-[10px] font-mono px-2 py-0.5 rounded-full font-bold", item.badgeColor || "bg-black/50 text-zinc-300 border border-white/10")}>
+                        <span className={clsx("relative z-10 text-[9px] font-mono px-1.5 py-0.2 rounded font-semibold", item.badgeColor || "bg-black/60 text-zinc-300 border border-white/10")}>
                           {item.badge}
                         </span>
                       )}
                       {item.shortcut && (
-                        <kbd className="relative z-10 text-[10px] font-mono bg-black/50 border border-white/10 px-1.5 py-0.5 rounded-lg text-zinc-500 shadow-inner">
+                        <kbd className="relative z-10 text-[9px] font-mono bg-black/60 border border-white/10 px-1.5 py-0.5 rounded text-zinc-400">
                           {item.shortcut}
                         </kbd>
                       )}
@@ -128,24 +126,24 @@ export function Sidebar() {
       </div>
       
       {/* System Telemetry Footer */}
-      <div className="p-5 border-t border-white/5 bg-black/20 text-xs font-mono text-zinc-500 space-y-3 backdrop-blur-md">
+      <div className="p-4 border-t border-white/[0.08] bg-black/40 text-[11px] font-mono text-zinc-400 space-y-2">
         <div className="flex justify-between items-center">
-          <span className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_#ffffff] animate-pulse"></span>
-            Tor Nodes
+          <span className="flex items-center gap-1.5 text-zinc-400">
+            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+            Tor Lacus
           </span>
-          <span className="font-medium text-zinc-300">8 Active</span>
+          <span className="text-white font-semibold">8 Active</span>
         </div>
         <div className="flex justify-between items-center">
-          <span className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_#ffffff]"></span>
-            FIU-IND
+          <span className="flex items-center gap-1.5 text-zinc-400">
+            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+            FIU-IND Node
           </span>
-          <span className="font-medium text-white">Online</span>
+          <span className="text-white font-semibold">Online</span>
         </div>
-        <div className="flex justify-between items-center pt-3 mt-1 border-t border-white/5 text-[10px] text-zinc-600">
-          <span>DARKINT v2.5</span>
-          <span className="bg-white/5 px-2 py-0.5 rounded border border-white/5">SECURE</span>
+        <div className="flex justify-between items-center pt-2 border-t border-white/5 text-[9px] text-zinc-500">
+          <span>DARKINT v2.8</span>
+          <span className="bg-white/5 px-1.5 py-0.2 rounded text-zinc-400 border border-white/5">SECURE</span>
         </div>
       </div>
     </aside>

@@ -91,7 +91,7 @@ export default function CommandCenter() {
       />
 
       {/* Main Workspace Area */}
-      <div className={clsx("flex-1 overflow-y-auto flex flex-col p-6 md:p-8 transition-all duration-300", selectedIncident ? "mr-0 lg:mr-[420px]" : "")}>
+      <div className="flex-1 flex flex-col">
         
         {/* Minimal Breadcrumb & System Status */}
         <div className="flex items-center justify-between mb-4">
@@ -320,13 +320,18 @@ export default function CommandCenter() {
       {/* Detail Slide-Out Drawer */}
       <AnimatePresence>
         {selectedIncident && (
-          <motion.div 
-            initial={{ x: "100%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: "100%", opacity: 0 }}
-            transition={{ type: "spring", stiffness: 350, damping: 32 }}
-            className="fixed top-0 right-0 bottom-0 w-full sm:w-[420px] bg-black/95 backdrop-blur-2xl border-l border-white/15 shadow-2xl flex flex-col z-40 pt-28"
-          >
+          <>
+            <div 
+              onClick={() => setSelectedIncident(null)} 
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40"
+            />
+            <motion.div 
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ type: "spring", stiffness: 350, damping: 32 }}
+              className="fixed top-14 right-0 bottom-0 w-full sm:w-[420px] bg-zinc-950 border-l border-white/10 shadow-2xl flex flex-col z-50"
+            >
             <div className="p-6 border-b border-white/10 relative">
               <button 
                 onClick={() => setSelectedIncident(null)} 
@@ -412,7 +417,8 @@ export default function CommandCenter() {
               </button>
             </div>
           </motion.div>
-        )}
+        </>
+      )}
       </AnimatePresence>
 
       {/* ASSIGN AGENT MODAL */}

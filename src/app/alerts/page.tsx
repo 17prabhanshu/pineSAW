@@ -32,7 +32,7 @@ export default function AlertsPage() {
 
   return (
     <div className="flex h-full overflow-hidden relative">
-      <div className={clsx("flex-1 p-8 flex flex-col transition-[margin] duration-300 overflow-y-auto", selectedAlert ? "mr-0 lg:mr-[460px]" : "")}>
+      <div className="flex-1 flex flex-col">
         
         {/* Minimal Header */}
         <header className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/10 pb-6">
@@ -128,7 +128,12 @@ export default function AlertsPage() {
 
       {/* Detail Drawer */}
       {selectedAlert && (
-        <div className="fixed right-0 top-0 bottom-0 w-full sm:w-[460px] bg-black/95 backdrop-blur-2xl border-l border-white/15 shadow-2xl flex flex-col z-50 pt-28">
+        <>
+          <div 
+            onClick={() => setSelectedAlert(null)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40"
+          />
+          <div className="fixed right-0 top-14 bottom-0 w-full sm:w-[460px] bg-zinc-950 border-l border-white/10 shadow-2xl flex flex-col z-50">
           <div className="p-6 border-b border-white/10 relative">
             <button 
               onClick={() => setSelectedAlert(null)}
@@ -243,6 +248,7 @@ export default function AlertsPage() {
             </button>
           </div>
         </div>
+        </>
       )}
     </div>
   );
