@@ -28,6 +28,19 @@ export default function EntityIntelligence() {
     fetch(`/api/entities/${id}`).then(r => r.json()).then(setEntity);
   }, [id]);
 
+
+  const graphData = entity ? {
+    nodes: [
+      { id: entity.id, label: entity.label, group: entity.type, priorityScore: entity.priorityScore },
+      ...(entity.sourceRelations || []).map((r: any) => ({ id: r.target.id, label: r.target.label, group: r.target.type, priorityScore: r.target.priorityScore })),
+      ...(entity.targetRelations || []).map((r: any) => ({ id: r.source.id, label: r.source.label, group: r.source.type, priorityScore: r.source.priorityScore }))
+    ],
+    links: [
+      ...(entity.sourceRelations || []).map((r: any) => ({ source: entity.id, target: r.target.id, label: r.type })),
+      ...(entity.targetRelations || []).map((r: any) => ({ source: r.source.id, target: entity.id, label: r.type }))
+    ]
+  } : { nodes: [], links: [] };
+
   if (!entity) return <div className="p-8 font-mono text-zinc-400 text-sm">LOADING ENTITY INTELLIGENCE...</div>;
 
   const tabs = ["OVERVIEW", "IDENTIFIERS", "ACTIVITY", "RELATIONSHIPS", "FINANCIAL", "EVIDENCE", "ALERTS", "INVESTIGATIONS", "LEGAL", "ACTIONS"];
@@ -346,13 +359,129 @@ export default function EntityIntelligence() {
         )}
 
         {/* Fallback for other tabs to show they are functional but empty in this demo */}
-        {!["OVERVIEW", "LEGAL", "ACTIONS"].includes(activeTab) && (
+        
+        
+        {activeTab === "IDENTIFIERS" && (
+          <div className="mt-6 px-2 max-w-5xl">
+            <h3 className="text-lg font-display font-semibold text-white mb-6">Known Digital & Physical Identifiers</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Communication Handles */}
+              <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-6 shadow-sm">
+                <div className="flex items-center gap-2 mb-4 pb-4 border-b border-white/5">
+                  <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                    <IdentificationCard size={16} weight="fill" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-white">Communication Handles</h4>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center bg-black/30 p-3 rounded-xl border border-white/5">
+                    <div>
+                      <div className="text-xs font-mono text-zinc-400 mb-0.5">Telegram</div>
+                      <div className="text-sm font-bold text-zinc-200">@shadow_broker_t</div>
+                    </div>
+                    <span className="text-[10px] px-2 py-1 bg-emerald-500/10 text-emerald-400 font-mono rounded">VERIFIED</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-black/30 p-3 rounded-xl border border-white/5">
+                    <div>
+                      <div className="text-xs font-mono text-zinc-400 mb-0.5">ProtonMail</div>
+                      <div className="text-sm font-bold text-zinc-200">shadow99@proton.me</div>
+                    </div>
+                    <span className="text-[10px] px-2 py-1 bg-emerald-500/10 text-emerald-400 font-mono rounded">VERIFIED</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Financial Assets */}
+              <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-6 shadow-sm">
+                <div className="flex items-center gap-2 mb-4 pb-4 border-b border-white/5">
+                  <div className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                    <HandCoins size={16} weight="fill" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-white">Cryptographic Wallets</h4>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center bg-black/30 p-3 rounded-xl border border-white/5">
+                    <div>
+                      <div className="text-xs font-mono text-zinc-400 mb-0.5">Bitcoin (BTC)</div>
+                      <div className="text-sm font-mono text-zinc-200 truncate max-w-[200px]">bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq</div>
+                    </div>
+                    <span className="text-[10px] px-2 py-1 bg-amber-500/10 text-amber-400 font-mono rounded">HIGH RISK</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-black/30 p-3 rounded-xl border border-white/5">
+                    <div>
+                      <div className="text-xs font-mono text-zinc-400 mb-0.5">Ethereum (ETH)</div>
+                      <div className="text-sm font-mono text-zinc-200 truncate max-w-[200px]">0x742d35Cc6634C0532925a3b844Bc454e4438f44e</div>
+                    </div>
+                    <span className="text-[10px] px-2 py-1 bg-zinc-500/10 text-zinc-400 font-mono rounded">UNKNOWN</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {activeTab === "RELATIONSHIPS" && (
+          <div className="mt-6">
+            <div className="flex justify-between items-center mb-4 px-2">
+              <div>
+                <h3 className="text-lg font-display font-semibold text-white">GNN Link Prediction & Property Graph</h3>
+                <p className="text-xs font-mono text-zinc-400">Powered by PyTorch Geometric // Rendering 1st & 2nd degree connections</p>
+              </div>
+            </div>
+            <div className="h-[600px] w-full relative bg-black rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl">
+              <NetworkGraph data={graphData} />
+            </div>
+          </div>
+        )}
+
+        {activeTab === "ACTIVITY" && (
+          <div className="mt-6 space-y-6">
+            <div className="px-2">
+              <h3 className="text-lg font-display font-semibold text-white">Temporal Clustering & Behavioral Drift</h3>
+              <p className="text-xs font-mono text-zinc-400">HDBSCAN applied over Time-Series Activity (AIL Intercepts)</p>
+            </div>
+            <div className="bg-zinc-900/60 border border-white/5 p-6 rounded-[2rem] space-y-6">
+              <div className="flex gap-4 items-start relative before:absolute before:left-3 before:top-8 before:bottom-0 before:w-px before:bg-white/10">
+                <div className="w-6 h-6 rounded-full bg-red-900/50 border border-red-500/50 flex items-center justify-center shrink-0 z-10">
+                  <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                </div>
+                <div>
+                  <div className="text-xs font-mono text-red-400 mb-1">CURRENT // VELOCITY BURST ANOMALY</div>
+                  <div className="text-sm text-zinc-200">System detected a 400% increase in darknet chatter mentioning {entity?.label} within a 2-hour sliding window.</div>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start relative before:absolute before:left-3 before:top-8 before:bottom-0 before:w-px before:bg-white/10">
+                <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center shrink-0 z-10">
+                  <div className="w-2 h-2 rounded-full bg-zinc-400" />
+                </div>
+                <div>
+                  <div className="text-xs font-mono text-zinc-400 mb-1">- 2 DAYS // IP GEO-DRIFT</div>
+                  <div className="text-sm text-zinc-300">Tor exit node rotation detected. Primary cluster moved from RU to NL endpoints.</div>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start relative">
+                <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center shrink-0 z-10">
+                  <div className="w-2 h-2 rounded-full bg-zinc-400" />
+                </div>
+                <div>
+                  <div className="text-xs font-mono text-zinc-400 mb-1">- 5 DAYS // CROSS-PLATFORM MIGRATION</div>
+                  <div className="text-sm text-zinc-300">Account '{entity?.label}' first observed bridging operations from Telegram to GenesisMarket.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!["OVERVIEW", "LEGAL", "ACTIONS", "RELATIONSHIPS", "ACTIVITY", "IDENTIFIERS"].includes(activeTab) && (
           <div className="p-8 flex items-center justify-center h-64 text-zinc-400 text-sm font-mono flex-col gap-4">
             <Folder size={48} className="opacity-50" />
             No records available for {activeTab} in this demo slice.
             <button onClick={() => setActiveTab("OVERVIEW")} className="text-nexus-cyan hover:underline">Return to Overview</button>
           </div>
         )}
+
 
       </div>
     </div>
