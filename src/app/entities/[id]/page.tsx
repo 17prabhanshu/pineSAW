@@ -7,6 +7,14 @@ import clsx from "clsx";
 import Link from "next/link";
 import { NetworkGraph } from "@/components/NetworkGraph";
 
+import FinancialTab from "@/components/tabs/FinancialTab";
+import EvidenceTab from "@/components/tabs/EvidenceTab";
+import AlertsTab from "@/components/tabs/AlertsTab";
+import InvestigationsTab from "@/components/tabs/InvestigationsTab";
+import { LegalTab } from "@/components/tabs/LegalTab";
+import { ActionsTab } from "@/components/tabs/ActionsTab";
+import { EntityFlowchart } from "@/components/EntityFlowchart";
+
 export default function EntityIntelligence() {
   const params = useParams();
   const [id, setId] = useState<string>("");
@@ -431,7 +439,7 @@ export default function EntityIntelligence() {
               </div>
             </div>
             <div className="h-[600px] w-full relative bg-black rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl">
-              <NetworkGraph data={graphData} />
+              <EntityFlowchart data={graphData} />
             </div>
           </div>
         )}
@@ -474,13 +482,14 @@ export default function EntityIntelligence() {
           </div>
         )}
 
-        {!["OVERVIEW", "LEGAL", "ACTIONS", "RELATIONSHIPS", "ACTIVITY", "IDENTIFIERS"].includes(activeTab) && (
-          <div className="p-8 flex items-center justify-center h-64 text-zinc-400 text-sm font-mono flex-col gap-4">
-            <Folder size={48} className="opacity-50" />
-            No records available for {activeTab} in this demo slice.
-            <button onClick={() => setActiveTab("OVERVIEW")} className="text-nexus-cyan hover:underline">Return to Overview</button>
-          </div>
-        )}
+        
+        {activeTab === "FINANCIAL" && <FinancialTab entity={entity} />}
+        {activeTab === "EVIDENCE" && <EvidenceTab entity={entity} />}
+        {activeTab === "ALERTS" && <AlertsTab entity={entity} />}
+        {activeTab === "INVESTIGATIONS" && <InvestigationsTab entity={entity} />}
+        {activeTab === "LEGAL" && <LegalTab entity={entity} />}
+        {activeTab === "ACTIONS" && <ActionsTab entity={entity} />}
+
 
 
       </div>

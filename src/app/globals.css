@@ -7,12 +7,12 @@
   --color-gemini-purple: #8b5cf6; /* Violet 500 */
   --color-gemini-pink: #ec4899; /* Pink 500 */
   
-  --color-gov-blue: #3b82f6; 
-  --color-gov-blue-hover: #2563eb; 
-  --color-gov-blue-light: #1e3a8a;
+  --color-gov-blue: #ffffff; 
+  --color-gov-blue-hover: #e4e4e7; 
+  --color-gov-blue-light: #27272a;
   
-  --color-nexus-cyan: #22d3ee;
-  --color-nexus-amber: #fbbf24;
+  --color-nexus-cyan: #ffffff;
+  --color-nexus-amber: #e4e4e7;
   --color-nexus-red: #f87171;
   --color-nexus-green: #4ade80;
   
@@ -23,7 +23,7 @@
 
 @layer base {
   :root {
-    --background: #09090b;
+    --background: #000000;
     --foreground: #f4f4f5;
   }
   
@@ -33,7 +33,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     /* Soft dark gradient like gemini */
-    background: radial-gradient(circle at top right, rgba(24,24,27,1) 0%, rgba(9,9,11,1) 100%);
+    background: #000000;
     min-height: 100vh;
   }
 }
@@ -188,4 +188,19 @@ body::after {
   background: radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.15) 0%, rgba(14, 165, 233, 0.05) 40%, transparent 70%);
   pointer-events: none;
   z-index: -1;
+}
+
+@layer utilities {
+  .glow-text {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+  .glow-border {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) inset, 0 0 15px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .glass-panel {
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }

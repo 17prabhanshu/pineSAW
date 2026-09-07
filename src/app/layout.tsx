@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   description: "Advanced intelligence terminal.",
 };
 
+import { ReactLenis } from "@studio-freight/react-lenis";
+
+import { SmoothScroll } from "@/components/SmoothScroll";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -58,7 +61,7 @@ export default function RootLayout({
           <div className="flex flex-1 w-full max-w-[1600px] mx-auto relative pt-28">
             <Sidebar />
             <main className="flex-1 min-w-0 pl-0 md:pl-72 pb-6 px-4 md:px-8 relative">
-              {children}
+              <SmoothScroll>{children}</SmoothScroll>
             </main>
           </div>
           <div className="static-glow "></div>
