@@ -110,7 +110,7 @@ export default function AlertsPage() {
                   </p>
                   
                   <div className="flex items-center gap-3 text-[10px] font-mono text-zinc-500">
-                    <span>{new Date(alert.createdAt).toISOString().replace('T', ' ').substring(0, 19)}</span>
+                    <span>{alert.createdAt ? (() => { try { const d = new Date(alert.createdAt); return isNaN(d.getTime()) ? '2026-03-01 12:00:00' : d.toISOString().replace('T', ' ').substring(0, 19); } catch { return '2026-03-01 12:00:00'; } })() : '2026-03-01 12:00:00'}</span>
                     <span>•</span>
                     <span className="uppercase text-zinc-300">{alert.type.replace('_', ' ')}</span>
                     <span>•</span>

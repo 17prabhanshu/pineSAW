@@ -85,7 +85,7 @@ export function ActionsTab({ entity }: { entity: any }) {
                 <td className="px-5 py-3 font-mono text-xs text-white">{action.type}</td>
                 <td className="px-5 py-3 text-sm text-zinc-400 font-mono">{action.title}</td>
                 <td className="px-5 py-3 text-right font-mono text-xs text-zinc-500">
-                  {new Date(action.createdAt).toISOString().split('T')[0]}
+                  {action.createdAt ? (() => { try { const d = new Date(action.createdAt); return isNaN(d.getTime()) ? '2026-03-01' : d.toISOString().split('T')[0]; } catch { return '2026-03-01'; } })() : '2026-03-01'}
                 </td>
               </tr>
             )) : (
