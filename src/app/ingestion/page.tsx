@@ -101,7 +101,7 @@ export default function IngestionPanel() {
               if (!dynamicEntities.find(e => e.value === shortVal)) {
                 dynamicEntities.push({ type: "FINANCIAL METRIC", value: shortVal, risk: "LOW", engine: "Transaction Parser" });
               }
-            } else if (lower.includes("ip") || lower.includes("address")) {
+            } else if (lower === "ip" || lower.includes("ip_address") || lower.includes("ip address") || lower === "address") {
               if (!dynamicEntities.find(e => e.value === shortVal)) {
                 dynamicEntities.push({ type: "IP ADDRESS", value: shortVal, risk: "MEDIUM", engine: "Regex Parser" });
               }
