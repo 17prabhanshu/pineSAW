@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+import path from 'path';
+import os from 'os';
+
+const execFileAsync = promisify(execFile);
 
 // Semantic query expansion dictionary for Darknet & Cybercrime CTI
 const SEMANTIC_SYNONYMS: Record<string, string[]> = {
@@ -13,45 +19,96 @@ const SEMANTIC_SYNONYMS: Record<string, string[]> = {
   "carding": ["cc", "dumps", "cvv", "track2", "stripe", "fullz"]
 };
 
-// Deterministic pseudo-embedding generator to simulate FAISS 768-dim vector embeddings
-function generateVectorFingerprint(seed: string): number[] {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i++) {
-    hash = (hash << 5) - hash + seed.charCodeAt(i);
-    hash |= 0;
+// Query the persistent FAISS daemon or fallback to direct Python CLI execution
+async function queryFaissEngine(
+  query: string, 
+  denseWeight: number, 
+  threshold: number, 
+  indexType: string
+): Promise<{ entities: any[]; metadata: any }> {
+  const params = new URLSearchParams({
+    q: query,
+    denseWeight: denseWeight.toString(),
+    threshold: threshold.toString(),
+    indexType: indexType,
+    topK: "30"
+  });
+
+  // Attempt 1: Fast HTTP query to in-memory FAISS daemon (sub-5ms)
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1800);
+    
+    const res = await fetch(`http://127.0.0.1:5055/search?${params.toString()}`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
+  } catch {
+    // Daemon not reached; falling back to direct Python CLI invocation
   }
-  const dims: number[] = [];
-  for (let i = 0; i < 6; i++) {
-    const val = Math.sin(hash + i * 99) * 0.95;
-    dims.push(parseFloat(val.toFixed(4)));
+
+  // Attempt 2: Direct CLI execution via virtualenv Python
+  try {
+    const projectRoot = process.cwd();
+    const pythonBin = process.env.PYTHON_BIN || path.join(os.homedir(), ".pinesaw-venv", "bin", "python");
+    const scriptPath = path.resolve(projectRoot, "backend", "scripts", "faiss_engine.py");
+
+    const { stdout } = await execFileAsync(pythonBin, [
+      scriptPath,
+      "--query", query,
+      "--dense-weight", denseWeight.toString(),
+      "--threshold", threshold.toString(),
+      "--index-type", indexType,
+      "--top-k", "30"
+    ]);
+
+    const data = JSON.parse(stdout);
+    return data;
+  } catch (err: any) {
+    console.error("FAISS CLI execution error:", err);
+    return {
+      entities: [],
+      metadata: {
+        query,
+        totalIndexedVectors: 0,
+        queryLatencyMs: 0,
+        indexType: "FAISS_Error",
+        denseWeight,
+        sparseWeight: 1 - denseWeight
+      }
+    };
   }
-  return dims;
 }
 
 export async function GET(request: Request) {
   const startTime = performance.now();
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q')?.trim() || '';
-  const denseWeight = parseFloat(searchParams.get('denseWeight') || '0.7'); // FAISS dense weight (0.0 to 1.0)
-  const threshold = parseFloat(searchParams.get('threshold') || '0.65');
-  const indexType = searchParams.get('indexType') || 'HNSW'; // HNSW, IVF_FLAT, FLAT_L2
+  const denseWeight = parseFloat(searchParams.get('denseWeight') || '0.70');
+  const threshold = parseFloat(searchParams.get('threshold') || '0.50');
+  const indexType = searchParams.get('indexType') || 'HNSW'; // HNSW or IndexFlatIP
 
   if (!q) {
     return NextResponse.json({
       entities: [],
       investigations: [],
       metadata: {
-        totalIndexedVectors: 109140,
+        totalIndexedVectors: 215,
         queryLatencyMs: 0,
-        indexType: "HNSW_Cosine",
+        indexType: `FAISS_${indexType}_Cosine_384d`,
         semanticExpansions: []
       }
     });
   }
 
   const queryLower = q.toLowerCase();
-  
-  // Semantic expansion lookups
+
+  // 1. Semantic expansions
   const expansions: string[] = [];
   Object.entries(SEMANTIC_SYNONYMS).forEach(([key, syns]) => {
     if (queryLower.includes(key)) {
@@ -59,79 +116,38 @@ export async function GET(request: Request) {
     }
   });
 
-  // Query entities from Prisma
-  const allEntities = await prisma.entity.findMany({
-    take: 80,
-    orderBy: { priorityScore: 'desc' }
-  });
+  // 2. Query Genuine FAISS Vector Engine
+  const faissResponse = await queryFaissEngine(q, denseWeight, threshold, indexType);
 
-  const allInvestigations = await prisma.investigation.findMany({
-    take: 20,
-    orderBy: { createdAt: 'desc' }
-  });
-
-  // Calculate FAISS Dense Similarity + BM25 Lexical Score for each entity
-  const scoredEntities = allEntities.map(ent => {
-    const labelLower = ent.label.toLowerCase();
-    const typeLower = ent.type.toLowerCase();
-    const riskStr = (ent.riskFactors || '').toLowerCase();
-
-    // BM25 Lexical Score (Exact match + substring)
-    let bm25 = 0;
-    if (labelLower === queryLower) bm25 += 1.0;
-    else if (labelLower.includes(queryLower)) bm25 += 0.8;
-    else if (typeLower.includes(queryLower)) bm25 += 0.5;
-    else if (riskStr.includes(queryLower)) bm25 += 0.4;
-
-    // FAISS Dense Vector Cosine Similarity (Semantic & Embedding matching)
-    let faissSimilarity = 0.55;
-    if (labelLower.includes(queryLower)) faissSimilarity += 0.35;
-    if (expansions.some(exp => labelLower.includes(exp) || riskStr.includes(exp))) {
-      faissSimilarity += 0.28;
-    }
-    if (typeLower.includes(queryLower)) faissSimilarity += 0.20;
-    
-    // Normalize to [0.60, 0.99] range
-    faissSimilarity = Math.min(0.992, Math.max(0.60, faissSimilarity));
-    const cosineDistance = parseFloat((1 - faissSimilarity).toFixed(4));
-
-    // Hybrid Score Fusion (Dense + Sparse)
-    const hybridScore = parseFloat((denseWeight * faissSimilarity + (1 - denseWeight) * bm25).toFixed(3));
-
-    return {
-      ...ent,
-      vectorEmbedding: generateVectorFingerprint(ent.label),
-      faissCosineSimilarity: parseFloat(faissSimilarity.toFixed(4)),
-      cosineDistance,
-      bm25LexicalScore: parseFloat(bm25.toFixed(3)),
-      hybridScore,
-      nearestClusterId: `CLUSTER-0x${Math.abs(ent.label.length * 7).toString(16).padStart(3, '0')}`
-    };
-  })
-  .filter(ent => ent.faissCosineSimilarity >= threshold || ent.bm25LexicalScore > 0.3)
-  .sort((a, b) => b.hybridScore - a.hybridScore);
-
-  // Score investigations
-  const scoredInvestigations = allInvestigations.filter(inv => 
-    inv.title.toLowerCase().includes(queryLower) ||
-    inv.caseId.toLowerCase().includes(queryLower) ||
-    expansions.some(exp => inv.title.toLowerCase().includes(exp))
-  );
+  // 3. Query Linked Investigations from Database
+  let investigations: any[] = [];
+  try {
+    investigations = await prisma.investigation.findMany({
+      where: {
+        OR: [
+          { title: { contains: q } },
+          { caseId: { contains: q } },
+          ...expansions.slice(0, 3).map(exp => ({ title: { contains: exp } }))
+        ]
+      },
+      take: 10,
+      orderBy: { createdAt: 'desc' }
+    });
+  } catch {
+    // Graceful fallback if SQLite is busy
+  }
 
   const endTime = performance.now();
-  const latencyMs = parseFloat((endTime - startTime).toFixed(2));
+  const totalLatency = parseFloat((endTime - startTime).toFixed(2));
 
   return NextResponse.json({
-    entities: scoredEntities.slice(0, 25),
-    investigations: scoredInvestigations,
+    entities: faissResponse.entities,
+    investigations,
     metadata: {
+      ...faissResponse.metadata,
       query: q,
-      totalIndexedVectors: 109140,
-      queryLatencyMs: latencyMs,
-      indexType: `${indexType}_Cosine_768d`,
-      semanticExpansions: Array.from(new Set(expansions)).slice(0, 6),
-      denseWeight,
-      sparseWeight: parseFloat((1 - denseWeight).toFixed(2))
+      totalLatencyMs: totalLatency,
+      semanticExpansions: Array.from(new Set(expansions)).slice(0, 6)
     }
   });
 }

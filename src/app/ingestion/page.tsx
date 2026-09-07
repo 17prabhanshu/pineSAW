@@ -24,6 +24,7 @@ import {
   Lightning,
   MagnifyingGlass,
   SlidersHorizontal,
+  Cpu,
   X
 } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -147,6 +148,32 @@ export default function IngestionPanel() {
     uniqueOrigins: 0,
     topCategory: "General"
   });
+
+  const [isIndexingFaiss, setIsIndexingFaiss] = useState(false);
+
+  const handleIndexToFaiss = async () => {
+    if (extractedEntities.length === 0) return;
+    setIsIndexingFaiss(true);
+    try {
+      const res = await fetch("/api/ingest/index-faiss", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ entities: extractedEntities })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("FAISS Vector Space Updated", {
+          description: `Successfully embedded and indexed ${data.indexedCount || extractedEntities.length} threat entities into live FAISS HNSW graph.`
+        });
+      } else {
+        toast.error("FAISS Indexing Notice", { description: data.error || "Processed with partial status" });
+      }
+    } catch {
+      toast.error("Failed to connect to FAISS vector ingestion service.");
+    } finally {
+      setIsIndexingFaiss(false);
+    }
+  };
 
   const [analyzingText, setAnalyzingText] = useState("");
   const analysisSteps = [
@@ -336,24 +363,18 @@ export default function IngestionPanel() {
             }
           }
 
-          const desc = getField(row, "Item Description", "item description", "description", "Description", "Item");
-          if (desc) {
-            const onionMatches = desc.match(/[a-z2-7]{16,56}\.onion/gi);
+          const itemText = getField(row, "Item", "item", "Title", "title");
+          const desc = getField(row, "Item Description", "item description", "description", "Description");
+          const combinedText = `${itemText} ${desc}`;
+          if (combinedText) {
+            const onionMatches = combinedText.match(/[a-z2-7]{16,56}\.onion/gi);
             if (onionMatches) {
               onionMatches.forEach((on: string) => onionsSet.add(on.toLowerCase()));
             }
           }
         }
 
-        if (onionsSet.size === 0) {
-          ["agoraer2jlvd4fve.onion", "i25c62nvu4cgeqyz.onion", "andromedam363aux.onion", "agorarelay3x28.onion"].forEach(o => onionsSet.add(o));
-        }
-
-        if (originsSet.size === 0) {
-          ["Torland / Anonymous Relay", "United States", "United Kingdom", "Germany", "Australia", "Netherlands"].forEach(o => originsSet.add(o));
-        }
-
-        let topCat = "Drugs/Cannabis/Weed";
+        let topCat = "General Narcotics";
         let maxCount = 0;
         Object.entries(categoriesCount).forEach(([cat, cnt]) => {
           if (cnt > maxCount) {
@@ -362,32 +383,35 @@ export default function IngestionPanel() {
           }
         });
 
-        const finalBtc = btcSum > 0 ? btcSum : 2431089.22;
+        const finalBtc = btcSum;
         setMacroStats({
           totalListings: data.length,
-          uniqueVendors: Math.max(vendorMap.size, 3192),
+          uniqueVendors: vendorMap.size,
           totalBtcVolume: finalBtc,
-          uniqueOnions: Math.max(onionsSet.size, 41),
-          uniqueOrigins: Math.max(originsSet.size, 398),
+          uniqueOnions: onionsSet.size,
+          uniqueOrigins: originsSet.size,
           topCategory: topCat
         });
 
         const entities: ExtractedEntity[] = [];
         const seenVals = new Set<string>();
 
-        Array.from(onionsSet).slice(0, 4).forEach(onion => {
-          if (!seenVals.has(onion)) {
-            seenVals.add(onion);
-            entities.push({
-              type: "TOR HIDDEN SERVICE",
-              category: "INFRASTRUCTURE",
-              value: onion,
-              risk: "CRITICAL",
-              engine: "AIL Lacus Tor Engine",
-              meta: "Active hidden marketplace cluster node"
-            });
-          }
-        });
+        // Only add genuine Tor hidden services if discovered in CSV rows
+        if (onionsSet.size > 0) {
+          Array.from(onionsSet).slice(0, 6).forEach(onion => {
+            if (!seenVals.has(onion)) {
+              seenVals.add(onion);
+              entities.push({
+                type: "TOR HIDDEN SERVICE",
+                category: "INFRASTRUCTURE",
+                value: onion,
+                risk: "CRITICAL",
+                engine: "AIL Lacus Tor Engine",
+                meta: "Active hidden marketplace cluster node"
+              });
+            }
+          });
+        }
 
         const sortedVendors = Array.from(vendorMap.entries()).sort((a, b) => b[1].count - a[1].count);
         sortedVendors.slice(0, 8).forEach(([vendorName, vData]) => {
@@ -404,28 +428,32 @@ export default function IngestionPanel() {
           }
         });
 
-        Array.from(originsSet).slice(0, 4).forEach(origin => {
-          if (!seenVals.has(origin)) {
-            seenVals.add(origin);
-            entities.push({
-              type: "SHIPPING HUB",
-              category: "LOGISTICS",
-              value: origin,
-              risk: "MEDIUM",
-              engine: "Postal Customs NER",
-              meta: "Identified distribution origin cluster"
-            });
-          }
-        });
+        if (originsSet.size > 0) {
+          Array.from(originsSet).slice(0, 4).forEach(origin => {
+            if (!seenVals.has(origin)) {
+              seenVals.add(origin);
+              entities.push({
+                type: "SHIPPING HUB",
+                category: "LOGISTICS",
+                value: origin,
+                risk: "MEDIUM",
+                engine: "Postal Customs NER",
+                meta: "Identified distribution origin cluster"
+              });
+            }
+          });
+        }
 
-        entities.push({
-          type: "AGGREGATE BTC VOLUME",
-          category: "FINANCIAL",
-          value: `₿ ${finalBtc.toLocaleString(undefined, { maximumFractionDigits: 2 })} BTC`,
-          risk: "HIGH",
-          engine: "Mempool Ledger Tracer",
-          meta: `Est. volume across ${data.length.toLocaleString()} transactions`
-        });
+        if (finalBtc > 0) {
+          entities.push({
+            type: "AGGREGATE BTC VOLUME",
+            category: "FINANCIAL",
+            value: `₿ ${finalBtc.toLocaleString(undefined, { maximumFractionDigits: 2 })} BTC`,
+            risk: "HIGH",
+            engine: "Mempool Ledger Tracer",
+            meta: `Est. volume across ${data.length.toLocaleString()} transactions`
+          });
+        }
 
         setExtractedEntities(entities);
       }
@@ -883,6 +911,39 @@ export default function IngestionPanel() {
                       <p className="text-zinc-400 text-[11px] leading-relaxed mb-2">
                         +{macroStats.totalListings.toLocaleString()} listings mapped to graph nodes. PyTorch GNN link prediction initialized across {macroStats.uniqueVendors.toLocaleString()} threat clusters.
                       </p>
+                    </div>
+
+                    {/* Meta FAISS Live Vector Indexing Control */}
+                    <div className="p-4 rounded-xl border border-white/10 bg-zinc-950 flex flex-col gap-2.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Cpu size={16} className="text-white" />
+                          <h4 className="text-xs font-bold text-white uppercase">Meta FAISS Vector Indexing</h4>
+                        </div>
+                        <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-white/10 text-zinc-300">
+                          BAAI/bge-small 384d
+                        </span>
+                      </div>
+                      <p className="text-zinc-400 text-[11px] leading-relaxed">
+                        Vectorize extracted threat entities and listings directly into the running FAISS HNSW and Flat IP vector index daemon.
+                      </p>
+                      <button
+                        onClick={handleIndexToFaiss}
+                        disabled={isIndexingFaiss || extractedEntities.length === 0}
+                        className="mt-1 w-full py-2 bg-white text-black font-mono text-xs font-semibold rounded-lg hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                      >
+                        {isIndexingFaiss ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                            <span>VECTORIZING INTO FAISS DAEMON...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Lightning size={14} weight="fill" />
+                            <span>INDEX {extractedEntities.length} EXTRACTED ENTITIES INTO FAISS</span>
+                          </>
+                        )}
+                      </button>
                     </div>
 
                     {csvHeaders.length > 0 && (

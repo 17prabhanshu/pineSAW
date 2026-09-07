@@ -27,6 +27,8 @@ interface SearchEntity {
   type: string;
   priorityScore: number;
   riskFactors?: string;
+  text?: string;
+  source?: string;
   vectorEmbedding?: number[];
   faissCosineSimilarity?: number;
   cosineDistance?: number;
@@ -49,12 +51,13 @@ export default function SearchPage() {
     entities: SearchEntity[];
     investigations: SearchInvestigation[];
     metadata?: {
-      totalIndexedVectors: number;
-      queryLatencyMs: number;
-      indexType: string;
-      semanticExpansions: string[];
-      denseWeight: number;
-      sparseWeight: number;
+      totalIndexedVectors?: number;
+      queryLatencyMs?: number;
+      totalLatencyMs?: number;
+      indexType?: string;
+      semanticExpansions?: string[];
+      denseWeight?: number;
+      sparseWeight?: number;
     };
   }>({ entities: [], investigations: [] });
 
@@ -121,12 +124,12 @@ export default function SearchPage() {
         <div className="flex items-center gap-4 text-[11px] font-mono border border-white/10 bg-black/60 px-3.5 py-1.5 rounded-lg">
           <div className="flex items-center gap-1.5 text-zinc-300">
             <Cpu size={14} className="text-zinc-400" />
-            <span>VECTORS: <strong className="text-white">109,140</strong></span>
+            <span>VECTORS: <strong className="text-white">{results.metadata?.totalIndexedVectors?.toLocaleString() ?? "216"}</strong></span>
           </div>
           <span className="text-zinc-700">|</span>
           <div className="flex items-center gap-1.5 text-zinc-300">
             <Lightning size={14} className="text-amber-400" />
-            <span>LATENCY: <strong className="text-white">{results.metadata?.queryLatencyMs ?? "1.8"}ms</strong></span>
+            <span>LATENCY: <strong className="text-white">{results.metadata?.queryLatencyMs ?? results.metadata?.totalLatencyMs ?? "1.8"}ms</strong></span>
           </div>
           <span className="text-zinc-700">|</span>
           <button 
@@ -177,7 +180,7 @@ export default function SearchPage() {
             <div className="flex items-center gap-2">
               <span className="text-zinc-300 text-[11px] uppercase tracking-wider">INDEX:</span>
               <div className="flex border border-white/10 rounded overflow-hidden">
-                {(["HNSW", "IVF_FLAT", "FLAT_L2"] as const).map((t) => (
+                {(["HNSW", "IndexFlatIP", "FLAT_L2"] as const).map((t) => (
                   <button
                     key={t}
                     type="button"
@@ -190,7 +193,7 @@ export default function SearchPage() {
                       indexType === t ? "bg-white text-black font-bold" : "bg-black text-zinc-300 hover:text-white"
                     )}
                   >
-                    {t}
+                    {t === "IndexFlatIP" ? "FLAT (EXACT)" : t}
                   </button>
                 ))}
               </div>
@@ -265,7 +268,7 @@ export default function SearchPage() {
           {searching && (
             <div className="flex flex-col items-center justify-center p-16 text-xs font-mono text-zinc-400 gap-3 border border-white/5 rounded-2xl bg-zinc-950/40">
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>COMPUTING 768-DIMENSIONAL COSINE PROXIMITIES ACROSS HNSW GRAPH...</span>
+              <span>COMPUTING 384-DIMENSIONAL COSINE SIMILARITIES VIA META FAISS + BM25 OKAPI...</span>
             </div>
           )}
 
@@ -336,23 +339,30 @@ export default function SearchPage() {
                               </div>
                             </div>
 
-                            {/* 6-Dimensional Vector Embedding Sparkline Visualizer */}
+                            {/* 384-Dimensional Neural Vector Embedding Projection */}
                             {ent.vectorEmbedding && (
                               <div className="my-2.5 p-2 rounded bg-black/60 border border-white/5 font-mono text-[10px]">
-                                <div className="flex items-center justify-between text-zinc-400 mb-1">
-                                  <span>768-DIM VECTOR EMBEDDING PROJECTION:</span>
-                                  <span className="text-zinc-400">BM25: {ent.bm25LexicalScore?.toFixed(2) || "0.40"}</span>
+                                <div className="flex items-center justify-between text-zinc-400 mb-1.5">
+                                  <span className="text-[9px] uppercase tracking-wider text-zinc-300">
+                                    384-Dim Neural Vector (BAAI/bge-small):
+                                  </span>
+                                  <span className="text-zinc-400 text-[9px]">
+                                    BM25: <strong className="text-zinc-200">{ent.bm25LexicalScore?.toFixed(3) || "0.000"}</strong>
+                                  </span>
                                 </div>
-                                <div className="grid grid-cols-6 gap-1 h-3 items-center">
+                                <div className="grid grid-cols-6 sm:grid-cols-12 gap-1 h-3.5 items-center">
                                   {ent.vectorEmbedding.map((dim, i) => (
                                     <div 
                                       key={i} 
-                                      className="h-full rounded-sm bg-white/20 relative overflow-hidden" 
+                                      className="h-full rounded-sm bg-white/10 relative overflow-hidden group/dim flex items-center justify-center cursor-help" 
                                       title={`Dim[${i}]: ${dim}`}
                                     >
                                       <div 
-                                        className="h-full bg-white transition-all"
-                                        style={{ width: `${Math.min(100, Math.max(15, (dim + 1) * 50))}%` }}
+                                        className={clsx(
+                                          "h-full transition-all",
+                                          dim >= 0 ? "bg-emerald-400/80" : "bg-cyan-400/80"
+                                        )}
+                                        style={{ width: `${Math.min(100, Math.max(15, Math.abs(dim) * 400))}%` }}
                                       />
                                     </div>
                                   ))}
@@ -360,8 +370,15 @@ export default function SearchPage() {
                               </div>
                             )}
 
+                            {/* Intercepted Corpus Text / Metadata */}
+                            {ent.text && (
+                              <div className="text-[10px] text-zinc-300 font-mono bg-white/[0.03] px-2.5 py-1.5 rounded border border-white/5 line-clamp-2 my-2 italic">
+                                &ldquo;{ent.text}&rdquo;
+                              </div>
+                            )}
+
                             {/* Risk context preview */}
-                            {ent.riskFactors && (
+                            {ent.riskFactors && !ent.text && (
                               <p className="text-[11px] text-zinc-400 font-mono line-clamp-1 mb-2">
                                 {ent.riskFactors}
                               </p>
