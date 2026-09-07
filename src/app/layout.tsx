@@ -30,9 +30,7 @@ export default function RootLayout({
           <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-16 liquid-glass  rounded-full flex items-center justify-between px-6 z-50 transition-all">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3 group cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-white to-zinc-400 flex items-center justify-center font-display font-bold text-white shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all group-hover:shadow-[0_0_35px_rgba(255,255,255,0.6)]">
-                  CP
-                </div>
+                <img src="/cp-logo.png" alt="Chandigarh Police Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]" />
                 <div className="leading-tight">
                   <div className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest">Chandigarh Police</div>
                   <div className="text-sm font-display font-semibold text-zinc-100 tracking-wide group-hover:text-white transition-colors">CYBER INTELLIGENCE</div>
@@ -56,7 +54,14 @@ export default function RootLayout({
             </div>
           </header>
 
+          
+          {/* Faded Watermark Background */}
+          <div className="fixed inset-0 pointer-events-none z-[-1] flex items-center justify-center opacity-[0.03]">
+            <img src="/cp-logo.png" alt="Watermark" className="w-[800px] h-[800px] object-contain grayscale" />
+          </div>
+
           {/* Main Application Area */}
+
           <div className="flex flex-1 w-full max-w-[1600px] mx-auto relative pt-28">
             <Sidebar />
             <main className="flex-1 min-w-0 pl-0 md:pl-72 pb-6 px-4 md:px-8 relative">
