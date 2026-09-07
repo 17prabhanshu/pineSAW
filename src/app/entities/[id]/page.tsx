@@ -343,13 +343,13 @@ export default function EntityIntelligence() {
                     <th className="px-5 py-3 font-medium text-right">Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200">
+                <tbody className="divide-y divide-white/5 font-mono">
                   {entity.actionItems?.map((action: any) => (
-                    <tr key={action.id} className="hover:bg-zinc-800/30 transition-colors">
+                    <tr key={action.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-5 py-3">
                         <span className={clsx(
-                          "px-2 py-0.5 rounded-2xl font-mono text-[10px] border uppercase",
-                          action.status === 'PENDING' ? "badge-warning" : "bg-zinc-800 text-zinc-300 border-zinc-700"
+                          "px-2 py-0.5 rounded font-mono text-[9px] border uppercase font-bold",
+                          action.status === 'PENDING' ? "bg-amber-950/60 text-amber-300 border-amber-500/30" : "bg-white/10 text-white border-white/20"
                         )}>
                           {action.status}
                         </span>

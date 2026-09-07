@@ -107,64 +107,65 @@ export default function InvestigationsPage() {
         }}
       />
 
-      <div className="glass rounded-xl border border-white/10 overflow-hidden flex-1 flex flex-col">
-        <table className="w-full text-left text-sm flex-1 block overflow-auto">
-          <thead className="sticky top-0 bg-black border-b border-white/10 w-full table table-fixed z-10">
-            <tr className="font-mono text-[10px] uppercase text-zinc-400">
-              <th className="px-6 py-4 font-medium w-32">Case ID</th>
-              <th className="px-6 py-4 font-medium">Title</th>
-              <th className="px-6 py-4 font-medium w-32">Priority</th>
-              <th className="px-6 py-4 font-medium w-32">Status</th>
-              <th className="px-6 py-4 font-medium w-48 text-right">Last Updated</th>
-            </tr>
-          </thead>
-          {isLoading ? (
-            <tbody className="divide-y divide-zinc-200 w-full table table-fixed">
-              {[...Array(5)].map((_, i) => <SkeletonRow key={i} />)}
-            </tbody>
-          ) : (
-            <motion.tbody 
-              variants={tableVariants}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              className="divide-y divide-zinc-200 w-full table table-fixed"
-            >
-              {investigations.map(inv => (
-                <motion.tr variants={rowVariants} key={inv.id} className="hover:bg-zinc-800/30 transition-colors group cursor-pointer">
-                  <td className="px-6 py-4 font-mono text-xs text-nexus-cyan">
-                    <Link href={`/investigations/${inv.id}`} className="before:absolute before:inset-0 relative block">
-                      {inv.caseId}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 text-zinc-200 group-hover:text-white relative">
-                    <div className="flex items-center gap-3">
-                      <Folder className="text-zinc-400" />
-                      {inv.title}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 relative">
-                    <span className={clsx(
-                      "px-2 py-0.5 rounded-none font-mono text-[10px] border",
-                      inv.priority === 'CRITICAL' && "bg-nexus-red/10 text-nexus-red border-nexus-red/20",
-                      inv.priority === 'HIGH' && "bg-nexus-amber/10 text-nexus-amber border-nexus-amber/20",
-                      inv.priority === 'MEDIUM' && "bg-nexus-cyan/10 text-nexus-cyan border-nexus-cyan/20",
-                      inv.priority === 'LOW' && "bg-zinc-800 text-zinc-400 border-zinc-700"
-                    )}>
-                      {inv.priority}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 relative">
-                    <span className="font-mono text-xs text-zinc-400">{inv.status}</span>
-                  </td>
-                  <td className="px-6 py-4 text-right font-mono text-xs text-zinc-400 relative">
-                    {new Date(inv.updatedAt).toISOString().split('T')[0]}
-                  </td>
-                </motion.tr>
-              ))}
-            </motion.tbody>
-          )}
-        </table>
+      <div className="w-full bg-zinc-950 border border-white/10 rounded-xl overflow-hidden shadow-sm">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full text-left text-xs min-w-[650px]">
+            <thead className="bg-black/90 border-b border-white/10">
+              <tr className="font-mono text-[10px] uppercase text-zinc-400">
+                <th className="px-4 py-3 font-semibold w-32">Case ID</th>
+                <th className="px-4 py-3 font-semibold">Title</th>
+                <th className="px-4 py-3 font-semibold w-28">Priority</th>
+                <th className="px-4 py-3 font-semibold w-28">Status</th>
+                <th className="px-4 py-3 font-semibold w-36 text-right">Last Updated</th>
+              </tr>
+            </thead>
+            {isLoading ? (
+              <tbody className="divide-y divide-white/5 font-mono">
+                {[...Array(5)].map((_, i) => <SkeletonRow key={i} />)}
+              </tbody>
+            ) : (
+              <motion.tbody 
+                variants={tableVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                className="divide-y divide-white/5 font-mono"
+              >
+                {investigations.map(inv => (
+                  <motion.tr variants={rowVariants} key={inv.id} className="hover:bg-white/5 transition-colors group cursor-pointer">
+                    <td className="px-4 py-3 font-mono text-xs font-semibold text-white">
+                      <Link href={`/investigations/${inv.id}`} className="hover:underline">
+                        {inv.caseId}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-zinc-200 group-hover:text-white">
+                      <Link href={`/investigations/${inv.id}`} className="flex items-center gap-2.5">
+                        <Folder className="text-zinc-400 group-hover:text-white transition-colors" size={15} />
+                        <span className="font-medium text-white group-hover:underline">{inv.title}</span>
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={clsx(
+                        "px-2 py-0.5 rounded text-[9px] font-bold uppercase border inline-block",
+                        inv.priority === 'CRITICAL' ? "bg-red-950/60 text-red-400 border-red-500/30" :
+                        inv.priority === 'HIGH' ? "bg-amber-950/60 text-amber-300 border-amber-500/30" :
+                        "bg-white/10 text-white border-white/20"
+                      )}>
+                        {inv.priority}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-wider">{inv.status}</span>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-xs text-zinc-400">
+                      {new Date(inv.updatedAt).toISOString().split('T')[0]}
+                    </td>
+                  </motion.tr>
+                ))}
+              </motion.tbody>
+            )}
+          </table>
+        </div>
       </div>
     </div>
   );

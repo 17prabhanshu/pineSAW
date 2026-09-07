@@ -22,8 +22,8 @@ const navSections = [
     title: "OPERATIONS",
     items: [
       { href: "/", label: "Command Center", icon: ShieldChevron },
-      { href: "/actions", label: "Action Center", icon: CheckSquareOffset, badge: "11" },
-      { href: "/alerts", label: "Alerts", icon: WarningOctagon, badge: "03", badgeColor: "bg-red-950/60 text-red-400 border border-red-500/30" },
+      { href: "/actions", label: "Action Center", icon: CheckSquareOffset },
+      { href: "/alerts", label: "Alerts", icon: WarningOctagon },
       { href: "/investigations", label: "Investigations", icon: FolderOpen },
     ]
   },
@@ -37,7 +37,7 @@ const navSections = [
   {
     title: "FINANCIAL FORENSICS",
     items: [
-      { href: "/financial", label: "Asset Review (Fiat)", icon: Bank, badge: "6" },
+      { href: "/financial", label: "Asset Review (Fiat)", icon: Bank },
     ]
   },
   {

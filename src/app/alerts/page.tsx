@@ -31,37 +31,36 @@ export default function AlertsPage() {
   }, [alerts, filter]);
 
   return (
-    <div className="flex h-full overflow-hidden relative">
+    <div className="w-full max-w-6xl mx-auto space-y-6">
       <div className="flex-1 flex flex-col">
         
         {/* Minimal Header */}
-        <header className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/10 pb-6">
+        <header className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/10 pb-5">
           <div>
-            <h1 className="font-display text-3xl font-bold tracking-tight text-white">Security Alerts</h1>
-            <p className="text-zinc-400 font-mono text-xs uppercase tracking-widest mt-1">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">Security Alerts</h1>
+            <p className="text-zinc-400 font-mono text-xs uppercase tracking-wider mt-1">
               Autonomous Threat Intercepts & Anomaly Indicators
             </p>
           </div>
 
-          {/* Filter Chips */}
-          <div className="flex items-center gap-2">
+          {/* Clean Functional Filter Pills */}
+          <div className="flex items-center gap-1.5 bg-zinc-950 border border-white/10 rounded-lg p-0.5">
             {[
-              { id: "ALL", label: "All Alerts", count: alerts.length },
-              { id: "CRITICAL", label: "Critical Only", count: alerts.filter(a => a.severity === "CRITICAL").length },
-              { id: "UNREAD", label: "Unread", count: alerts.filter(a => a.status === "UNREAD").length }
+              { id: "ALL", label: "All Alerts" },
+              { id: "CRITICAL", label: "Critical" },
+              { id: "UNREAD", label: "Unread" }
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setFilter(tab.id as any)}
                 className={clsx(
-                  "px-3 py-1.5 rounded-xl text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer border",
+                  "px-3 py-1 rounded text-xs font-mono transition-colors cursor-pointer",
                   filter === tab.id
-                    ? "bg-white text-black font-semibold shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-                    : "bg-zinc-950/60 border-white/10 text-zinc-400 hover:text-white hover:border-white/20"
+                    ? "bg-white text-black font-semibold"
+                    : "text-zinc-400 hover:text-white"
                 )}
               >
-                <span>{tab.label}</span>
-                <span className="text-[10px] opacity-70">({tab.count})</span>
+                {tab.label}
               </button>
             ))}
           </div>

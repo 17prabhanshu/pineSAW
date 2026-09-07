@@ -167,9 +167,9 @@ export default function FinancialPage() {
       ) : (
         <div className="flex-1 flex overflow-hidden relative">
           <div className="flex-1 overflow-auto">
-          <div className="glass nexus-border rounded-2xl shadow-sm flex flex-col min-h-0">
-            <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex justify-between items-center">
-              <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
+          <div className="w-full bg-zinc-950 border border-white/10 rounded-xl overflow-hidden shadow-sm flex flex-col min-h-0">
+            <div className="p-4 bg-black/60 border-b border-white/10 flex justify-between items-center">
+              <h2 className="text-xs font-semibold text-white uppercase tracking-wider flex items-center gap-2 font-mono">
                 <Bank size={16} /> Tracked Financial Assets (Indian & Offshore Banks)
               </h2>
               <span className="text-[10px] font-mono text-zinc-400 uppercase">
@@ -178,9 +178,9 @@ export default function FinancialPage() {
             </div>
             
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm whitespace-nowrap">
-                <thead className="bg-black border-b border-white/10 sticky top-0 z-10">
-                  <tr className="font-mono text-[10px] uppercase text-zinc-300">
+              <table className="w-full text-left text-xs min-w-[700px]">
+                <thead className="bg-black/90 border-b border-white/10 sticky top-0 z-10">
+                  <tr className="font-mono text-[10px] uppercase text-zinc-400">
                     <th className="px-4 py-3 font-semibold">Asset ID / Label</th>
                     <th className="px-4 py-3 font-semibold">Asset Type</th>
                     <th className="px-4 py-3 font-semibold">Priority</th>
@@ -188,7 +188,7 @@ export default function FinancialPage() {
                     <th className="px-4 py-3 font-semibold text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/10">
+                <tbody className="divide-y divide-white/5 font-mono">
                   {filteredAccounts.map((acc: any) => {
                     const controllers = acc.targetRelations?.filter((r:any) => r.type === "CONTROLS").map((r:any) => r.source) || [];
                     const isSelected = selectedAccount?.id === acc.id;
@@ -200,7 +200,7 @@ export default function FinancialPage() {
                         className={clsx(
                           "transition-all cursor-pointer group",
                           isSelected 
-                            ? "bg-white/15 border-l-2 border-l-white text-white font-medium shadow-[inset_0_0_25px_rgba(255,255,255,0.04)]" 
+                            ? "bg-white/10 border-l-2 border-l-white text-white font-medium" 
                             : "hover:bg-white/5 border-l-2 border-l-transparent text-zinc-300"
                         )}
                       >
@@ -212,7 +212,10 @@ export default function FinancialPage() {
                         </td>
                         <td className="px-4 py-3 font-mono text-xs text-zinc-300">{acc.type.replace('_', ' ')}</td>
                         <td className="px-4 py-3">
-                          <span className={acc.priorityScore >= 80 ? "badge-critical" : "badge-warning"}>
+                          <span className={clsx(
+                            "px-2 py-0.5 rounded text-[9px] font-bold uppercase border inline-block",
+                            acc.priorityScore >= 80 ? "bg-red-950/60 text-red-400 border-red-500/30" : "bg-amber-950/60 text-amber-300 border-amber-500/30"
+                          )}>
                             {acc.priorityScore}
                           </span>
                         </td>

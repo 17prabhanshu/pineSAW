@@ -64,10 +64,10 @@ export default function EntitiesPage() {
   }, [entities, filter, searchQuery]);
 
   return (
-    <div className="p-8 max-w-6xl mx-auto h-full flex flex-col">
-      <header className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/10 pb-6">
+    <div className="w-full max-w-6xl mx-auto space-y-6">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/10 pb-5">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight text-white mb-1">Entity Intelligence</h1>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1">Entity Intelligence</h1>
           <p className="text-zinc-400 font-mono text-xs uppercase tracking-widest">
             Monitored Threat Actors, Financial Accounts, Wallets, and Identifiers
           </p>
@@ -106,63 +106,65 @@ export default function EntitiesPage() {
         </div>
       </header>
 
-      <div className="glass rounded-xl border border-white/10 overflow-hidden flex-1 flex flex-col shadow-xl">
-        <table className="w-full text-left text-sm flex-1 block overflow-y-auto">
-          <thead className="sticky top-0 bg-black/90 border-b border-white/10 w-full table table-fixed z-10">
-            <tr className="font-mono text-[10px] uppercase text-zinc-400">
-              <th className="px-6 py-3.5 font-medium w-32">Type</th>
-              <th className="px-6 py-3.5 font-medium">Identifier / Label</th>
-              <th className="px-6 py-3.5 font-medium w-32 text-right">Confidence</th>
-              <th className="px-6 py-3.5 font-medium w-32 text-right">Priority</th>
-            </tr>
-          </thead>
-          {isLoading ? (
-            <tbody className="divide-y divide-white/10 w-full table table-fixed">
-              {[...Array(6)].map((_, i) => <SkeletonRow key={i} />)}
-            </tbody>
-          ) : (
-            <motion.tbody 
-              variants={tableVariants} 
-              initial="hidden" 
-              whileInView="show" 
-              viewport={{ once: true }}
-              className="divide-y divide-white/5 w-full table table-fixed"
-            >
-              {filteredEntities.map(ent => (
-                <motion.tr 
-                  variants={rowVariants} 
-                  key={ent.id} 
-                  className="hover:bg-white/5 transition-colors group cursor-pointer"
-                >
-                  <td className="px-6 py-4 font-mono text-xs text-zinc-400">
-                    <Link href={`/entities/${ent.id}`} className="before:absolute before:inset-0 relative block">
-                      {ent.type}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 text-zinc-200 group-hover:text-white relative">
-                    <div className="flex items-center gap-3">
-                      <User className="text-zinc-500 group-hover:text-white transition-colors" size={16} />
-                      <span className="font-medium">{ent.label}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right font-mono text-xs text-zinc-400 relative">
-                    {((ent.confidence || 0.95) * 100).toFixed(0)}%
-                  </td>
-                  <td className="px-6 py-4 text-right relative">
-                    <span className={clsx(
-                      "font-mono text-xs px-2.5 py-0.5 rounded-full border",
-                      ent.priorityScore >= 80 
-                        ? "bg-red-500/20 text-red-400 border-red-500/30 font-bold" 
-                        : "bg-white/10 text-white border-white/20"
-                    )}>
-                      {ent.priorityScore}
-                    </span>
-                  </td>
-                </motion.tr>
-              ))}
-            </motion.tbody>
-          )}
-        </table>
+      <div className="w-full bg-zinc-950 border border-white/10 rounded-xl overflow-hidden shadow-sm">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full text-left text-xs min-w-[650px]">
+            <thead className="bg-black/90 border-b border-white/10">
+              <tr className="font-mono text-[10px] uppercase text-zinc-400">
+                <th className="px-4 py-3 font-semibold w-32">Type</th>
+                <th className="px-4 py-3 font-semibold">Identifier / Label</th>
+                <th className="px-4 py-3 font-semibold w-32 text-right">Confidence</th>
+                <th className="px-4 py-3 font-semibold w-32 text-right">Priority</th>
+              </tr>
+            </thead>
+            {isLoading ? (
+              <tbody className="divide-y divide-white/5 font-mono">
+                {[...Array(6)].map((_, i) => <SkeletonRow key={i} />)}
+              </tbody>
+            ) : (
+              <motion.tbody 
+                variants={tableVariants} 
+                initial="hidden" 
+                whileInView="show" 
+                viewport={{ once: true }}
+                className="divide-y divide-white/5 font-mono"
+              >
+                {filteredEntities.map(ent => (
+                  <motion.tr 
+                    variants={rowVariants} 
+                    key={ent.id} 
+                    className="hover:bg-white/5 transition-colors group cursor-pointer"
+                  >
+                    <td className="px-4 py-3 font-mono text-xs text-zinc-400">
+                      <Link href={`/entities/${ent.id}`} className="hover:underline">
+                        {ent.type}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-zinc-200 group-hover:text-white">
+                      <Link href={`/entities/${ent.id}`} className="flex items-center gap-2.5">
+                        <User className="text-zinc-500 group-hover:text-white transition-colors" size={15} />
+                        <span className="font-medium text-white group-hover:underline">{ent.label}</span>
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-xs text-zinc-400">
+                      {((ent.confidence || 0.95) * 100).toFixed(0)}%
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span className={clsx(
+                        "font-mono text-[10px] px-2 py-0.5 rounded uppercase font-bold border inline-block",
+                        ent.priorityScore >= 80 
+                          ? "bg-red-950/60 text-red-400 border-red-500/30" 
+                          : "bg-white/10 text-white border-white/20"
+                      )}>
+                        {ent.priorityScore}
+                      </span>
+                    </td>
+                  </motion.tr>
+                ))}
+              </motion.tbody>
+            )}
+          </table>
+        </div>
       </div>
     </div>
   );

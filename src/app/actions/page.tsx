@@ -82,48 +82,37 @@ export default function ActionCenter() {
   }, [actions]);
 
   return (
-    <div className="flex h-full overflow-hidden relative select-none">
-      <div className={clsx("flex-1 p-6 md:p-8 flex flex-col transition-all duration-300 overflow-y-auto", selectedAction ? "mr-0 lg:mr-[460px]" : "")}>
+    <div className="w-full max-w-7xl mx-auto space-y-6 select-none">
+      <div className="flex-1 flex flex-col">
         
         {/* Breadcrumb & Live System Pulse */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-            <span>DARKINT</span> <CaretRight size={10} /> <span className="text-zinc-300">Operations</span> <CaretRight size={10} /> <span className="text-white font-semibold">Action Center</span>
+            <span>DARKINT</span> <CaretRight size={10} /> <span className="text-white font-semibold">Action Center</span>
           </div>
-          <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+          <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/10 px-2.5 py-1 rounded-md">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>DIRECTIVE ENGINE ACTIVE</span>
+            <span>{actions.length} DIRECTIVES QUEUED</span>
           </div>
         </div>
 
-        {/* Header Title & View Layout Switcher */}
-        <header className="mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
+        {/* Minimal Header */}
+        <header className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-white/10 pb-5">
           <div>
-            <h1 className="font-display text-3xl font-bold text-white tracking-tight">Investigative Directives</h1>
-            <p className="text-xs text-zinc-400 font-mono mt-1">
-              Operational interventions, statutory evidence preparation, and procedural off-ramps.
+            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">Action Center</h1>
+            <p className="text-zinc-400 font-mono text-xs uppercase tracking-wider mt-1">
+              Law Enforcement Operations, Asset Freezes & Subpoena Pipeline
             </p>
           </div>
 
           {/* View Mode Switcher */}
-          <div className="flex items-center gap-1 bg-zinc-950 border border-white/10 p-1 rounded-2xl shadow-inner">
-            <button
-              onClick={() => setViewMode("3D")}
-              className={clsx(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
-                viewMode === "3D" 
-                  ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)]" 
-                  : "text-zinc-400 hover:text-white"
-              )}
-            >
-              <Stack size={14} weight="bold" /> 3D Cascade
-            </button>
+          <div className="flex bg-zinc-950 border border-white/10 rounded-lg p-0.5 shadow-inner">
             <button
               onClick={() => setViewMode("MATRIX")}
               className={clsx(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
                 viewMode === "MATRIX" 
-                  ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)]" 
+                  ? "bg-white text-black font-bold shadow-sm" 
                   : "text-zinc-400 hover:text-white"
               )}
             >
@@ -132,60 +121,50 @@ export default function ActionCenter() {
             <button
               onClick={() => setViewMode("PIPELINE")}
               className={clsx(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
                 viewMode === "PIPELINE" 
-                  ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)]" 
+                  ? "bg-white text-black font-bold shadow-sm" 
                   : "text-zinc-400 hover:text-white"
               )}
             >
               <GitCommit size={14} weight="bold" /> Pipeline
             </button>
+            <button
+              onClick={() => setViewMode("3D")}
+              className={clsx(
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-mono uppercase tracking-wider transition-all cursor-pointer",
+                viewMode === "3D" 
+                  ? "bg-white text-black font-bold shadow-sm" 
+                  : "text-zinc-400 hover:text-white"
+              )}
+            >
+              <Stack size={14} weight="bold" /> 3D Stack
+            </button>
           </div>
         </header>
 
-        {/* Executive KPI Stats Ribbon */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-          <div className="bg-zinc-950/80 border border-white/10 rounded-2xl p-4 flex flex-col justify-between hover:border-white/30 transition-colors">
-            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Total Directives</span>
-            <div className="text-2xl font-display font-light text-white mt-1">{stats.total}</div>
-          </div>
-          <div className="bg-zinc-950/80 border border-white/10 rounded-2xl p-4 flex flex-col justify-between hover:border-white/30 transition-colors">
-            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Urgent Critical</span>
-            <div className="text-2xl font-display font-bold text-red-400 mt-1">{stats.critical}</div>
-          </div>
-          <div className="bg-zinc-950/80 border border-white/10 rounded-2xl p-4 flex flex-col justify-between hover:border-white/30 transition-colors">
-            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Ready to Execute</span>
-            <div className="text-2xl font-display font-semibold text-white mt-1">{stats.ready}</div>
-          </div>
-          <div className="bg-zinc-950/80 border border-white/10 rounded-2xl p-4 flex flex-col justify-between hover:border-white/30 transition-colors">
-            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Statutory Compliance</span>
-            <div className="text-2xl font-display font-semibold text-emerald-400 mt-1">100%</div>
-          </div>
-        </div>
-
         {/* Filter Tabs & Search Bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-8">
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-6">
+          <div className="flex items-center gap-1 bg-zinc-950 border border-white/10 rounded-lg p-0.5 overflow-x-auto">
             {[
-              { label: "All", id: "ALL", count: actions.length },
-              { label: "Critical", id: "CRITICAL", count: actions.filter(a => a.priority === "CRITICAL").length },
-              { label: "High", id: "HIGH", count: actions.filter(a => a.priority === "HIGH").length },
-              { label: "Pending", id: "PENDING", count: actions.filter(a => a.status === "PENDING").length },
-              { label: "Ready", id: "READY", count: actions.filter(a => a.status === "READY").length },
-              { label: "Draft", id: "DRAFT", count: actions.filter(a => a.status === "DRAFT").length }
+              { label: "All Directives", id: "ALL" },
+              { label: "Critical", id: "CRITICAL" },
+              { label: "High", id: "HIGH" },
+              { label: "Ready", id: "READY" },
+              { label: "Pending", id: "PENDING" },
+              { label: "Draft", id: "DRAFT" }
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setFilter(tab.id)}
                 className={clsx(
-                  "px-3 py-1.5 rounded-xl text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer border whitespace-nowrap",
+                  "px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer whitespace-nowrap",
                   filter === tab.id
-                    ? "bg-white/15 border-white text-white font-semibold shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-                    : "bg-zinc-950/60 border-white/10 text-zinc-400 hover:text-white hover:border-white/20"
+                    ? "bg-white text-black font-semibold"
+                    : "text-zinc-400 hover:text-white"
                 )}
               >
                 <span>{tab.label}</span>
-                <span className="text-[10px] opacity-60">({tab.count})</span>
               </button>
             ))}
           </div>
@@ -526,13 +505,18 @@ export default function ActionCenter() {
       {/* ========================================================================= */}
       <AnimatePresence>
         {selectedAction && (
-          <motion.div
-            initial={{ x: "100%", opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: "100%", opacity: 0 }}
-            transition={{ type: "spring", stiffness: 350, damping: 32 }}
-            className="fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-black/95 backdrop-blur-2xl border-l border-white/15 shadow-2xl flex flex-col z-50 pt-28"
-          >
+          <>
+            <div 
+              onClick={() => setSelectedAction(null)} 
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40"
+            />
+            <motion.div
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              transition={{ type: "spring", stiffness: 350, damping: 32 }}
+              className="fixed top-14 right-0 bottom-0 w-full sm:w-[460px] bg-zinc-950 border-l border-white/10 shadow-2xl flex flex-col z-50"
+            >
             {/* Drawer Header */}
             <div className="p-6 border-b border-white/10 relative">
               <button 
@@ -691,7 +675,8 @@ export default function ActionCenter() {
             </div>
 
           </motion.div>
-        )}
+        </>
+      )}
       </AnimatePresence>
 
     </div>
