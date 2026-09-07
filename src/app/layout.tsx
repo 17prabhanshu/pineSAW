@@ -56,7 +56,7 @@ export default function RootLayout({
 
           
           {/* Faded Watermark Background */}
-          <div className="fixed inset-0 pointer-events-none z-[-1] flex items-center justify-center opacity-[0.03]">
+          <div className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center opacity-[0.15]">
             <img src="/cp-logo.png" alt="Watermark" className="w-[800px] h-[800px] object-contain grayscale" />
           </div>
 

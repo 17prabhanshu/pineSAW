@@ -146,7 +146,7 @@ body::before {
   linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 30px 30px;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
@@ -204,7 +204,7 @@ body::after {
   height: 100vh;
   background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%);
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
 }
 
 @layer utilities {
