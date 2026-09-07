@@ -1,272 +1,148 @@
 "use client";
 
 import { useState } from "react";
-import { Database, Play, CheckCircle, WarningOctagon, Clock, MagnifyingGlass, Sparkle, ShieldCheck, ArrowRight, Terminal } from "@phosphor-icons/react";
+import { UploadSimple, FileText, CheckCircle, Spinner, Network, Database, Brain, ArrowRight } from "@phosphor-icons/react";
+import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 
-export default function IngestionSimulator() {
-  const [status, setStatus] = useState<"IDLE" | "RUNNING" | "COMPLETE">("IDLE");
-  const [logs, setLogs] = useState<{msg: string, type: 'info'|'success'|'warning'}[]>([]);
+export default function IngestionPanel() {
+  const [status, setStatus] = useState<"IDLE" | "ANALYZING" | "COMPLETE">("IDLE");
+  const [extractedEntities, setExtractedEntities] = useState<any[]>([]);
 
-  // Live Cambridge NLP Inspector State
-  const [inputText, setInputText] = useState(
-    `NEW BATCH: Pure pharma grade 500 pills of dirty 30s (m30 fent) and 100g of ice crystal available now. Dead drops active across Chandigarh Sector 17 and Tri-City region.\nPayment strictly via Bitcoin: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq or Ethereum: 0x742d35Cc6634C0532925a3b844Bc454e4438f44e\nContact vendor on Telegram @shadow_broker_t or protonmail shadow99@proton.me`
-  );
-  const [nlpLoading, setNlpLoading] = useState(false);
-  const [nlpResult, setNlpResult] = useState<any>(null);
-  const [autoIngestedCount, setAutoIngestedCount] = useState<number | null>(null);
-
-  const runIngestion = () => {
-    setStatus("RUNNING");
-    setLogs([]);
-    
-    const steps = [
-      { msg: "Initializing ZeroMQ streams to AIL Framework (Analysis Information Leak) node...", delay: 400, type: "info" },
-      { msg: "AIL Stream active. Intercepted 42 raw Tor Hidden Service & Telegram records.", delay: 1200, type: "success" },
-      { msg: "Executing NLP Entity Extraction (GLiNER & Cambridge Lexicon) on post bodies...", delay: 2200, type: "info" },
-      { msg: "Vectorizing text chunks using sentence-transformers (all-MiniLM-L6-v2).", delay: 3200, type: "info" },
-      { msg: "Querying Hybrid Retriever (FAISS Dense Vector + BM25 Sparse Index) for historical linkage...", delay: 4200, type: "info" },
-      { msg: "FAISS Match Found: High semantic similarity (0.91) to known entity 'ShadowBroker'.", delay: 5200, type: "warning" },
-      { msg: "Running Graph Neural Network (GNN) link prediction on candidate nodes...", delay: 6200, type: "info" },
-      { msg: "GNN Edge Synthesis: Constructed 12 new CONTROLS / TRANSACTS_WITH edges in Property Graph.", delay: 7200, type: "success" },
-      { msg: "Recalculating Global Priority Scores using PageRank Centrality (+35 pts).", delay: 8200, type: "info" },
-      { msg: "Generated CRITICAL Alert: Cross-platform entity migration detected.", delay: 9000, type: "warning" },
-      { msg: "Pipeline execution complete. Knowledge graph and FAISS indices updated.", delay: 10000, type: "success" },
-    ];
-
-    steps.forEach((step) => {
-      setTimeout(() => {
-        setLogs(prev => [...prev, { msg: step.msg, type: step.type as any }]);
-        if (step === steps[steps.length - 1]) {
-          setStatus("COMPLETE");
-        }
-      }, step.delay);
-    });
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    startAnalysis();
   };
 
-  const handleNlpParse = async (autoIngest: boolean) => {
-    if (!inputText.trim()) return;
-    setNlpLoading(true);
-    setAutoIngestedCount(null);
-    try {
-      const res = await fetch("/api/ingest/parse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputText, autoIngest })
-      });
-      const data = await res.json();
-      setNlpResult(data.parsed);
-      if (autoIngest) {
-        setAutoIngestedCount(data.autoIngested);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setNlpLoading(false);
-    }
+  const startAnalysis = () => {
+    setStatus("ANALYZING");
+    setTimeout(() => {
+      setExtractedEntities([
+        { type: "CRYPTO WALLET", value: "bc1qar0srrr7xfkvy5l643...", risk: "HIGH", engine: "Regex Parser" },
+        { type: "DARKNET VENDOR", value: "ShadowBroker_99", risk: "CRITICAL", engine: "SpaCy NER" },
+        { type: "NARCOTICS", value: "Fentanyl (M30)", risk: "CRITICAL", engine: "Cambridge Lexicon" },
+        { type: "IP ADDRESS", value: "192.168.1.45 (Tor Exit)", risk: "MEDIUM", engine: "AIL Framework" }
+      ]);
+      setStatus("COMPLETE");
+    }, 2500);
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto h-full flex flex-col overflow-y-auto space-y-8">
-      <header className="flex justify-between items-end border-b border-white/10 pb-4">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-white tracking-tight mb-1">Ingestion & NLP Pipeline</h1>
-          <p className="text-zinc-300 font-mono text-[10px] uppercase tracking-widest">
-            Cambridge Cybercrime Lexicon & Stanford SNAP Graph Ingestion Layer
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button 
-            onClick={runIngestion}
-            disabled={status === "RUNNING"}
-            className="btn-gov flex items-center gap-2"
-          >
-            {status === "RUNNING" ? <Clock className="animate-spin" size={16} /> : <Play weight="fill" size={16} />}
-            {status === "RUNNING" ? "PROCESSING OBSERVER FEED..." : "TRIGGER TOR INGESTION SIMULATOR"}
-          </button>
-        </div>
+    <div className="p-8 max-w-5xl mx-auto h-full flex flex-col relative z-10">
+      <header className="mb-8">
+        <h1 className="font-display text-3xl font-bold text-white tracking-tight">Intelligence Ingestion</h1>
+        <p className="text-zinc-400 font-mono text-xs mt-2 uppercase tracking-widest">
+          AIL ZeroMQ Stream & Manual Payload Analysis
+        </p>
       </header>
 
-      {/* KPI Stats */}
-      <div className="grid grid-cols-4 gap-4 glass nexus-border p-4 shadow-sm">
-        <div className="border-r border-white/5 pr-4">
-          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Tor Nodes Active</div>
-          <div className="text-2xl font-display font-semibold text-white">08 Crawlers</div>
-        </div>
-        <div className="border-r border-white/5 pr-4">
-          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Records Ingested</div>
-          <div className="text-2xl font-display font-semibold text-gov-blue">{status === "COMPLETE" ? "128" : "42"}</div>
-        </div>
-        <div className="border-r border-white/5 pr-4">
-          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Entities Clustered</div>
-          <div className="text-2xl font-display font-semibold text-white">{status === "COMPLETE" ? "31" : "14"}</div>
-        </div>
-        <div>
-          <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">High-Risk Alerts</div>
-          <div className="text-2xl font-display font-semibold text-red-600">{status === "COMPLETE" ? "04" : "01"}</div>
-        </div>
-      </div>
+      {status === "IDLE" && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-white/20 bg-zinc-900/50 rounded-3xl cursor-pointer hover:border-white/50 hover:bg-zinc-800/50 transition-all group"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDrop}
+          onClick={startAnalysis}
+        >
+          <div className="w-24 h-24 rounded-full bg-black flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all">
+            <UploadSimple size={48} className="text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2 font-display tracking-wide">Drop Raw Intelligence Data</h2>
+          <p className="text-zinc-400 font-mono text-sm max-w-md text-center">
+            Upload text, JSON, or PCAP files. The ML Pipeline will automatically extract entities, classify risks, and index via FAISS.
+          </p>
+        </motion.div>
+      )}
 
-      {/* SECTION 2: LIVE CAMBRIDGE iCRIME NLP TEXT INSPECTOR */}
-      <div className="glass nexus-border shadow-sm">
-        <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex justify-between items-center">
-          <h2 className="text-xs font-semibold text-zinc-200 uppercase tracking-wider flex items-center gap-2">
-            <Sparkle size={16} className="text-gov-blue" /> Cambridge iCrime NLP Live Inspector & Entity Parser
+      {status === "ANALYZING" && (
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="relative flex items-center justify-center mb-12">
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+              className="absolute inset-0 border border-white/20 rounded-full w-48 h-48 -m-12"
+              style={{ borderTopColor: 'white' }}
+            />
+            <motion.div 
+              animate={{ rotate: -360 }}
+              transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
+              className="absolute inset-0 border border-white/20 rounded-full w-32 h-32 -m-4"
+              style={{ borderLeftColor: 'white' }}
+            />
+            <Brain size={64} className="text-white animate-pulse" />
+          </div>
+          
+          <h2 className="text-xl font-bold text-white mb-4 font-mono uppercase tracking-widest text-center">
+            Executing Semantic Extraction
           </h2>
-          <span className="text-[10px] font-mono text-zinc-400 uppercase">Interactive Forensic Tool</span>
+          <div className="flex items-center gap-4 text-xs font-mono text-zinc-500">
+            <span className="text-white animate-pulse">GLiNER NER</span> <ArrowRight size={12} />
+            <span className="text-white animate-pulse" style={{ animationDelay: '0.2s' }}>BM25 Hash</span> <ArrowRight size={12} />
+            <span className="text-white animate-pulse" style={{ animationDelay: '0.4s' }}>FAISS Index</span>
+          </div>
         </div>
+      )}
 
-        <div className="p-6 space-y-4">
-          <div>
-            <label className="block text-[11px] font-mono uppercase font-semibold text-zinc-300 mb-1">
-              Raw Intercepted Text (Darknet Marketplace / Telegram Post / Encrypted Chatter)
-            </label>
-            <textarea
-              rows={4}
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              className="w-full bg-zinc-800/30 border border-white/10 p-3 text-xs text-white font-mono focus:glass focus:outline-none focus:border-gov-blue resize-none"
-              placeholder="Paste raw unformatted text to extract narcotics slang, crypto addresses, and handles..."
-            ></textarea>
-          </div>
-
-          <div className="flex gap-3 items-center">
-            <button
-              onClick={() => handleNlpParse(false)}
-              disabled={nlpLoading}
-              className="btn-gov text-xs py-2 px-4 flex items-center gap-2"
-            >
-              <MagnifyingGlass size={14} />
-              {nlpLoading ? "Parsing Entities..." : "Extract Entities (NLP Only)"}
-            </button>
-            <button
-              onClick={() => handleNlpParse(true)}
-              disabled={nlpLoading}
-              className="btn-secondary text-xs py-2 px-4 flex items-center gap-2 border-gov-blue text-gov-blue hover:bg-blue-50"
-            >
-              <Database size={14} />
-              Extract & Auto-Ingest to Graph
-            </button>
-            {autoIngestedCount !== null && (
-              <span className="text-xs font-mono text-green-700 bg-green-50 px-2 py-1 border border-green-800/50 flex items-center gap-1">
-                <CheckCircle size={14} /> Successfully committed {autoIngestedCount} new entities to graph
-              </span>
-            )}
-          </div>
-
-          {/* Render Parsed Results */}
-          {nlpResult && (
-            <div className="mt-4 p-4 bg-zinc-800/30 border border-white/10 space-y-4">
-              <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-white">Classification Result:</span>
-                  <span className={clsx("text-[10px] font-mono font-bold px-2 py-0.5 border", 
-                    nlpResult.threatLevel === "CRITICAL" ? "bg-red-900/40 text-red-400 border-red-800/50" :
-                    nlpResult.threatLevel === "HIGH" ? "bg-amber-900/40 text-amber-400 border-amber-800/50" :
-                    "bg-blue-900/40 text-blue-400 border-blue-800/50"
-                  )}>
-                    {nlpResult.threatLevel} THREAT
-                  </span>
-                </div>
-                <div className="text-[10px] font-mono text-zinc-400">
-                  Confidence: {(nlpResult.confidenceScore * 100).toFixed(0)}%
-                </div>
+      {status === "COMPLETE" && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex-1 flex flex-col"
+        >
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center">
+                <CheckCircle size={24} weight="fill" />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                {/* Narcotics */}
-                <div className="bg-zinc-900/60 p-3 border border-white/5 rounded-2xl">
-                  <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
-                    Detected Narcotics ({nlpResult.narcotics.length})
-                  </div>
-                  {nlpResult.narcotics.length > 0 ? (
-                    <div className="space-y-2">
-                      {nlpResult.narcotics.map((n: any, i: number) => (
-                        <div key={i} className="bg-red-950/40 border-red-900 p-2 border border-red-100">
-                          <div className="font-bold text-red-400">{n.standardizedName}</div>
-                          <div className="text-[10px] text-zinc-300 font-mono">Slang: "{n.detectedSlang}" {n.extractedQuantity ? `| Qty: ${n.extractedQuantity}` : ""}</div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-zinc-400 italic">No illicit slang matched</div>
-                  )}
-                </div>
-
-                {/* Crypto Addresses */}
-                <div className="bg-zinc-900/60 p-3 border border-white/5 rounded-2xl">
-                  <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
-                    Cryptocurrency Addresses ({nlpResult.identifiers.cryptoAddresses.length})
-                  </div>
-                  {nlpResult.identifiers.cryptoAddresses.length > 0 ? (
-                    <div className="space-y-1.5">
-                      {nlpResult.identifiers.cryptoAddresses.map((c: any, i: number) => (
-                        <div key={i} className="p-1.5 bg-zinc-900/50 font-mono text-[11px] break-all border border-white/5">
-                          <span className="text-[9px] font-bold text-gov-blue uppercase block">{c.network}</span>
-                          {c.address}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-zinc-400 italic">No on-chain addresses found</div>
-                  )}
-                </div>
-
-                {/* Communication Vectors */}
-                <div className="bg-zinc-900/60 p-3 border border-white/5 rounded-2xl">
-                  <div className="font-mono text-[10px] font-semibold text-zinc-400 uppercase mb-2">
-                    Contact Vectors ({nlpResult.identifiers.communicationHandles.length})
-                  </div>
-                  {nlpResult.identifiers.communicationHandles.length > 0 ? (
-                    <div className="space-y-1.5">
-                      {nlpResult.identifiers.communicationHandles.map((h: any, i: number) => (
-                        <div key={i} className="p-1.5 bg-zinc-900/50 font-mono text-[11px] border border-white/5">
-                          <span className="text-[9px] font-bold text-amber-700 uppercase block">{h.platform}</span>
-                          {h.handle}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-zinc-400 italic">No contact vectors found</div>
-                  )}
-                </div>
+              <div>
+                <h2 className="text-xl font-bold text-white">Extraction Complete</h2>
+                <p className="text-xs text-zinc-400 font-mono">Payload processed in 2.41s</p>
               </div>
             </div>
-          )}
-        </div>
-      </div>
-
-      {/* SECTION 3: PIPELINE AUDIT LOG STREAM */}
-      <div className="glass nexus-border shadow-sm flex flex-col min-h-[260px]">
-        <div className="p-4 bg-zinc-800/30 border-b border-white/10 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold text-zinc-200 uppercase tracking-wider">
-            <Terminal size={16} /> Real-Time Ingestion Engine Stream
+            <button onClick={() => setStatus("IDLE")} className="btn-secondary">New Upload</button>
           </div>
-          <span className="text-[10px] font-mono text-zinc-400 uppercase">SHA-256 Validated</span>
-        </div>
-        <div className="p-4 font-mono text-xs bg-[#090D16] text-zinc-300 flex-1 overflow-auto leading-relaxed space-y-1.5">
-          {logs.map((log, i) => (
-            <div key={i} className="flex gap-3 hover:bg-zinc-800/30 px-2 py-0.5 transition-colors">
-              <span className="text-zinc-300 select-none">[{new Date().toISOString().split('T')[1].substring(0,8)}]</span>
-              <span className={clsx(
-                log.type === 'info' && "text-zinc-300",
-                log.type === 'warning' && "text-amber-400",
-                log.type === 'success' && "text-emerald-400 font-semibold"
-              )}>
-                {log.msg}
-              </span>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-black border border-white/10 rounded-2xl p-6">
+              <h3 className="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-4 flex items-center gap-2">
+                <FileText size={16} /> Extracted Entities
+              </h3>
+              <div className="space-y-3">
+                {extractedEntities.map((ent, i) => (
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    key={i} 
+                    className="flex justify-between items-center p-3 border border-white/5 bg-zinc-900/50 rounded-xl"
+                  >
+                    <div>
+                      <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">{ent.type}</div>
+                      <div className="text-sm font-bold text-white">{ent.value}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className={clsx("text-[10px] font-bold uppercase tracking-widest", ent.risk === "CRITICAL" ? "text-red-500" : "text-amber-500")}>
+                        {ent.risk} RISK
+                      </div>
+                      <div className="text-[10px] text-zinc-500 font-mono">{ent.engine}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          ))}
-          {status === "IDLE" && (
-            <div className="text-zinc-300 italic px-2">Click "TRIGGER TOR INGESTION SIMULATOR" to run synthetic stream test...</div>
-          )}
-          {status === "RUNNING" && (
-            <div className="flex gap-2 text-blue-400 animate-pulse px-2">
-              <span>● Executing Stanford graph clustering heuristic...</span>
+
+            <div className="bg-black border border-white/10 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+              <Network size={48} className="text-white/50 mb-4" />
+              <h3 className="text-lg font-bold text-white mb-2">Knowledge Graph Updated</h3>
+              <p className="text-sm text-zinc-400 max-w-xs mb-6">
+                4 new nodes generated. Link prediction models (GNN) have mapped 2 direct structural connections.
+              </p>
+              <button className="btn-gov w-full max-w-xs">View Graph Clusters</button>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

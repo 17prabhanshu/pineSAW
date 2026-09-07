@@ -209,44 +209,26 @@ export default function CommandCenter() {
         </header>
 
         
-        
-        {/* ML Engine Process Flowchart */}
-        <div className="mb-8">
-          <h2 className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-4">Live System Architecture</h2>
-          <div className="bg-black border border-white/10 rounded-2xl p-8 relative flex justify-between">
-            {/* Connecting Line */}
-            <div className="absolute top-12 left-[10%] right-[10%] h-px bg-white/20 z-0"></div>
-
-            {/* Step 1 */}
-            <div className="relative z-10 flex flex-col items-center gap-3 bg-black px-4 w-1/4">
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-black flex items-center justify-center font-mono font-bold text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]">1</div>
-              <div className="text-xs font-bold text-white tracking-widest text-center mt-2">DATA INTERCEPT</div>
-              <div className="text-[10px] text-zinc-500 font-mono text-center leading-tight">AIL Framework<br/>ZeroMQ Darknet Streams</div>
+        {/* Sleek ML Ticker */}
+        <div className="mb-6 bg-black border border-white/10 rounded-xl px-4 py-2 flex items-center justify-between shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+          <div className="flex items-center gap-4 text-xs font-mono">
+            <div className="flex items-center gap-2 text-white">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-[0_0_8px_white]"></div>
+              <span>AIL / ZMQ STREAMING</span>
             </div>
-
-            {/* Step 2 */}
-            <div className="relative z-10 flex flex-col items-center gap-3 bg-black px-4 w-1/4">
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-black flex items-center justify-center font-mono font-bold text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]">2</div>
-              <div className="text-xs font-bold text-white tracking-widest text-center mt-2">ENTITY EXTRACTION</div>
-              <div className="text-[10px] text-zinc-500 font-mono text-center leading-tight">SpaCy NLP / NER<br/>Cross-Platform Resolution</div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative z-10 flex flex-col items-center gap-3 bg-black px-4 w-1/4">
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-black flex items-center justify-center font-mono font-bold text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]">3</div>
-              <div className="text-xs font-bold text-white tracking-widest text-center mt-2">VECTOR RETRIEVAL</div>
-              <div className="text-[10px] text-zinc-500 font-mono text-center leading-tight">FAISS + BM25<br/>Hybrid Semantic Search</div>
-            </div>
-
-            {/* Step 4 */}
-            <div className="relative z-10 flex flex-col items-center gap-3 bg-black px-4 w-1/4">
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-black flex items-center justify-center font-mono font-bold text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]">4</div>
-              <div className="text-xs font-bold text-white tracking-widest text-center mt-2">GRAPH ANALYSIS</div>
-              <div className="text-[10px] text-zinc-500 font-mono text-center leading-tight">PyTorch GNN<br/>SHAP Feature Attribution</div>
-            </div>
+            <div className="w-px h-3 bg-white/20"></div>
+            <span className="text-zinc-500">FAISS + BM25: <span className="text-zinc-300">NOMINAL</span></span>
+            <div className="w-px h-3 bg-white/20"></div>
+            <span className="text-zinc-500">PYTORCH GNN: <span className="text-zinc-300">SYNCED</span></span>
+            <div className="w-px h-3 bg-white/20"></div>
+            <span className="text-zinc-500">SHAP: <span className="text-zinc-300">ACTIVE</span></span>
+          </div>
+          <div className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase flex items-center gap-2">
+            <span>System State</span> <span className="text-white bg-white/10 px-2 py-0.5 rounded">SECURE</span>
           </div>
         </div>
-{/* Operational Status KPI Strip */}
+
+        {/* Operational Status KPI Strip */}
 
         <div className=" glass nexus-border rounded-[2rem] flex divide-x divide-zinc-300 mb-8 overflow-hidden shadow-sm">
           {[
