@@ -100,13 +100,13 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
 
 
   if (!mounted) return (
-    <div className="w-full h-full bg-zinc-50 flex items-center justify-center text-zinc-400 font-mono text-xs">
+    <div className="w-full h-full bg-transparent flex items-center justify-center text-zinc-400 font-mono text-xs">
       INITIALIZING INSTITUTIONAL GRAPH ENGINE...
     </div>
   );
 
   return (
-        <div className="w-full h-full relative bg-[#F8FAFC] overflow-hidden">
+        <div className="w-full h-full relative bg-transparent overflow-hidden">
       {/* SVG Pulse Overlay */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
         <AnimatePresence>
@@ -131,7 +131,7 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
         </AnimatePresence>
       </svg>
       {/* Top Legend and Filter Toolbar */}
-      <div className="absolute top-4 left-4 z-20 flex gap-1.5 bg-black/50/95 backdrop-blur-sm p-1.5 border border-zinc-300 shadow-sm text-xs font-mono">
+      <div className="absolute top-4 left-4 z-20 flex gap-1.5 bg-zinc-900/80 p-2 border border-white/5 shadow-2xl rounded-full text-xs font-mono">
         {[
           { key: "ALL", label: "ALL NODES", color: "bg-zinc-800 text-white" },
           { key: "ACTOR", label: "ACTORS", color: "bg-[#002244] text-white" },
@@ -142,8 +142,8 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
           <button
             key={btn.key}
             onClick={() => setFilterType(btn.key)}
-            className={`px-2 py-1 text-[10px] font-semibold transition-none ${
-              filterType === btn.key ? btn.color : "bg-zinc-800/50 text-zinc-700 hover:bg-white/10"
+            className={`px-3 py-1.5 text-[10px] font-mono font-bold tracking-widest rounded-full transition-colors ${
+              filterType === btn.key ? btn.color : "bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800"
             }`}
           >
             {btn.label}
@@ -152,7 +152,7 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
       </div>
 
       {/* Zoom Control Overlay */}
-      <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-1 bg-white p-1 border border-zinc-300 shadow-sm">
+      <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-1 bg-zinc-900/60 p-1 border border-white/5 shadow-sm rounded-xl">
         <button 
           onClick={handleZoomIn} 
           title="Zoom In"
@@ -214,10 +214,10 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="absolute top-4 right-4 z-40 w-80 bg-black/50/95 backdrop-blur-md shadow-2xl border border-white/10 rounded-lg overflow-hidden flex flex-col max-h-[calc(100vh-2rem)]"
+            className="absolute top-4 right-4 z-40 w-80 bg-zinc-900/80 backdrop-blur-md shadow-2xl border border-white/10 rounded-[2rem] overflow-hidden flex flex-col max-h-[calc(100vh-2rem)]"
             layoutId={`node-panel-${selectedNode.id}`}
           >
-            <div className="p-4 bg-black/50 text-white flex justify-between items-start">
+            <div className="p-5 bg-zinc-900/50 text-white flex justify-between items-start">
               <div>
                 <motion.h2 className="text-lg font-bold font-mono" layoutId={`node-title-${selectedNode.id}`}>
                   {selectedNode.label}
@@ -316,7 +316,7 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
 
           const label = node.label || '';
           const fontSize = (node === selectedNode ? 14 : 11) / globalScale;
-          ctx.font = `${node === selectedNode ? 'bold ' : ''}${fontSize}px IBM Plex Mono, monospace`;
+          ctx.font = `${node === selectedNode ? 'bold ' : ''}${fontSize}px Space Grotesk, monospace`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           

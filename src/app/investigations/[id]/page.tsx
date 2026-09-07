@@ -64,28 +64,28 @@ export default function InvestigationWorkspace() {
 
         {/* View Switcher Toolbar */}
         <div className="flex items-center gap-6">
-          <div className="flex items-center bg-zinc-900/50 p-1 border border-white/10">
+          <div className="flex items-center bg-zinc-900/60 p-1 border border-white/5 rounded-full">
             <button 
               onClick={() => setActivePane("GRAPH")} 
-              className={clsx("px-3 py-1.5 text-xs font-semibold transition-none", activePane === "GRAPH" ? "bg-gov-blue text-white" : "text-zinc-300 hover:text-white")}
+              className={clsx("px-4 py-1.5 text-xs font-medium rounded-full transition-all", activePane === "GRAPH" ? "bg-zinc-800 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]" : "text-zinc-400 hover:text-white hover:bg-zinc-800/50")}
             >
               Property Graph
             </button>
             <button 
               onClick={() => setActivePane("BACKTRACK")} 
-              className={clsx("px-3 py-1.5 text-xs font-semibold transition-none", activePane === "BACKTRACK" ? "bg-gov-blue text-white" : "text-zinc-300 hover:text-white")}
+              className={clsx("px-4 py-1.5 text-xs font-medium rounded-full transition-all", activePane === "BACKTRACK" ? "bg-zinc-800 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]" : "text-zinc-400 hover:text-white hover:bg-zinc-800/50")}
             >
               Bidirectional Backtracking (MFScope)
             </button>
             <button 
               onClick={() => setActivePane("EVIDENCE")} 
-              className={clsx("px-3 py-1.5 text-xs font-semibold transition-none", activePane === "EVIDENCE" ? "bg-gov-blue text-white" : "text-zinc-300 hover:text-white")}
+              className={clsx("px-4 py-1.5 text-xs font-medium rounded-full transition-all", activePane === "EVIDENCE" ? "bg-zinc-800 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]" : "text-zinc-400 hover:text-white hover:bg-zinc-800/50")}
             >
               Evidence Board
             </button>
             <button 
               onClick={() => setActivePane("REPORT")} 
-              className={clsx("px-3 py-1.5 text-xs font-semibold transition-none", activePane === "REPORT" ? "bg-gov-blue text-white" : "text-zinc-300 hover:text-white")}
+              className={clsx("px-4 py-1.5 text-xs font-medium rounded-full transition-all", activePane === "REPORT" ? "bg-zinc-800 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]" : "text-zinc-400 hover:text-white hover:bg-zinc-800/50")}
             >
               Case Dossier
             </button>
@@ -106,7 +106,7 @@ export default function InvestigationWorkspace() {
       <div className="flex flex-1 overflow-hidden">
         
         {/* Left Panel - Timeline & Summary */}
-        <div className="w-80 glass border-r border-white/10 flex flex-col shrink-0 z-10 overflow-y-auto p-5 space-y-6">
+        <div className="w-80 bg-zinc-900/60 border-r border-white/5 flex flex-col shrink-0 z-10 overflow-y-auto p-6 space-y-8">
           <div className="space-y-2">
             <h2 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest font-semibold">Executive Intelligence Summary</h2>
             <p className="text-xs text-zinc-300 leading-relaxed bg-zinc-800/20 p-3 border border-white/5">
