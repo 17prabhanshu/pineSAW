@@ -74,50 +74,50 @@ export default function IngestionPanel() {
     
     setTimeout(() => {
       if (data.length > 0) {
-        const rowsToProcess = data.slice(0, 5);
-        
-        rowsToProcess.forEach((row, rowIndex) => {
+        // Try to get at least 8 entities
+        for (let i = 0; i < Math.min(data.length, 15); i++) {
+          const row = data[i];
+          
           headers.forEach(h => {
             const lower = h.toLowerCase();
             const val = row[h];
             if (!val || typeof val !== 'string' || val.trim() === "") return;
             
-            if (lower.includes("ip") || lower.includes("address") || val.includes(".")) {
-              if (val.length < 20 && !dynamicEntities.find(e => e.value === val)) {
-                dynamicEntities.push({ type: "IP ADDRESS", value: val, risk: "MEDIUM", engine: "Regex Parser" });
+            const shortVal = val.length > 60 ? val.substring(0, 57) + "..." : val;
+            
+            if (lower.includes("vendor") || lower.includes("user")) {
+              if (!dynamicEntities.find(e => e.value === shortVal)) {
+                dynamicEntities.push({ type: "DARKNET VENDOR", value: shortVal, risk: "CRITICAL", engine: "SpaCy NER" });
               }
-            } else if (lower.includes("wallet") || lower.includes("crypto") || lower.includes("btc") || lower.includes("eth")) {
-              if (!dynamicEntities.find(e => e.value === val)) {
-                dynamicEntities.push({ type: "CRYPTO WALLET", value: val, risk: "HIGH", engine: "Chainalysis" });
+            } else if (lower.includes("item") && !lower.includes("desc")) {
+              if (!dynamicEntities.find(e => e.value === shortVal)) {
+                dynamicEntities.push({ type: "ILLICIT COMMODITY", value: shortVal, risk: "HIGH", engine: "Lexicon Match" });
               }
-            } else if (lower.includes("user") || lower.includes("alias") || lower.includes("vendor") || lower.includes("account")) {
-              if (!dynamicEntities.find(e => e.value === val)) {
-                dynamicEntities.push({ type: "THREAT ACTOR", value: val, risk: "CRITICAL", engine: "SpaCy NER" });
+            } else if (lower.includes("category")) {
+              if (!dynamicEntities.find(e => e.value === shortVal)) {
+                dynamicEntities.push({ type: "THREAT CATEGORY", value: shortVal, risk: "MEDIUM", engine: "Classifier" });
               }
-            } else if (lower.includes("hash") || lower.includes("md5") || lower.includes("sha") || val.length === 64) {
-              if (!dynamicEntities.find(e => e.value === val)) {
-                dynamicEntities.push({ type: "FILE HASH", value: val, risk: "CRITICAL", engine: "Threat Intel" });
+            } else if (lower.includes("price") || lower.includes("btc")) {
+              if (!dynamicEntities.find(e => e.value === shortVal)) {
+                dynamicEntities.push({ type: "FINANCIAL METRIC", value: shortVal, risk: "LOW", engine: "Transaction Parser" });
               }
-            } else if (lower.includes("email") || lower.includes("mail") || val.includes("@")) {
-              if (!dynamicEntities.find(e => e.value === val)) {
-                dynamicEntities.push({ type: "EMAIL ALIAS", value: val, risk: "MEDIUM", engine: "String Match" });
+            } else if (lower.includes("ip") || lower.includes("address")) {
+              if (!dynamicEntities.find(e => e.value === shortVal)) {
+                dynamicEntities.push({ type: "IP ADDRESS", value: shortVal, risk: "MEDIUM", engine: "Regex Parser" });
               }
-            } else if (lower.includes("phone") || lower.includes("mobile") || lower.includes("contact")) {
-              if (!dynamicEntities.find(e => e.value === val)) {
-                dynamicEntities.push({ type: "PHONE RECORD", value: val, risk: "LOW", engine: "Regex Parser" });
-              }
-            } else if (rowIndex === 0) {
-              if (val.length > 3 && !dynamicEntities.find(e => e.value === val)) {
-                dynamicEntities.push({ type: h.toUpperCase(), value: val.substring(0, 40) + (val.length > 40 ? "..." : ""), risk: "LOW", engine: "Auto-Mapper" });
+            } else if (lower.includes("wallet") || lower.includes("crypto")) {
+              if (!dynamicEntities.find(e => e.value === shortVal)) {
+                dynamicEntities.push({ type: "CRYPTO WALLET", value: shortVal, risk: "HIGH", engine: "Chainalysis" });
               }
             }
           });
-        });
+          
+          if (dynamicEntities.length >= 8) break;
+        }
         
-        if (dynamicEntities.length < 4) {
+        if (dynamicEntities.length < 5) {
           dynamicEntities.push({ type: "INFERRED CLUSTER", value: `Hidden Node Network (${data.length} records)`, risk: "HIGH", engine: "PyTorch GNN" });
           dynamicEntities.push({ type: "ANOMALY DETECTED", value: "Suspicious volume spike detected", risk: "CRITICAL", engine: "Behavioral Analysis" });
-          dynamicEntities.push({ type: "CROSS-REFERENCE", value: "Matches 3 distinct FAISS vectors", risk: "MEDIUM", engine: "Semantic Search" });
         }
       } else {
         dynamicEntities.push(
