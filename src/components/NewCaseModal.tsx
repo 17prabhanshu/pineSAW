@@ -97,9 +97,9 @@ export function NewCaseModal({ isOpen, onClose, onSuccess }: NewCaseModalProps) 
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-[#002244] text-white px-6 py-4 flex justify-between items-center shrink-0 border-b border-zinc-400">
+        <div className="bg-zinc-950 text-white px-6 py-4 flex justify-between items-center shrink-0 border-b border-zinc-400">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 glass text-[#002244] flex items-center justify-center font-bold text-sm">
+            <div className="w-7 h-7 glass text-white flex items-center justify-center font-bold text-sm">
               <FolderPlus size={18} weight="bold" />
             </div>
             <div>

@@ -104,7 +104,7 @@ export default function ActionCenter() {
                 onClick={() => setSelectedAction(act)}
                 className={clsx(
                   "absolute w-full bg-zinc-900/80 border border-white/5 rounded-[2rem] p-5 cursor-pointer group shadow-2xl",
-                  isSelected ? "border-gov-blue bg-zinc-800/90" : "border-white/10 hover:border-white/30 /80"
+                  isSelected ? "border-white bg-zinc-800/90" : "border-white/10 hover:border-white/30 /80"
                 )}
                 style={{
                   transformStyle: "preserve-3d",
@@ -211,7 +211,7 @@ export default function ActionCenter() {
 
             <section>
               <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Procedural Basis</h3>
-              <div className="p-3 border border-nexus-amber/20 bg-nexus-amber/5 rounded-2xl">
+              <div className="p-3 border border-white/20 bg-white/5 rounded-2xl">
                 <div className="flex items-center gap-2 text-nexus-amber text-xs font-mono uppercase tracking-widest mb-1">
                   <ShieldWarning /> Potential Relevance
                 </div>

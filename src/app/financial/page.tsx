@@ -240,9 +240,9 @@ export default function FinancialPage() {
       {legalModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px] p-4">
           <div className="glass border border-zinc-400 w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh]">
-            <div className="bg-[#002244] text-white px-6 py-4 flex justify-between items-center shrink-0 border-b border-zinc-400">
+            <div className="bg-zinc-950 text-white px-6 py-4 flex justify-between items-center shrink-0 border-b border-zinc-400">
               <div className="flex items-center gap-3">
-                <ShieldCheck size={20} className="text-amber-400" />
+                <ShieldCheck size={20} className="text-white" />
                 <div>
                   <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-300">Statutory Evidentiary Document</div>
                   <h3 className="text-base font-bold">
@@ -272,7 +272,7 @@ export default function FinancialPage() {
                     <span className="badge-neutral text-[10px] font-mono uppercase shrink-0 ml-3">TAMPER-EVIDENT</span>
                   </div>
 
-                  <div className="bg-[#FAFAFA] border border-white/10 p-5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-white overflow-x-auto select-all">
+                  <div className="bg-zinc-900 border border-white/10 p-5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-300 overflow-x-auto select-all">
                     {legalNoticeDoc.formattedText}
                   </div>
                 </>

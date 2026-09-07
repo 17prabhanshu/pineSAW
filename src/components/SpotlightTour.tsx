@@ -107,7 +107,7 @@ export function SpotlightTour() {
               
               <button
                 onClick={handleNext}
-                className="px-4 py-2 bg-[#002244] text-white text-sm font-medium rounded-lg hover:bg-[#003366] transition-colors flex items-center cursor-pointer"
+                className="px-4 py-2 bg-zinc-950 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors flex items-center cursor-pointer"
               >
                 {currentStep === steps.length - 1 ? "Finish Tour" : "Next"}
                 {currentStep !== steps.length - 1 && <ChevronRight className="w-4 h-4 ml-1" />}
