@@ -33,7 +33,7 @@ const navSections = [
     title: "INTELLIGENCE",
     items: [
       { href: "/entities", label: "Entities Directory", icon: Users },
-      { href: "/search", label: "Global Search", icon: MagnifyingGlass, shortcut: "⌘K" },
+      { href: "/search", label: "FAISS Vector Search", icon: MagnifyingGlass, shortcut: "⌘K" },
     ]
   },
   {
@@ -51,7 +51,7 @@ const navSections = [
   {
     title: "INTELLIGENCE INGESTION",
     items: [
-      { href: "/ingestion", label: "Tor & NLP Ingestion", icon: Database },
+      { href: "/ingestion", label: "AIL / ZeroMQ Streams", icon: Database },
     ]
   }
 ];
