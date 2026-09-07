@@ -10,6 +10,8 @@ import { NewCaseModal } from "@/components/NewCaseModal";
 import { motion, useMotionValue, useTransform, animate, useReducedMotion, AnimatePresence, useSpring } from "motion/react";
 import { CyberText } from "@/components/CyberText";
 import { motionTokens } from "@/lib/motionTokens";
+import { IntelligenceCarousel } from "@/components/IntelligenceCarousel";
+
 
 function AnimatedKPI({ label, value, color }: { label: string, value: string | number, color: string }) {
   const shouldReduceMotion = useReducedMotion();
@@ -243,6 +245,9 @@ export default function CommandCenter() {
             <AnimatedKPI key={i} label={kpi.label} value={kpi.value} color={kpi.color} />
           ))}
         </div>
+
+        {/* Live Intelligence & Tactical Threat Dispatch Carousel */}
+        <IntelligenceCarousel />
 
         {/* Main Content Area */}
         <div className="flex-1 flex gap-6 min-h-0">
