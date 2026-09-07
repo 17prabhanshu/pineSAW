@@ -98,22 +98,27 @@ export default function FinancialPage() {
                     <th className="px-4 py-3 font-semibold text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200">
+                <tbody className="divide-y divide-white/10">
                   {accounts.map((acc: any) => {
                     const controllers = acc.targetRelations?.filter((r:any) => r.type === "CONTROLS").map((r:any) => r.source) || [];
+                    const isSelected = selectedAccount?.id === acc.id;
                     
                     return (
                       <tr 
                         key={acc.id} 
                         onClick={() => setSelectedAccount(acc)}
                         className={clsx(
-                          "transition-colors cursor-pointer group",
-                          selectedAccount?.id === acc.id ? "bg-blue-50 border-l-2 border-l-gov-blue" : "hover:bg-zinc-800/30 border-l-2 border-l-transparent"
+                          "transition-all cursor-pointer group",
+                          isSelected 
+                            ? "bg-white/15 border-l-2 border-l-white text-white font-medium shadow-[inset_0_0_25px_rgba(255,255,255,0.04)]" 
+                            : "hover:bg-white/5 border-l-2 border-l-transparent text-zinc-300"
                         )}
                       >
                         <td className="px-4 py-3 font-medium text-white flex items-center gap-2">
-                          <Bank className="text-zinc-400 group-hover:text-gov-blue" size={16} />
-                          {acc.label}
+                          <Bank className={clsx("transition-colors", isSelected ? "text-white" : "text-zinc-400 group-hover:text-white")} size={16} />
+                          <span className={clsx("font-mono text-xs", isSelected ? "text-white font-semibold" : "text-zinc-200")}>
+                            {acc.label}
+                          </span>
                         </td>
                         <td className="px-4 py-3 font-mono text-xs text-zinc-300">{acc.type.replace('_', ' ')}</td>
                         <td className="px-4 py-3">
@@ -133,8 +138,8 @@ export default function FinancialPage() {
                           )}
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <button className="text-xs font-semibold text-gov-blue hover:underline">
-                            Inspect Asset & Legal Action
+                          <button className="text-xs font-mono text-zinc-400 group-hover:text-white hover:underline">
+                            Inspect Asset →
                           </button>
                         </td>
                       </tr>
@@ -167,7 +172,7 @@ export default function FinancialPage() {
                   <h3 className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">Risk Indicators</h3>
                   <div className="space-y-2">
                     {JSON.parse(selectedAccount.riskFactors).map((risk: string, i: number) => (
-                      <div key={i} className="flex justify-between items-center text-xs bg-red-50 border border-red-100 p-2 text-red-400 font-medium">
+                      <div key={i} className="flex justify-between items-center text-xs bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl text-red-400 font-medium">
                         <span>{risk}</span>
                         <TrendUp size={14} />
                       </div>
@@ -219,7 +224,7 @@ export default function FinancialPage() {
                   </button>
                   <button 
                     onClick={() => handleGenerateNotice("SECTION_68F_NDPS")}
-                    className="w-full btn-secondary py-2 text-xs font-semibold text-red-700 hover:bg-red-50 hover:text-red-400 border-red-300 hover:border-red-400 flex items-center justify-center gap-2"
+                    className="w-full btn-secondary py-2 text-xs font-semibold text-red-400 hover:bg-red-500/10 hover:text-red-300 border-red-500/30 hover:border-red-500/50 flex items-center justify-center gap-2 cursor-pointer transition-colors"
                   >
                     <span>Prepare Section 68F NDPS Act Asset Freeze Order</span>
                   </button>
