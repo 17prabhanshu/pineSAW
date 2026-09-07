@@ -5,7 +5,8 @@ import { useParams } from "next/navigation";
 import { ShieldWarning, IdentificationCard, Link as LinkIcon, Graph, TrendUp, Folder, FileText, NotePencil, WarningOctagon, Clock, MapPin, MagnifyingGlass, CaretRight, Plus, Gavel, HandCoins, ArrowRight } from "@phosphor-icons/react";
 import clsx from "clsx";
 import Link from "next/link";
-import { NetworkGraph } from "@/components/NetworkGraph";
+import { IntelligenceFlowchart } from "@/components/IntelligenceFlowchart";
+
 
 import FinancialTab from "@/components/tabs/FinancialTab";
 import EvidenceTab from "@/components/tabs/EvidenceTab";
@@ -13,7 +14,7 @@ import AlertsTab from "@/components/tabs/AlertsTab";
 import InvestigationsTab from "@/components/tabs/InvestigationsTab";
 import { LegalTab } from "@/components/tabs/LegalTab";
 import { ActionsTab } from "@/components/tabs/ActionsTab";
-import { EntityFlowchart } from "@/components/EntityFlowchart";
+
 
 export default function EntityIntelligence() {
   const params = useParams();
@@ -439,7 +440,7 @@ export default function EntityIntelligence() {
               </div>
             </div>
             <div className="h-[600px] w-full relative bg-black rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl">
-              <EntityFlowchart data={graphData} />
+              <IntelligenceFlowchart data={graphData} />
             </div>
           </div>
         )}

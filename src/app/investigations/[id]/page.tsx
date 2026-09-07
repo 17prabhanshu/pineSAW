@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { NetworkGraph } from "@/components/NetworkGraph";
+import { IntelligenceFlowchart } from "@/components/IntelligenceFlowchart";
+
 import { ShieldWarning, MagnifyingGlass, Funnel, Clock, CaretRight, Info, Eye, DownloadSimple, Printer, Checks, HandCoins, Lightning, Bank, ArrowsClockwise, FileText, CheckCircle } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { BidirectionalBacktracker } from "@/lib/analytics/backtrack";
@@ -156,7 +157,7 @@ export default function InvestigationWorkspace() {
           {/* PANE 1: PROPERTY GRAPH */}
           {activePane === "GRAPH" && (
             <div className="w-full h-full relative">
-              <NetworkGraph data={graphData} onNodeClick={setSelectedEntity} />
+              <IntelligenceFlowchart data={graphData} onNodeClick={setSelectedEntity} />
             </div>
           )}
 

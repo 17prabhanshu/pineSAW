@@ -208,7 +208,28 @@ export default function CommandCenter() {
           </div>
         </header>
 
+        
+        {/* Sleek ML Ticker */}
+        <div className="mb-6 bg-black border border-white/10 rounded-xl px-4 py-2 flex items-center justify-between shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+          <div className="flex items-center gap-4 text-xs font-mono">
+            <div className="flex items-center gap-2 text-white">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-[0_0_8px_white]"></div>
+              <span>AIL / ZMQ STREAMING</span>
+            </div>
+            <div className="w-px h-3 bg-white/20"></div>
+            <span className="text-zinc-500">FAISS + BM25: <span className="text-zinc-300">NOMINAL</span></span>
+            <div className="w-px h-3 bg-white/20"></div>
+            <span className="text-zinc-500">PYTORCH GNN: <span className="text-zinc-300">SYNCED</span></span>
+            <div className="w-px h-3 bg-white/20"></div>
+            <span className="text-zinc-500">SHAP: <span className="text-zinc-300">ACTIVE</span></span>
+          </div>
+          <div className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase flex items-center gap-2">
+            <span>System State</span> <span className="text-white bg-white/10 px-2 py-0.5 rounded">SECURE</span>
+          </div>
+        </div>
+
         {/* Operational Status KPI Strip */}
+
         <div className=" glass nexus-border rounded-[2rem] flex divide-x divide-zinc-300 mb-8 overflow-hidden shadow-sm">
           {[
             { label: "Active Investigations", value: data.metrics?.investigationCount || data.activeInvestigations || "06", color: "text-white" },
