@@ -30,7 +30,7 @@ export default function RootLayout({
           <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-16 liquid-glass  rounded-full flex items-center justify-between px-6 z-50 transition-all">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3 group cursor-pointer">
-                <img src="/cp-logo.png" alt="Chandigarh Police Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]" />
+                <img src="/cp-logo-transparent.png" alt="Chandigarh Police Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]" />
                 <div className="leading-tight">
                   <div className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest">Chandigarh Police</div>
                   <div className="text-sm font-display font-semibold text-zinc-100 tracking-wide group-hover:text-white transition-colors">CYBER INTELLIGENCE</div>
@@ -57,7 +57,7 @@ export default function RootLayout({
           
           {/* Faded Watermark Background */}
           <div className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center opacity-[0.15]">
-            <img src="/cp-logo.png" alt="Watermark" className="w-[800px] h-[800px] object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.8)]" />
+            <img src="/cp-logo-transparent.png" alt="Watermark" className="w-[800px] h-[800px] object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.8)]" />
           </div>
 
           {/* Main Application Area */}
