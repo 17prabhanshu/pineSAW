@@ -24,7 +24,7 @@ export default function SearchPage() {
       {/* Header */}
       <header className="px-8 py-6 glass border-b border-white/10 shrink-0">
         <h1 className="font-display text-2xl font-bold tracking-tight mb-1 text-white">Global Search</h1>
-        <p className="text-zinc-300 font-mono text-[10px] uppercase tracking-widest">Cross-Network Entity & Investigation Query</p>
+        <p className="text-zinc-300 font-mono text-[10px] uppercase tracking-widest">FAISS + BM25 Hybrid Retrieval // Cross-Network Semantic Query</p>
       </header>
 
       <div className="p-8 flex-1 flex flex-col overflow-hidden max-w-5xl mx-auto w-full">

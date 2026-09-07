@@ -101,7 +101,7 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
 
   if (!mounted) return (
     <div className="w-full h-full bg-transparent flex items-center justify-center text-zinc-400 font-mono text-xs">
-      INITIALIZING INSTITUTIONAL GRAPH ENGINE...
+      INITIALIZING GNN-POWERED PROPERTY GRAPH...
     </div>
   );
 
@@ -260,7 +260,7 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
 
                 {Object.keys(selectedNode).filter(k => !['id', 'label', 'group', 'priorityScore', 'x', 'y', 'vx', 'vy', 'index', 'color'].includes(k)).length > 0 && (
                   <div>
-                    <div className="text-xs text-zinc-400 font-mono mb-2 border-b border-white/10 pb-1">Additional Properties</div>
+                    <div className="text-xs text-zinc-400 font-mono mb-2 border-b border-white/10 pb-1">GNN Node Features</div>
                     <div className="space-y-2">
                       {Object.entries(selectedNode)
                         .filter(([k]) => !['id', 'label', 'group', 'priorityScore', 'x', 'y', 'vx', 'vy', 'index', 'color'].includes(k))
