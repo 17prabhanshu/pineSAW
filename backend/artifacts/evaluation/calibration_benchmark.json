@@ -1,0 +1,18 @@
+{
+  "LogisticRegression (Raw)": {
+    "brier_score": 0.010349044845531657,
+    "f1_score": 1.0
+  },
+  "LogisticRegression (Platt)": {
+    "brier_score": 0.005859120108179909,
+    "f1_score": 1.0
+  },
+  "LogisticRegression (Isotonic)": {
+    "brier_score": 1.251351501375026e-32,
+    "f1_score": 1.0
+  },
+  "GradientBoosting": {
+    "brier_score": 5.050334692695451e-10,
+    "f1_score": 1.0
+  }
+}

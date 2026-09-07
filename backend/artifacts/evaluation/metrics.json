@@ -1,0 +1,7 @@
+{
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "split_method": "temporal",
+  "model": "TF-IDF + LogisticRegression"
+}
