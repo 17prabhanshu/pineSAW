@@ -15,6 +15,7 @@ import AlertsTab from "@/components/tabs/AlertsTab";
 import InvestigationsTab from "@/components/tabs/InvestigationsTab";
 import { LegalTab } from "@/components/tabs/LegalTab";
 import { ActionsTab } from "@/components/tabs/ActionsTab";
+import DeAnonymizationTab from "@/components/tabs/DeAnonymizationTab";
 
 
 export default function EntityIntelligence() {
@@ -53,7 +54,7 @@ export default function EntityIntelligence() {
 
   if (!entity) return <div className="p-8 font-mono text-zinc-400 text-sm">LOADING ENTITY INTELLIGENCE...</div>;
 
-  const tabs = ["OVERVIEW", "IDENTIFIERS", "ACTIVITY", "RELATIONSHIPS", "FINANCIAL", "EVIDENCE", "ALERTS", "INVESTIGATIONS", "LEGAL", "ACTIONS"];
+  const tabs = ["OVERVIEW", "DE-ANONYMIZATION", "IDENTIFIERS", "ACTIVITY", "RELATIONSHIPS", "FINANCIAL", "EVIDENCE", "ALERTS", "INVESTIGATIONS", "LEGAL", "ACTIONS"];
 
   const handleNoteSubmit = () => {
     if (!noteText.trim()) return;
@@ -484,7 +485,7 @@ export default function EntityIntelligence() {
           </div>
         )}
 
-        
+        {activeTab === "DE-ANONYMIZATION" && <DeAnonymizationTab entity={entity} />}
         {activeTab === "FINANCIAL" && <FinancialTab entity={entity} />}
         {activeTab === "EVIDENCE" && <EvidenceTab entity={entity} />}
         {activeTab === "ALERTS" && <AlertsTab entity={entity} />}
