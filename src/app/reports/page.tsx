@@ -74,7 +74,7 @@ export default function ReportsPage() {
         <button 
           onClick={handleGenerate}
           disabled={generating}
-          className="btn-gov px-6 py-2.5 rounded-2xl font-medium flex items-center gap-2 hover:bg-cyan-400 transition-colors disabled:opacity-50"
+          className="btn-gov px-6 py-2.5 rounded-2xl font-medium flex items-center gap-2 hover:bg-white hover:text-black transition-colors disabled:opacity-50"
         >
           <FileText weight="fill" />
           {generating ? "GENERATING REPORT..." : "GENERATE REPORT"}

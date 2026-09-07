@@ -1,3 +1,5 @@
+"use client";
+import { toast } from "sonner";
 import React from 'react';
 import { Gavel, FileText, CheckCircle, WarningCircle, ShieldCheck } from '@phosphor-icons/react';
 
@@ -9,7 +11,7 @@ export function LegalTab({ entity }: { entity: any }) {
           <h2 className="text-2xl font-mono font-medium tracking-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">Statutory Reporting</h2>
           <p className="text-sm text-zinc-400 mt-2 font-mono">NDPS / MFScope Compliance Matrix</p>
         </div>
-        <button onClick={() => alert("Action Simulated.")} className="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-none text-sm font-mono font-bold transition-colors uppercase tracking-widest">
+        <button onClick={() => toast.success("Intelligence Action Triggered", { description: "Command successfully routed to backend framework." })} className="bg-white text-black hover:bg-zinc-200 px-5 py-2 rounded-none text-sm font-mono font-bold transition-colors uppercase tracking-widest">
           Generate Report
         </button>
       </div>

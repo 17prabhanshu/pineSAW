@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "sonner";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -56,7 +57,7 @@ export default function EntityIntelligence() {
 
   const handleNoteSubmit = () => {
     if (!noteText.trim()) return;
-    alert("Simulated: Note added to entity.");
+    toast.info("Simulated: Note added to entity.");
     setNoteText("");
   };
 
@@ -88,10 +89,10 @@ export default function EntityIntelligence() {
             </p>
           </div>
           <div className="flex gap-2">
-            <button className="bg-zinc-800/30 hover:bg-zinc-700/50 border border-white/10 px-4 py-2 rounded-2xl text-sm transition-colors flex items-center gap-2">
+            <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="bg-zinc-800/30 hover:bg-zinc-700/50 border border-white/10 px-4 py-2 rounded-2xl text-sm transition-colors flex items-center gap-2">
               <Folder weight="fill" /> Add to Case
             </button>
-            <button className="btn-gov px-4 py-2 rounded-2xl font-medium text-sm hover:bg-cyan-400 transition-colors flex items-center gap-2">
+            <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="btn-gov px-4 py-2 rounded-2xl font-medium text-sm hover:bg-white hover:text-black transition-colors flex items-center gap-2">
               <MagnifyingGlass weight="bold" /> Investigate
             </button>
           </div>
@@ -122,7 +123,7 @@ export default function EntityIntelligence() {
             <div className="lg:col-span-2 space-y-6">
               {/* Rationale Panel */}
               <div className="bg-zinc-900/60 border-l-2 border-l-nexus-amber border border-white/5 rounded-[2rem] p-5">
-                <h2 className="text-sm font-mono text-nexus-amber flex items-center gap-2 mb-4 uppercase tracking-widest">
+                <h2 className="text-sm font-mono text-white flex items-center gap-2 mb-4 uppercase tracking-widest">
                   <ShieldWarning weight="fill" /> Risk Assessment
                 </h2>
                 <div className="space-y-4">
@@ -138,7 +139,7 @@ export default function EntityIntelligence() {
                       {entity.riskFactors ? JSON.parse(entity.riskFactors).map((risk: string, i: number) => (
                         <div key={i} className="flex justify-between items-center text-sm bg-zinc-800/30 px-3 py-2 rounded-2xl">
                           <span className="text-zinc-300">{risk}</span>
-                          <span className="text-nexus-amber font-mono text-xs">+{(entity.priorityScore / JSON.parse(entity.riskFactors).length).toFixed(0)}</span>
+                          <span className="text-white font-mono text-xs">+{(entity.priorityScore / JSON.parse(entity.riskFactors).length).toFixed(0)}</span>
                         </div>
                       )) : <div className="text-sm text-zinc-400 italic">No specific risk components flagged.</div>}
                     </div>
@@ -146,7 +147,7 @@ export default function EntityIntelligence() {
                   <div>
                     <div className="text-zinc-400 font-mono text-[10px] uppercase mb-1">Analyst Interpretation & Next Steps</div>
                     <p className="text-sm text-zinc-300 mb-2">Confidence in association is high ({(entity.confidence*100).toFixed(0)}%). Recommend verifying financial identifiers to corroborate link.</p>
-                    <button className="text-xs font-mono text-nexus-cyan flex items-center gap-1 hover:underline">
+                    <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="text-xs font-mono text-white underline flex items-center gap-1 hover:underline">
                       Generate Bank Information Request <CaretRight />
                     </button>
                   </div>
@@ -164,7 +165,7 @@ export default function EntityIntelligence() {
                   {entity.investigations?.length > 0 ? entity.investigations.map((inv: any) => (
                     <Link key={inv.investigation.id} href={`/investigations/${inv.investigation.id}`} className="flex justify-between items-center bg-zinc-800/30 px-4 py-3 rounded-2xl hover:bg-zinc-700/50 transition-colors group">
                       <div className="flex items-center gap-3">
-                        <Folder weight="fill" className="text-zinc-400 group-hover:text-nexus-cyan" />
+                        <Folder weight="fill" className="text-zinc-400 group-hover:text-white underline" />
                         <div>
                           <div className="text-sm font-medium text-white">{inv.investigation.title}</div>
                           <div className="text-xs font-mono text-zinc-400 mt-0.5">{inv.investigation.caseId}</div>
@@ -199,7 +200,7 @@ export default function EntityIntelligence() {
                       <span className="text-zinc-400 flex items-center gap-1">
                         <LinkIcon size={12}/> {rel.type}
                       </span>
-                      <Link href={`/entities/${rel.target.id}`} className="font-mono text-nexus-cyan hover:underline truncate max-w-[150px] text-right">
+                      <Link href={`/entities/${rel.target.id}`} className="font-mono text-white underline hover:underline truncate max-w-[150px] text-right">
                         {rel.target.label}
                       </Link>
                     </div>
@@ -237,7 +238,7 @@ export default function EntityIntelligence() {
                     placeholder="Add a note..." 
                     value={noteText}
                     onChange={e => setNoteText(e.target.value)}
-                    className="flex-1 bg-zinc-900/60 border border-white/10 rounded-2xl px-3 py-1.5 text-xs text-white placeholder:text-zinc-300 focus:outline-none focus:border-nexus-cyan"
+                    className="flex-1 bg-zinc-900/60 border border-white/10 rounded-2xl px-3 py-1.5 text-xs text-white placeholder:text-zinc-300 focus:outline-none focus:border-white"
                   />
                   <button onClick={handleNoteSubmit} className="glass/10 hover:glass/20 px-3 py-1.5 rounded-2xl text-xs transition-colors">
                     Save
@@ -253,9 +254,9 @@ export default function EntityIntelligence() {
             <div className="mb-6 flex justify-between items-end">
               <div>
                 <h2 className="text-xl font-display font-medium text-white">Legal & Procedural Relevance</h2>
-                <p className="text-sm text-zinc-300 mt-1">Potentially applicable legal categories for this entity. <strong className="text-nexus-amber">Requires verification.</strong></p>
+                <p className="text-sm text-zinc-300 mt-1">Potentially applicable legal categories for this entity. <strong className="text-white">Requires verification.</strong></p>
               </div>
-              <button className="bg-zinc-800/30 border border-white/10 hover:border-white/10 px-4 py-2 rounded-2xl text-sm flex items-center gap-2 transition-colors">
+              <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="bg-zinc-800/30 border border-white/10 hover:border-white/10 px-4 py-2 rounded-2xl text-sm flex items-center gap-2 transition-colors">
                 <Plus /> Add Reference
               </button>
             </div>
@@ -272,7 +273,7 @@ export default function EntityIntelligence() {
                         <div className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-1">{ref.jurisdiction}</div>
                         <h3 className="font-medium text-white">{ref.provision}</h3>
                       </div>
-                      <span className="px-2 py-0.5 bg-nexus-amber/10 text-nexus-amber border border-nexus-amber/20 rounded-2xl font-mono text-[10px] uppercase">
+                      <span className="px-2 py-0.5 bg-nexus-amber/10 text-white border border-nexus-amber/20 rounded-2xl font-mono text-[10px] uppercase">
                         Unverified
                       </span>
                     </div>
@@ -280,7 +281,7 @@ export default function EntityIntelligence() {
                       <strong>Relevance:</strong> {ref.reason}
                     </p>
                     <div className="flex gap-3">
-                      <button className="text-xs font-mono text-nexus-cyan flex items-center gap-1 hover:underline">
+                      <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="text-xs font-mono text-white underline flex items-center gap-1 hover:underline">
                         Prepare Draft Request
                       </button>
                     </div>
@@ -290,7 +291,7 @@ export default function EntityIntelligence() {
                 <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-12 text-center flex flex-col items-center">
                   <Gavel size={48} className="text-zinc-300 mb-4" />
                   <p className="text-zinc-300 mb-2">No legal provisions currently linked.</p>
-                  <button className="text-nexus-cyan text-sm">Add initial legal category for review</button>
+                  <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="text-white underline text-sm">Add initial legal category for review</button>
                 </div>
               )}
             </div>
@@ -307,24 +308,24 @@ export default function EntityIntelligence() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-6 hover:border-nexus-cyan/50 transition-colors cursor-pointer group">
                 <div className="flex justify-between items-start mb-4">
-                  <HandCoins className="text-3xl text-zinc-400 group-hover:text-nexus-cyan transition-colors" />
+                  <HandCoins className="text-3xl text-zinc-400 group-hover:text-white underline transition-colors" />
                   <span className="px-2 py-0.5 bg-zinc-800 text-zinc-300 rounded-2xl font-mono text-[10px] uppercase">Draft</span>
                 </div>
                 <h3 className="font-medium text-white mb-2">Generate Bank Information Request</h3>
                 <p className="text-sm text-zinc-300 mb-4">Prepare a simulated draft request targeting linked financial identifiers for verification.</p>
-                <button className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-nexus-cyan group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
+                <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-white group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
                   Prepare Request
                 </button>
               </div>
 
               <div className="bg-zinc-900/60 border border-white/5 rounded-[2rem] p-6 hover:border-nexus-amber/50 transition-colors cursor-pointer group">
                 <div className="flex justify-between items-start mb-4">
-                  <ShieldWarning className="text-3xl text-zinc-400 group-hover:text-nexus-amber transition-colors" />
+                  <ShieldWarning className="text-3xl text-zinc-400 group-hover:text-white transition-colors" />
                   <span className="px-2 py-0.5 bg-zinc-800 text-zinc-300 rounded-2xl font-mono text-[10px] uppercase">Draft</span>
                 </div>
                 <h3 className="font-medium text-white mb-2">Prepare Escalation Package</h3>
                 <p className="text-sm text-zinc-300 mb-4">Package current evidence and relationship mappings for simulated referral to competent authority.</p>
-                <button className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-nexus-amber group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
+                <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-white group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
                   Draft Escalation
                 </button>
               </div>

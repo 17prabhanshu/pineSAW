@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "sonner";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -147,7 +148,7 @@ export default function ActionCenter() {
                       {act.status}
                     </span>
                     <div className="flex gap-2 mt-4">
-                      <button className="btn-secondary">Review</button>
+                      <button onClick={() => toast.success("Review Initialized", { description: "Action dossier loaded into memory." })} className="btn-secondary">Review</button>
                       <button className="btn-gov">Prepare</button>
                     </div>
                   </div>

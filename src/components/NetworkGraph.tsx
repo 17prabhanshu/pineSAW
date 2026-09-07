@@ -134,7 +134,7 @@ export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (
       <div className="absolute top-4 left-4 z-20 flex gap-1.5 bg-zinc-900/80 p-2 border border-white/5 shadow-2xl rounded-full text-xs font-mono">
         {[
           { key: "ALL", label: "ALL NODES", color: "bg-zinc-800 text-white" },
-          { key: "ACTOR", label: "ACTORS", color: "bg-[#002244] text-white" },
+          { key: "ACTOR", label: "ACTORS", color: "bg-zinc-950 text-white" },
           { key: "BANK_ACCOUNT", label: "BANKS (FIAT)", color: "bg-emerald-700 text-white" },
           { key: "WALLET", label: "CRYPTO WALLETS", color: "bg-amber-600 text-white" },
           { key: "IDENTIFIER", label: "IDENTIFIERS", color: "bg-blue-600 text-white" }

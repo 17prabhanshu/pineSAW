@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 import { Sidebar } from "@/components/Sidebar";
 import { ClientLenis } from "@/components/ClientLenis";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -72,6 +73,7 @@ export default function RootLayout({
         
         <CommandPalette />
         <SpotlightTour />
+        <Toaster theme="dark" position="bottom-right" toastOptions={{ style: { background: "black", border: "1px solid rgba(255,255,255,0.2)", color: "white", fontFamily: "monospace" } }} />
       </body>
     </html>
   );

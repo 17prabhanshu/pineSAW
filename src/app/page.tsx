@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "sonner";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -253,7 +254,7 @@ export default function CommandCenter() {
                 <WarningOctagon className="text-nexus-red" size={16} /> <CyberText text="Priority Incidents" />
               </h2>
               <div className="flex gap-2">
-                <button className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-mono"><Funnel size={14}/> Filter</button>
+                <button onClick={() => toast.info("Filter Menu", { description: "Advanced filtering modal will open here." })} className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-mono"><Funnel size={14}/> Filter</button>
               </div>
             </div>
             
@@ -291,9 +292,7 @@ export default function CommandCenter() {
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-gov-blue">INV-2026-0042</td>
                       <td className="px-4 py-3 text-right">
-                        <button className="text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-gov-blue/20 border border-gov-blue/50 px-3 py-1.5 rounded-full hover:bg-gov-blue hover:shadow-[0_0_15px_rgba(37,99,235,0.6)] transition-all">
-                          Investigate
-                        </button>
+                        <button onClick={() => toast.success("Loading Case File", { description: "Establishing secure connection to dossier..." })} className="text-[10px] font-mono font-bold uppercase tracking-wider text-black bg-white border border-white px-3 py-1.5 rounded-full hover:bg-zinc-200 hover:shadow-[0_0_15px_rgba(255,255,255,0.6)] transition-all">Investigate</button>
                       </td>
                     </tr>
                   ))}

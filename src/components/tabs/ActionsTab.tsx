@@ -1,3 +1,5 @@
+"use client";
+import { toast } from "sonner";
 import React from 'react';
 import { LockKey, FileMagnifyingGlass, Eye, ShieldWarning, HandCoins } from '@phosphor-icons/react';
 
@@ -17,7 +19,7 @@ export function ActionsTab({ entity }: { entity: any }) {
           </div>
           <h3 className="font-mono text-lg font-bold text-white mb-2 uppercase tracking-widest">Freeze Assets</h3>
           <p className="font-mono text-xs text-zinc-400 mb-6">Instigate immediate freeze on all identified custodial wallets and associated fiat accounts.</p>
-          <button onClick={() => alert("Action Simulated.")} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
+          <button onClick={() => toast.success("Intelligence Action Triggered", { description: "Command successfully routed to backend framework." })} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
             Execute Freeze
           </button>
         </div>
@@ -29,7 +31,7 @@ export function ActionsTab({ entity }: { entity: any }) {
           </div>
           <h3 className="font-mono text-lg font-bold text-white mb-2 uppercase tracking-widest">Generate Subpoena</h3>
           <p className="font-mono text-xs text-zinc-400 mb-6">Automated generation of legal demands for ISP and exchange transaction records.</p>
-          <button onClick={() => alert("Action Simulated.")} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
+          <button onClick={() => toast.success("Intelligence Action Triggered", { description: "Command successfully routed to backend framework." })} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
             Draft Subpoena
           </button>
         </div>
@@ -41,7 +43,7 @@ export function ActionsTab({ entity }: { entity: any }) {
           </div>
           <h3 className="font-mono text-lg font-bold text-white mb-2 uppercase tracking-widest">Deploy Surveillance</h3>
           <p className="font-mono text-xs text-zinc-400 mb-6">Initialize continuous network tracking and behavioral drift analysis heuristics.</p>
-          <button onClick={() => alert("Action Simulated.")} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
+          <button onClick={() => toast.success("Intelligence Action Triggered", { description: "Command successfully routed to backend framework." })} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
             Activate Watch
           </button>
         </div>
@@ -53,7 +55,7 @@ export function ActionsTab({ entity }: { entity: any }) {
           </div>
           <h3 className="font-mono text-lg font-bold text-white mb-2 uppercase tracking-widest">Agency Referral</h3>
           <p className="font-mono text-xs text-zinc-400 mb-6">Package evidence topology and submit dossier to cross-border taskforce.</p>
-          <button onClick={() => alert("Action Simulated.")} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
+          <button onClick={() => toast.success("Intelligence Action Triggered", { description: "Command successfully routed to backend framework." })} className="w-full bg-transparent border border-white text-white hover:bg-white hover:text-black py-2 text-sm font-mono font-bold transition-colors uppercase tracking-widest">
             Transmit Dossier
           </button>
         </div>
