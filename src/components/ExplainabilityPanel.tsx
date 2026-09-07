@@ -19,9 +19,9 @@ export function ExplainabilityPanel({
   entityName = "Unknown Entity",
   riskScore = 85,
   features = [
-    { name: "Unusual Transaction Volume", impact: 40, description: "Spike in transactions in the last 24h." },
-    { name: "Dark Web Mentions", impact: 30, description: "Mentions in known illicit marketplaces." },
-    { name: "Geographic Anomaly", impact: 15, description: "Multiple logins from high-risk countries." }
+    { name: "Velocity Burst Anomaly (Temporal GNN)", impact: 40, description: "Spike in transactions in the last 24h." },
+    { name: "AIL Framework High-Confidence Match", impact: 30, description: "Mentions in known illicit marketplaces." },
+    { name: "Semantic Drift (BM25 Retrieval)", impact: 15, description: "Multiple logins from high-risk countries." }
   ]
 }: ExplainabilityPanelProps) {
   const shouldReduceMotion = useReducedMotion();
@@ -51,7 +51,7 @@ export function ExplainabilityPanel({
         <div className="p-4 border-b border-white/5 dark:border-zinc-800 flex justify-between items-center">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Activity className="w-5 h-5 text-blue-500" />
-            AI Reasoning Trace
+            SHAP Feature Attribution (GNN + XGBoost)
           </h2>
           <button onClick={onClose} className="p-2 rounded-md hover:bg-zinc-900/50 dark:hover:bg-zinc-800 transition-colors">
             <X className="w-5 h-5" />
