@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Papa from "papaparse";
 import { UploadSimple, FileText, CheckCircle, Spinner, Network, Database, Brain, ArrowRight } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
@@ -8,21 +9,85 @@ import clsx from "clsx";
 export default function IngestionPanel() {
   const [status, setStatus] = useState<"IDLE" | "ANALYZING" | "COMPLETE">("IDLE");
   const [extractedEntities, setExtractedEntities] = useState<any[]>([]);
+  const [csvPreview, setCsvPreview] = useState<any[]>([]);
+  const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (file: File) => {
+    if (!file) return;
+    
+    // Parse CSV
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        if (results.data && results.data.length > 0) {
+          const headers = Object.keys(results.data[0] as any);
+          setCsvHeaders(headers);
+          setCsvPreview(results.data.slice(0, 5)); // Preview first 5 rows
+          startAnalysis(results.data, headers);
+        }
+      }
+    });
+  };
 
   const handleDrop = (e: any) => {
     e.preventDefault();
-    startAnalysis();
+    const file = e.dataTransfer.files[0];
+    if (file && (file.type === "text/csv" || file.name.endsWith(".csv"))) {
+      handleFileUpload(file);
+    } else {
+      startAnalysis([], []); // fallback
+    }
   };
 
-  const startAnalysis = () => {
+  const handleFileChange = (e: any) => {
+    const file = e.target.files[0];
+    if (file) handleFileUpload(file);
+  };
+
+  const startAnalysis = (data: any[], headers: string[]) => {
     setStatus("ANALYZING");
+    
+    // Simulate smart extraction based on CSV columns
+    const dynamicEntities: any[] = [];
+    
     setTimeout(() => {
-      setExtractedEntities([
-        { type: "CRYPTO WALLET", value: "bc1qar0srrr7xfkvy5l643...", risk: "HIGH", engine: "Regex Parser" },
-        { type: "DARKNET VENDOR", value: "ShadowBroker_99", risk: "CRITICAL", engine: "SpaCy NER" },
-        { type: "NARCOTICS", value: "Fentanyl (M30)", risk: "CRITICAL", engine: "Cambridge Lexicon" },
-        { type: "IP ADDRESS", value: "192.168.1.45 (Tor Exit)", risk: "MEDIUM", engine: "AIL Framework" }
-      ]);
+      if (data.length > 0) {
+        // Try to find suspicious data in the CSV rows
+        const sampleRow = data[0];
+        
+        headers.forEach(h => {
+          const lower = h.toLowerCase();
+          const val = sampleRow[h];
+          if (!val) return;
+          
+          if (lower.includes("ip") || lower.includes("address")) {
+            dynamicEntities.push({ type: "IP ADDRESS", value: val, risk: "MEDIUM", engine: "Regex Parser" });
+          } else if (lower.includes("wallet") || lower.includes("crypto") || lower.includes("btc")) {
+            dynamicEntities.push({ type: "CRYPTO WALLET", value: val, risk: "HIGH", engine: "Chainalysis Heuristics" });
+          } else if (lower.includes("user") || lower.includes("alias") || lower.includes("vendor")) {
+            dynamicEntities.push({ type: "THREAT ACTOR", value: val, risk: "CRITICAL", engine: "SpaCy NER" });
+          } else if (lower.includes("hash") || lower.includes("md5")) {
+            dynamicEntities.push({ type: "MALWARE HASH", value: val, risk: "CRITICAL", engine: "Threat Intel Feed" });
+          }
+        });
+        
+        // Add some generic ones if it didn't find enough
+        if (dynamicEntities.length < 2) {
+          dynamicEntities.push({ type: "BULK RECORD", value: `${data.length} Rows Ingested`, risk: "LOW", engine: "Batch Processor" });
+          dynamicEntities.push({ type: "DATA SOURCE", value: "CSV Upload", risk: "LOW", engine: "System" });
+        }
+      } else {
+        // Fallback demo data
+        dynamicEntities.push(
+          { type: "CRYPTO WALLET", value: "bc1qar0srrr7xfkvy5l643...", risk: "HIGH", engine: "Regex Parser" },
+          { type: "DARKNET VENDOR", value: "ShadowBroker_99", risk: "CRITICAL", engine: "SpaCy NER" },
+          { type: "NARCOTICS", value: "Fentanyl (M30)", risk: "CRITICAL", engine: "Cambridge Lexicon" }
+        );
+      }
+      
+      setExtractedEntities(dynamicEntities);
       setStatus("COMPLETE");
     }, 2500);
   };
@@ -37,14 +102,21 @@ export default function IngestionPanel() {
       </header>
 
       {status === "IDLE" && (
-        <motion.div 
+                <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-white/20 bg-zinc-900/50 rounded-3xl cursor-pointer hover:border-white/50 hover:bg-zinc-800/50 transition-all group"
+          className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-white/20 bg-zinc-900/50 rounded-3xl cursor-pointer hover:border-white/50 hover:bg-zinc-800/50 transition-all group relative overflow-hidden"
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
-          onClick={startAnalysis}
+          onClick={() => fileInputRef.current?.click()}
         >
+          <input 
+            type="file" 
+            accept=".csv,.txt,.json" 
+            className="hidden" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+          />
           <div className="w-24 h-24 rounded-full bg-black flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all">
             <UploadSimple size={48} className="text-white" />
           </div>
@@ -103,7 +175,34 @@ export default function IngestionPanel() {
             <button onClick={() => setStatus("IDLE")} className="btn-secondary">New Upload</button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {csvHeaders.length > 0 && (
+              <div className="md:col-span-2 bg-black border border-white/10 rounded-2xl p-6 overflow-hidden">
+                <h3 className="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-4 flex items-center gap-2">
+                  <Database size={16} /> Raw CSV Data Parsed (Preview)
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs font-mono text-zinc-300">
+                    <thead className="text-[10px] uppercase text-zinc-500 border-b border-white/10 bg-zinc-900/50">
+                      <tr>
+                        {csvHeaders.slice(0, 6).map((h, i) => (
+                          <th key={i} className="px-4 py-2">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {csvPreview.map((row, i) => (
+                        <tr key={i} className="hover:bg-zinc-900/30">
+                          {csvHeaders.slice(0, 6).map((h, j) => (
+                            <td key={j} className="px-4 py-2 truncate max-w-[150px]">{row[h]}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
             <div className="bg-black border border-white/10 rounded-2xl p-6">
               <h3 className="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-4 flex items-center gap-2">
                 <FileText size={16} /> Extracted Entities
