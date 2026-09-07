@@ -17,7 +17,6 @@ export const metadata: Metadata = {
 
 import { ReactLenis } from "@studio-freight/react-lenis";
 
-import { SmoothScroll } from "@/components/SmoothScroll";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,13 +24,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${outfit.variable} ${space.variable} antialiased bg-black text-foreground min-h-screen flex flex-col selection:bg-gemini-purple/30`}>
+      <body className={`${inter.variable} ${outfit.variable} ${space.variable} antialiased bg-black text-foreground min-h-screen flex flex-col selection:bg-white/20`}>
         
           {/* Aesthetic Liquid Glass Header */}
           <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl h-16 liquid-glass  rounded-full flex items-center justify-between px-6 z-50 transition-all">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3 group cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-gemini-purple to-gemini-accent flex items-center justify-center font-display font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all group-hover:shadow-[0_0_35px_rgba(139,92,246,0.6)]">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-white to-zinc-400 flex items-center justify-center font-display font-bold text-white shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all group-hover:shadow-[0_0_35px_rgba(255,255,255,0.6)]">
                   CP
                 </div>
                 <div className="leading-tight">
@@ -47,7 +46,7 @@ export default function RootLayout({
             </div>
             
             <div className="flex items-center gap-6">
-              <div className="px-4 py-1.5 rounded-full bg-gemini-purple/20 border border-gemini-purple/30 text-gemini-purple text-[10px] font-mono uppercase font-bold tracking-widest hidden sm:block shadow-[inset_0_0_10px_rgba(139,92,246,0.2)]">
+              <div className="px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-mono uppercase font-bold tracking-widest hidden sm:block shadow-[inset_0_0_10px_rgba(255,255,255,0.2)]">
                 Secure Terminal
               </div>
               <div className="text-right">
@@ -61,7 +60,7 @@ export default function RootLayout({
           <div className="flex flex-1 w-full max-w-[1600px] mx-auto relative pt-28">
             <Sidebar />
             <main className="flex-1 min-w-0 pl-0 md:pl-72 pb-6 px-4 md:px-8 relative">
-              <SmoothScroll>{children}</SmoothScroll>
+              {children}
             </main>
           </div>
           <div className="static-glow "></div>

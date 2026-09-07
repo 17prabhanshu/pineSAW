@@ -1,11 +1,28 @@
 @import "tailwindcss";
 
 @theme {
+  --color-purple-400: #a1a1aa;
+  --color-purple-500: #ffffff;
+  --color-purple-600: #71717a;
+  --color-purple-900: #18181b;
+  --color-blue-400: #a1a1aa;
+  --color-blue-500: #ffffff;
+  --color-blue-600: #71717a;
+  --color-blue-900: #18181b;
+  --color-indigo-400: #a1a1aa;
+  --color-indigo-500: #ffffff;
+  --color-indigo-600: #71717a;
+  --color-indigo-900: #18181b;
+  --color-pink-400: #a1a1aa;
+  --color-pink-500: #ffffff;
+  --color-pink-600: #71717a;
+  --color-pink-900: #18181b;
+
   --color-gemini-bg: #09090b; /* Zinc 950 */
   --color-gemini-bg-secondary: #18181b; /* Zinc 900 */
-  --color-gemini-accent: #3b82f6; /* Blue 500 */
-  --color-gemini-purple: #8b5cf6; /* Violet 500 */
-  --color-gemini-pink: #ec4899; /* Pink 500 */
+  --color-gemini-accent: #ffffff; /* Blue 500 */
+  --color-gemini-purple: #ffffff; /* Violet 500 */
+  --color-gemini-pink: #ffffff; /* Pink 500 */
   
   --color-gov-blue: #ffffff; 
   --color-gov-blue-hover: #e4e4e7; 
@@ -139,7 +156,7 @@ body::after {
   position: fixed;
   top: -20%; left: -10%;
   width: 50%; height: 50%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
   pointer-events: none;
   z-index: -2;
   border-radius: 50%;
@@ -185,7 +202,7 @@ body::after {
   transform: translateX(-50%);
   width: 120vw;
   height: 100vh;
-  background: radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.15) 0%, rgba(14, 165, 233, 0.05) 40%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%);
   pointer-events: none;
   z-index: -1;
 }

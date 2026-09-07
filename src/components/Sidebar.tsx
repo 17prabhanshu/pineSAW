@@ -96,7 +96,7 @@ export function Sidebar() {
                       {isActive && (
                         <motion.div
                           layoutId="activeTab"
-                          className="absolute inset-0 bg-gemini-purple/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_0_10px_rgba(139,92,246,0.3)] border border-gemini-purple/30 rounded-xl"
+                          className="absolute inset-0 bg-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_0_10px_rgba(255,255,255,0.2)] border border-white/20 rounded-xl"
                           initial={false}
                           transition={{ type: "spring", stiffness: 380, damping: 30 }}
                         />
@@ -104,7 +104,7 @@ export function Sidebar() {
                       <div className="relative z-10 flex items-center gap-3">
                         <item.icon
                           weight={isActive ? "fill" : "regular"}
-                          className={clsx("text-lg", isActive ? "text-gemini-purple" : "text-zinc-500")}
+                          className={clsx("text-lg", isActive ? "text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" : "text-zinc-500")}
                         />
                         <span>{item.label}</span>
                       </div>
@@ -131,17 +131,17 @@ export function Sidebar() {
       <div className="p-5 border-t border-white/5 bg-black/20 text-xs font-mono text-zinc-500 space-y-3 backdrop-blur-md">
         <div className="flex justify-between items-center">
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-gemini-purple rounded-full shadow-[0_0_10px_#8b5cf6] animate-pulse"></span>
+            <span className="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_#ffffff] animate-pulse"></span>
             Tor Nodes
           </span>
           <span className="font-medium text-zinc-300">8 Active</span>
         </div>
         <div className="flex justify-between items-center">
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-gemini-accent rounded-full shadow-[0_0_10px_#3b82f6]"></span>
+            <span className="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_#ffffff]"></span>
             FIU-IND
           </span>
-          <span className="font-medium text-gemini-accent">Online</span>
+          <span className="font-medium text-white">Online</span>
         </div>
         <div className="flex justify-between items-center pt-3 mt-1 border-t border-white/5 text-[10px] text-zinc-600">
           <span>DARKINT v2.5</span>
