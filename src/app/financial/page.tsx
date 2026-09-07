@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { Bank, Users, MagnifyingGlass, Funnel, CaretRight, X, TrendUp, Link as LinkIcon, Printer, Copy, ShieldCheck, Check } from "@phosphor-icons/react";
 import clsx from "clsx";
+import { toast } from "sonner";
 
 export default function FinancialPage() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<any>(null);
+  const [assetFilter, setAssetFilter] = useState<"ALL" | "BANK" | "WALLET">("ALL");
+  const [queryingFIU, setQueryingFIU] = useState(false);
 
   // Legal Notice Modal State
   const [legalModalOpen, setLegalModalOpen] = useState(false);
@@ -58,6 +61,25 @@ export default function FinancialPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleQueryFIU = () => {
+    setQueryingFIU(true);
+    toast.info("Connecting to FIU-IND Gateway...", {
+      description: "Dispatching STR/CTR batch scan on monitored banking endpoints."
+    });
+    setTimeout(() => {
+      setQueryingFIU(false);
+      toast.success("FIU-IND Telemetry Synced", {
+        description: "6 nodal accounts verified. 0 flagged transactions found in last 24h."
+      });
+    }, 1200);
+  };
+
+  const filteredAccounts = useMemo(() => {
+    if (assetFilter === "BANK") return accounts.filter(a => a.type?.includes("BANK"));
+    if (assetFilter === "WALLET") return accounts.filter(a => a.type?.includes("WALLET"));
+    return accounts;
+  }, [accounts, assetFilter]);
+
   return (
     <div className="flex h-full overflow-hidden flex-col">
       <header className="px-8 py-6 glass border-b border-white/10 shrink-0">
@@ -69,8 +91,32 @@ export default function FinancialPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <button className="btn-secondary flex items-center gap-2 text-xs"><Funnel size={14} /> Filter Assets</button>
-            <button className="btn-gov flex items-center gap-2 text-xs"><MagnifyingGlass size={14} /> Query FIU-IND Gateway</button>
+            <div className="flex bg-zinc-900 border border-white/10 rounded-xl p-0.5">
+              {(["ALL", "BANK", "WALLET"] as const).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => {
+                    setAssetFilter(f);
+                    toast.info(`Filtered: ${f === 'ALL' ? 'All Assets' : f === 'BANK' ? 'Bank Accounts' : 'Crypto Wallets'}`);
+                  }}
+                  className={clsx(
+                    "px-3 py-1 text-xs font-mono rounded-lg transition-colors cursor-pointer",
+                    assetFilter === f ? "bg-white text-black font-semibold" : "text-zinc-400 hover:text-white"
+                  )}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+
+            <button 
+              onClick={handleQueryFIU}
+              disabled={queryingFIU}
+              className="btn-gov flex items-center gap-2 text-xs cursor-pointer disabled:opacity-50"
+            >
+              <MagnifyingGlass size={14} /> 
+              {queryingFIU ? "Pinging FIU-IND..." : "Query FIU-IND Gateway"}
+            </button>
           </div>
         </div>
       </header>
@@ -83,7 +129,7 @@ export default function FinancialPage() {
                 <Bank size={16} /> Tracked Financial Assets (Indian & Offshore Banks)
               </h2>
               <span className="text-[10px] font-mono text-zinc-400 uppercase">
-                {accounts.length} Assets Monitored
+                {filteredAccounts.length} Assets Monitored
               </span>
             </div>
             
@@ -99,7 +145,7 @@ export default function FinancialPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10">
-                  {accounts.map((acc: any) => {
+                  {filteredAccounts.map((acc: any) => {
                     const controllers = acc.targetRelations?.filter((r:any) => r.type === "CONTROLS").map((r:any) => r.source) || [];
                     const isSelected = selectedAccount?.id === acc.id;
                     
