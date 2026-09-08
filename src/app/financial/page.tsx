@@ -2,10 +2,11 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { Bank, Users, MagnifyingGlass, Funnel, CaretRight, X, TrendUp, Link as LinkIcon, Printer, Copy, ShieldCheck, Check, GitCommit, Table } from "@phosphor-icons/react";
+import { Bank, Users, MagnifyingGlass, Funnel, CaretRight, X, TrendUp, Link as LinkIcon, Printer, Copy, ShieldCheck, Check, GitCommit, Table, PaperPlaneTilt } from "@phosphor-icons/react";
 import clsx from "clsx";
 import { toast } from "sonner";
 import { ChainalysisReactorFlow } from "@/components/ChainalysisReactorFlow";
+import { StatutoryDispatchModal } from "@/components/StatutoryDispatchModal";
 
 export default function FinancialPage() {
   const [accounts, setAccounts] = useState<any[]>([]);
@@ -13,6 +14,9 @@ export default function FinancialPage() {
   const [viewMode, setViewMode] = useState<"REACTOR" | "LEDGER">("REACTOR");
   const [assetFilter, setAssetFilter] = useState<"ALL" | "BANK" | "WALLET">("ALL");
   const [queryingFIU, setQueryingFIU] = useState(false);
+
+  // Statutory Nodal Dispatch Modal State
+  const [dispatchModalOpen, setDispatchModalOpen] = useState(false);
 
   // Legal Notice Modal State
   const [legalModalOpen, setLegalModalOpen] = useState(false);
@@ -315,6 +319,13 @@ export default function FinancialPage() {
                 </h3>
                 <div className="space-y-2.5">
                   <button 
+                    onClick={() => setDispatchModalOpen(true)}
+                    className="w-full bg-white text-black hover:bg-zinc-200 py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm"
+                  >
+                    <PaperPlaneTilt size={14} weight="bold" />
+                    <span>Dispatch to Bank LEA Nodal Desk</span>
+                  </button>
+                  <button 
                     onClick={() => handleGenerateNotice("SECTION_91_CRPC")}
                     className="w-full btn-gov py-2 text-xs font-semibold flex items-center justify-center gap-2"
                   >
@@ -340,6 +351,15 @@ export default function FinancialPage() {
         )}
         </div>
       )}
+
+      {/* STATUTORY INSTITUTIONAL DISPATCH MODAL */}
+      <StatutoryDispatchModal
+        isOpen={dispatchModalOpen}
+        onClose={() => setDispatchModalOpen(false)}
+        defaultEntityLabel={selectedAccount?.label || "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"}
+        defaultAccountNumber={selectedAccount?.label?.includes("Acct:") ? selectedAccount.label.split("Acct:")[1].replace(")", "").trim() : "99481204812"}
+        defaultCaseId="FIR-NDPS-2026-088"
+      />
 
       {/* LEGAL NOTICE GENERATION MODAL */}
       {legalModalOpen && (
@@ -388,7 +408,17 @@ export default function FinancialPage() {
               <div className="text-[10px] font-mono text-zinc-400">
                 Chandigarh Police Cyber Crime Division · Court Admissible
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
+                <button 
+                  onClick={() => {
+                    setLegalModalOpen(false);
+                    setDispatchModalOpen(true);
+                  }}
+                  className="bg-white text-black hover:bg-zinc-200 text-xs px-3 py-1.5 rounded font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <PaperPlaneTilt size={14} weight="bold" />
+                  <span>Transmit to Bank LEA Desk →</span>
+                </button>
                 <button 
                   onClick={handleCopy}
                   className="btn-secondary text-xs px-3 py-1.5 flex items-center gap-1"

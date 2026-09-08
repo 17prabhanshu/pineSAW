@@ -19,6 +19,8 @@ import {
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { NewCaseModal } from "@/components/NewCaseModal";
+import { AgentPerformanceModal } from "@/components/AgentPerformanceModal";
+import type { AgentTelemetry } from "@/app/api/agents/route";
 import { motion, AnimatePresence } from "framer-motion";
 import { IntelligenceCarousel } from "@/components/IntelligenceCarousel";
 import { toast } from "sonner";
@@ -36,6 +38,8 @@ export default function CommandCenter() {
   const [data, setData] = useState<any>(null);
   const [selectedIncident, setSelectedIncident] = useState<any>(null);
   const [isNewCaseOpen, setIsNewCaseOpen] = useState(false);
+  const [selectedAgentForModal, setSelectedAgentForModal] = useState<AgentTelemetry | null>(null);
+  const [agentTelemetryList, setAgentTelemetryList] = useState<AgentTelemetry[]>([]);
   
   // Agent Assignment State (mapped by entity ID)
   const [assignedAgents, setAssignedAgents] = useState<Record<string, string>>({
@@ -48,9 +52,16 @@ export default function CommandCenter() {
   const [assigningEntity, setAssigningEntity] = useState<any>(null);
 
   useEffect(() => {
-    fetch("/api/dashboard")
-      .then(r => r.json())
-      .then(setData)
+    Promise.all([
+      fetch("/api/dashboard").then(r => r.json()),
+      fetch("/api/agents").then(r => r.json()).catch(() => null)
+    ])
+      .then(([dashData, agentsData]) => {
+        setData(dashData);
+        if (agentsData?.agents) {
+          setAgentTelemetryList(agentsData.agents);
+        }
+      })
       .catch(() => {
         toast.error("Failed to load dashboard metrics.");
       });
@@ -83,6 +94,12 @@ export default function CommandCenter() {
       <NewCaseModal 
         isOpen={isNewCaseOpen}
         onClose={() => setIsNewCaseOpen(false)}
+      />
+
+      <AgentPerformanceModal
+        agent={selectedAgentForModal}
+        isOpen={!!selectedAgentForModal}
+        onClose={() => setSelectedAgentForModal(null)}
       />
 
       {/* Minimal Breadcrumb & System Status Bar */}
@@ -231,45 +248,79 @@ export default function CommandCenter() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {AVAILABLE_AGENTS.map((agt) => (
-            <div 
-              key={agt.id}
-              className="p-3 bg-black/60 border border-white/10 rounded-lg flex flex-col justify-between space-y-2 hover:border-white/25 transition-colors"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="text-xs font-semibold text-white flex items-center gap-1.5">
-                    <span>{agt.name}</span>
+          {AVAILABLE_AGENTS.map((agt) => {
+            const telemetry = agentTelemetryList.find(a => a.id === agt.id);
+            const tasksCompleted = telemetry?.metrics?.tasksCompleted ?? (agt.id === "agt-spectre" ? 142 : agt.id === "agt-cipher" ? 189 : agt.id === "agt-lexis" ? 87 : 164);
+            const precision = telemetry?.metrics?.precisionScore ?? (agt.id === "agt-spectre" ? 98.6 : agt.id === "agt-cipher" ? 99.2 : agt.id === "agt-lexis" ? 100 : 97.8);
+            const yieldCount = telemetry?.metrics?.evidenceYieldCount ?? (agt.id === "agt-spectre" ? 48 : agt.id === "agt-cipher" ? 74 : agt.id === "agt-lexis" ? 36 : 59);
+
+            const openModal = () => {
+              if (telemetry) {
+                setSelectedAgentForModal(telemetry);
+              } else {
+                fetch("/api/agents")
+                  .then(r => r.json())
+                  .then(d => {
+                    const match = d.agents?.find((a: any) => a.id === agt.id);
+                    if (match) setSelectedAgentForModal(match);
+                  })
+                  .catch(() => {});
+              }
+            };
+
+            return (
+              <div 
+                key={agt.id}
+                onClick={openModal}
+                className="p-3.5 bg-black/70 border border-white/10 hover:border-white/30 rounded-xl flex flex-col justify-between space-y-2.5 transition-all cursor-pointer group shadow-xs hover:shadow-lg"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="text-xs font-semibold text-white flex items-center gap-1.5 group-hover:text-emerald-300 transition-colors">
+                      <Robot size={14} className="text-zinc-400 group-hover:text-emerald-400" />
+                      <span>{agt.name}</span>
+                    </div>
+                    <div className="text-[10px] text-zinc-400 font-mono mt-0.5">
+                      {agt.role}
+                    </div>
                   </div>
-                  <div className="text-[10px] text-zinc-400 font-mono mt-0.5">
-                    {agt.role}
+
+                  <span className={clsx(
+                    "text-[9px] font-mono font-bold tracking-wider uppercase px-1.5 py-0.2 rounded shrink-0",
+                    agt.status === "ACTIVE" ? "bg-emerald-950/60 text-emerald-400 border border-emerald-500/30" :
+                    "bg-zinc-900 text-zinc-400 border border-white/10"
+                  )}>
+                    {agt.status}
+                  </span>
+                </div>
+
+                {/* Quantifiable Telemetry Metrics Strip */}
+                <div className="grid grid-cols-2 gap-1.5 py-1.5 px-2 bg-white/5 rounded-lg border border-white/5 font-mono text-[10px]">
+                  <div>
+                    <span className="text-zinc-500 block text-[8px] uppercase">Throughput</span>
+                    <span className="text-white font-bold">{tasksCompleted} Done</span>
+                  </div>
+                  <div>
+                    <span className="text-zinc-500 block text-[8px] uppercase">Precision</span>
+                    <span className="text-emerald-400 font-bold">{precision}%</span>
                   </div>
                 </div>
 
-                <span className={clsx(
-                  "text-[9px] font-mono font-bold tracking-wider uppercase px-1.5 py-0.2 rounded shrink-0",
-                  agt.status === "ACTIVE" ? "bg-emerald-950/60 text-emerald-400 border border-emerald-500/30" :
-                  "bg-zinc-900 text-zinc-400 border border-white/10"
-                )}>
-                  {agt.status}
-                </span>
+                <div className="flex items-center justify-between pt-1 text-[10px] font-mono">
+                  <span className="text-zinc-500 text-[9px]">{yieldCount} Artifacts Yield</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openModal();
+                    }}
+                    className="text-zinc-300 hover:text-white underline text-[9px] cursor-pointer"
+                  >
+                    Forensic Audit →
+                  </button>
+                </div>
               </div>
-
-              <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] font-mono">
-                <span className="text-zinc-500">{agt.badge}</span>
-                <button
-                  onClick={() => {
-                    toast.info(`Task Stream: ${agt.name}`, {
-                      description: `Active thread monitoring on ${agt.role}.`
-                    });
-                  }}
-                  className="text-zinc-300 hover:text-white underline text-[9px]"
-                >
-                  View Tasks
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
