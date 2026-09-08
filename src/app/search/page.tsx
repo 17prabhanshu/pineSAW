@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { 
   MagnifyingGlass, 
   User, 
@@ -48,8 +49,10 @@ interface SearchInvestigation {
   priority: string;
 }
 
-export default function SearchPage() {
-  const [query, setQuery] = useState("shadow");
+function SearchPageContent() {
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams?.get("q") || "shadow";
+  const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<{
     entities: SearchEntity[];
     investigations: SearchInvestigation[];
@@ -89,9 +92,14 @@ export default function SearchPage() {
   };
 
   useEffect(() => {
-    // Initial auto-search on mount
-    executeSearch(query);
-  }, []);
+    const q = searchParams?.get("q");
+    if (q) {
+      setQuery(q);
+      executeSearch(q);
+    } else {
+      executeSearch(query);
+    }
+  }, [searchParams]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -527,5 +535,20 @@ export default function SearchPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen w-full items-center justify-center bg-black font-mono text-xs text-zinc-400">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+          <span>INITIALIZING FAISS VECTOR INTELLIGENCE...</span>
+        </div>
+      </div>
+    }>
+      <SearchPageContent />
+    </Suspense>
   );
 }

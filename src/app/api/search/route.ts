@@ -34,16 +34,13 @@ async function queryFaissEngine(
     topK: "30"
   });
 
-  // Attempt 1: Fast HTTP query to FastAPI backend
+  // Attempt 1: Fast HTTP query to FAISS daemon (port 5055)
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 1800);
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
     
-    const res = await fetch(`http://127.0.0.1:8000/api/search?${params.toString()}`, {
+    const res = await fetch(`http://127.0.0.1:5055/search?${params.toString()}`, {
       signal: controller.signal,
-      headers: {
-        "x-api-key": "testkey123"
-      }
     });
     clearTimeout(timeoutId);
 
@@ -51,21 +48,41 @@ async function queryFaissEngine(
       const data = await res.json();
       return data;
     }
-    throw new Error(`FAISS daemon returned HTTP ${res.status}`);
   } catch (err: any) {
-    console.error("FastAPI search execution error:", err);
-    return {
-      entities: [],
-      metadata: {
-        query,
-        totalIndexedVectors: 0,
-        queryLatencyMs: 0,
-        indexType: "FAISS_Error",
-        denseWeight,
-        sparseWeight: 1 - denseWeight
-      }
-    };
+    // Daemon might be starting up; proceed to CLI fallback
   }
+
+  // Attempt 2: Resilient direct Python CLI execution fallback
+  try {
+    const pythonScript = path.join(process.cwd(), 'backend', 'scripts', 'faiss_engine.py');
+    const { stdout } = await execFileAsync('python', [
+      pythonScript,
+      '--query', query,
+      '--dense-weight', denseWeight.toString(),
+      '--threshold', threshold.toString(),
+      '--index-type', indexType,
+      '--top-k', '30'
+    ], { timeout: 10000, maxBuffer: 10 * 1024 * 1024 });
+
+    const parsed = JSON.parse(stdout.trim());
+    if (parsed && Array.isArray(parsed.entities)) {
+      return parsed;
+    }
+  } catch (cliErr: any) {
+    console.error("FAISS CLI execution fallback error:", cliErr);
+  }
+
+  return {
+    entities: [],
+    metadata: {
+      query,
+      totalIndexedVectors: 0,
+      queryLatencyMs: 0,
+      indexType: "FAISS_Error",
+      denseWeight,
+      sparseWeight: 1 - denseWeight
+    }
+  };
 }
 
 export async function GET(request: Request) {

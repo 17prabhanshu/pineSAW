@@ -416,6 +416,7 @@ export default function IngestionPanel() {
   const [autoIngest, setAutoIngest] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [vectorizingPostId, setVectorizingPostId] = useState<string | null>(null);
+  const [vectorizedPostsMap, setVectorizedPostsMap] = useState<Record<string, boolean>>({});
 
   // Add to Investigation Modal State
   const [investigationModalItem, setInvestigationModalItem] = useState<AddToInvestigationItem | null>(null);
@@ -490,9 +491,10 @@ export default function IngestionPanel() {
   };
 
   const handleManualVectorize = async (post: any) => {
-    setVectorizingPostId(post.id);
+    const postKey = post.id || post.text?.substring(0, 20);
+    setVectorizingPostId(postKey);
     try {
-      const res = await fetch("/faiss-api/index", {
+      const res = await fetch("/api/ingest/vectorize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -505,13 +507,16 @@ export default function IngestionPanel() {
         })
       });
       const data = await res.json();
-      if (res.ok) {
+      if (res.ok && (data.status === "indexed" || data.success)) {
+        setVectorizedPostsMap(prev => ({ ...prev, [postKey]: true, [post.id]: true }));
         toast.success("Indexed into FAISS Vector Space", {
           description: `Computed 384-d dense embedding. Live vector count: ${data.total_vectors}.`
         });
+      } else {
+        toast.error("Vectorization Failed", { description: data.error || "Could not index into FAISS" });
       }
-    } catch {
-      toast.error("Vector daemon unreachable on port 5055.");
+    } catch (err: any) {
+      toast.error("Vector daemon unreachable on port 5055.", { description: err.message });
     } finally {
       setVectorizingPostId(null);
     }
@@ -1785,7 +1790,9 @@ export default function IngestionPanel() {
                   const p = item.post;
                   const nlp = item.nlp;
                   const onions = item.onionDomains || [];
-                  const isVectorized = !!item.faissIndexingResult || vectorizingPostId === p.id;
+                  const postKey = p.id || p.text?.substring(0, 20) || String(idx);
+                  const isVectorized = !!item.faissIndexingResult || !!vectorizedPostsMap[postKey] || (p.id ? !!vectorizedPostsMap[p.id] : false);
+                  const isCurrentlyVectorizing = vectorizingPostId === postKey || (p.id ? vectorizingPostId === p.id : false);
 
                   return (
                     <div
@@ -1896,21 +1903,41 @@ export default function IngestionPanel() {
                           <button
                             type="button"
                             onClick={() => handleManualVectorize(p)}
-                            disabled={vectorizingPostId === p.id}
+                            disabled={isCurrentlyVectorizing || isVectorized}
                             className={clsx(
-                              "px-3 py-1.5 rounded-lg text-xs font-mono transition-colors flex items-center gap-1.5",
+                              "px-3 py-1.5 rounded-lg text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed",
                               isVectorized 
-                                ? "bg-emerald-950/40 text-emerald-300 border border-emerald-500/30" 
+                                ? "bg-emerald-950/60 text-emerald-300 border border-emerald-500/40" 
                                 : "bg-white/10 hover:bg-white/20 text-white border border-white/15"
                             )}
                           >
-                            <Cpu size={13} />
-                            {isVectorized ? "Vectorized in FAISS (384-d)" : "Vectorize & Push to FAISS"}
+                            {isCurrentlyVectorizing ? (
+                              <>
+                                <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                <span>Vectorizing into FAISS...</span>
+                              </>
+                            ) : isVectorized ? (
+                              <>
+                                <CheckCircle size={13} weight="fill" className="text-emerald-400" />
+                                <span>Vectorized in FAISS (384-d)</span>
+                              </>
+                            ) : (
+                              <>
+                                <Cpu size={13} />
+                                <span>Vectorize & Push to FAISS</span>
+                              </>
+                            )}
                           </button>
 
                           <Link
-                            href={`/search?q=${encodeURIComponent(nlp.narcotics?.[0]?.detectedSlang || "dirty 30s")}`}
-                            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-zinc-300 hover:text-white border border-white/10 text-xs font-mono transition-colors flex items-center gap-1.5"
+                            href={`/search?q=${encodeURIComponent(
+                              nlp.narcotics?.[0]?.detectedSlang ||
+                              nlp.narcotics?.[0]?.standardizedName ||
+                              p.sender ||
+                              p.text?.substring(0, 30) ||
+                              "dirty 30s"
+                            )}`}
+                            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-zinc-300 hover:text-white border border-white/10 text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer"
                           >
                             <MagnifyingGlass size={13} />
                             Verify in Vector Search

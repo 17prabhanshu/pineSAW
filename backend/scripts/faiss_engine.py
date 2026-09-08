@@ -349,10 +349,26 @@ def main():
     parser.add_argument("--top-k", type=int, default=25, help="Number of results")
     parser.add_argument("--daemon", action="store_true", help="Run as persistent microservice")
     parser.add_argument("--port", type=int, default=5055, help="Daemon port")
+    parser.add_argument("--index-json", type=str, default=None, help="JSON document string to index into FAISS")
     args = parser.parse_args()
 
     if args.daemon:
         run_daemon(port=args.port)
+    elif args.index_json:
+        engine = get_engine()
+        try:
+            doc = json.loads(args.index_json)
+            added = engine.add_document(
+                doc_id=doc.get("id", f"CLI-{int(time.time()*1000)}"),
+                label=doc.get("label", "Unknown"),
+                doc_type=doc.get("type", "LISTING"),
+                text=doc.get("text", ""),
+                risk_factors=doc.get("riskFactors", ""),
+                priority=doc.get("priorityScore", 50)
+            )
+            print(json.dumps({"status": "indexed", "total_vectors": engine.index_flat.ntotal, "document": added}))
+        except Exception as e:
+            print(json.dumps({"error": str(e)}))
     elif args.query is not None:
         engine = get_engine()
         results = engine.search(
