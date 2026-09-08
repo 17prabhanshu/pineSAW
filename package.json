@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:backend": "backend/venv/Scripts/python.exe backend/simple_sse.py",
-    "dev:vector": "backend/venv/Scripts/python.exe backend/scripts/faiss_engine.py --daemon --port 5055",
+    "dev:backend": "python3 backend/simple_sse.py",
+    "dev:vector": "python3 backend/scripts/faiss_engine.py --daemon --port 5055",
     "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:vector\" \"npm run dev\"",
     "build": "next build",
     "start": "next start",
@@ -49,6 +49,7 @@
     "@types/papaparse": "^5.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^10.0.5",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
     "tailwindcss": "^4",
