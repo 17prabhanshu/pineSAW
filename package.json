@@ -7,6 +7,7 @@
     "dev:backend": "python3 backend/simple_sse.py",
     "dev:vector": "python3 backend/scripts/faiss_engine.py --daemon --port 5055",
     "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:vector\" \"npm run dev\"",
+    "start:all": "concurrently \"npm run dev:backend\" \"npm run dev:vector\" \"npm start -p $PORT\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
