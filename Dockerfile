@@ -25,7 +25,7 @@ WORKDIR /app
 COPY . .
 
 # Install Python dependencies
-RUN python3 -m pip install -r backend/requirements.txt --break-system-packages
+RUN python3 -m pip install -r backend/requirements.txt
 
 # Install Node dependencies
 RUN npm install --legacy-peer-deps
