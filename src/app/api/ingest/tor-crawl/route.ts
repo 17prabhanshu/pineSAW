@@ -4,6 +4,8 @@ export const dynamic = 'force-dynamic';
 import nodeFetch from 'node-fetch';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import * as cheerio from 'cheerio';
+import fs from 'fs/promises';
+import path from 'path';
 
 // ── regex patterns ──────────────────────────────────────────────────────────
 const REGEX_BTC      = /\b(bc1[a-z0-9]{25,39}|[13][a-zA-Z0-9]{25,34})\b/g;
@@ -131,6 +133,31 @@ export async function POST(request: Request): Promise<Response> {
 
         const fullText = `${title}\n\n${bodyText}`;
         const entities = extractEntities(fullText);
+
+        // Save scraped data to file as requested
+        try {
+          const dataDir = path.join(process.cwd(), 'data', 'scrapes');
+          await fs.mkdir(dataDir, { recursive: true });
+          const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase().slice(0, 20);
+          const fileName = `scrape_${safeTitle}_${Date.now()}.json`;
+          
+          const filePayload = {
+            url,
+            title,
+            scrapedAt: new Date().toISOString(),
+            bytesReceived,
+            entities,
+            rawText: bodyText
+          };
+          
+          await fs.writeFile(
+            path.join(dataDir, fileName), 
+            JSON.stringify(filePayload, null, 2)
+          );
+          console.log(`[FILE STORAGE] Saved scrape to ${fileName}`);
+        } catch (fsErr) {
+          console.error("Failed to write scrape file to disk:", fsErr);
+        }
 
         let ingestResult: unknown = null;
         try {

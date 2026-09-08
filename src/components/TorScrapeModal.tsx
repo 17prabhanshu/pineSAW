@@ -80,33 +80,44 @@ export function TorScrapeModal({ open, onClose, investigationId }: Props) {
     setStatus("idle");
   };
 
-  const generateLLMExplanation = (dataResults: TorResult[]) => {
+  const generateLLMExplanation = async (dataResults: TorResult[]) => {
     if (!dataResults || dataResults.length === 0) return;
     setIsLlmTyping(true);
-    setLlmAnalysis("");
+    setLlmAnalysis("Connecting to Gemini 1.5 Flash via tactical API module...");
     
-    // Generate a context-aware mock analysis based on what was scraped
-    let analysisText = "";
-    const firstResult = dataResults[0];
-    const e = firstResult.entities;
-    
-    if (firstResult.title.toLowerCase().includes("cryptostamp")) {
-      analysisText = `LLM Analysis (Llama-3-8B-Tactical):\n\nThe scraped target is "${firstResult.title}". It appears to be an operational darknet service facilitating the purchase of postal materials using decentralized cryptocurrencies. \n\nKey Findings:\n- Discovered ${(e.xmrAddresses?.length || 0)} Monero (XMR) and ${(e.btcAddresses?.length || 0)} Bitcoin (BTC) deposit addresses.\n- High OPSEC indicators: The site enforces strict non-fiat transactions. \n- Threat Assessment: LOW for narcotics, but HIGH for facilitating anonymous logistics commonly used by darknet vendors to ship illicit goods.`;
-    } else if ((e.btcAddresses?.length || 0) > 0 || (e.xmrAddresses?.length || 0) > 0) {
-      analysisText = `LLM Analysis (Llama-3-8B-Tactical):\n\nThe scraped target "${firstResult.title}" exhibits strong indicators of an illicit marketplace or vendor shop. \n\nKey Findings:\n- Extracted ${(e.btcAddresses?.length || 0) + (e.xmrAddresses?.length || 0)} cryptographic wallets for untraceable transactions.\n- Escrow or direct payment models are likely active.\n- Recommendation: Hand off wallet addresses to Agent Cipher for on-chain taint analysis via the Financial Forensics module.`;
-    } else {
-      analysisText = `LLM Analysis (Llama-3-8B-Tactical):\n\nThe scraped target "${firstResult.title}" was successfully mirrored. No direct illicit identifiers (crypto wallets, PGP blocks, or narcotics slang) were detected in the immediate payload. The site may be an informational repository, a dead drop, or requires CAPTCHA/authentication to view illicit listings.`;
-    }
+    try {
+      const firstResult = dataResults[0];
+      
+      const res = await fetch("/api/llm/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: firstResult.title,
+          text: firstResult.ingestResult?.parsed?.rawText || firstResult.title,
+          entities: firstResult.entities
+        })
+      });
 
-    let i = 0;
-    const interval = setInterval(() => {
-      setLlmAnalysis(prev => prev + analysisText.charAt(i));
-      i++;
-      if (i >= analysisText.length) {
-        clearInterval(interval);
-        setIsLlmTyping(false);
-      }
-    }, 15);
+      if (!res.ok) throw new Error("API responded with an error");
+      const data = await res.json();
+      
+      const analysisText = data.analysis;
+      setLlmAnalysis(""); // Clear loading text
+      
+      let i = 0;
+      const interval = setInterval(() => {
+        setLlmAnalysis(prev => prev + analysisText.charAt(i));
+        i++;
+        if (i >= analysisText.length) {
+          clearInterval(interval);
+          setIsLlmTyping(false);
+        }
+      }, 5); // Fast typing speed
+      
+    } catch (err) {
+      setLlmAnalysis(`LLM Error: Could not connect to Gemini API. Check your .env file and network connection.`);
+      setIsLlmTyping(false);
+    }
   };
 
   const runCrawl = async () => {
