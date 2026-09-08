@@ -75,3 +75,4 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## ⚖️ Note on Synthetic Data & Legal Framing
 This platform operates on synthetic intelligence data generated for defensive demonstration and hackathon evaluation. No live connections to real illicit darknet markets are made during this simulation. All legal document generators strictly adhere to standard Indian criminal procedure (Code of Criminal Procedure / Information Technology Act / NDPS Act).
+
