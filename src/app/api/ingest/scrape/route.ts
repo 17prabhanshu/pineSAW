@@ -204,11 +204,11 @@ export async function POST(request: Request) {
             }
 
             // Probe messages via official Telegram Embed Widget: https://t.me/<handle>/<id>?embed=1
-            let reachedEnd = false;
+            let consecutiveMisses = 0;
             let msgId = 1;
             const maxProbe = 30;
 
-            while (!reachedEnd && msgId <= maxProbe) {
+            while (consecutiveMisses < 5 && msgId <= maxProbe) {
               const pair = [msgId, msgId + 1];
               msgId += 2;
 
@@ -256,12 +256,18 @@ export async function POST(request: Request) {
                 return { serviceMessage: true, mId };
               }));
 
+              let pairHadHit = false;
               for (const item of pairResults) {
-                if ((item as any).notFound) {
-                  reachedEnd = true;
-                } else if ((item as any).text) {
+                if ((item as any).text) {
                   scrapedPosts.push(item);
+                  pairHadHit = true;
                 }
+              }
+              
+              if (!pairHadHit) {
+                consecutiveMisses++;
+              } else {
+                consecutiveMisses = 0; // reset misses if we found something
               }
             }
 
