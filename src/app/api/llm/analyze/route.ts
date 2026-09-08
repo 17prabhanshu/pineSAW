@@ -13,8 +13,8 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    // Using gemini-2.5-flash as the "small LLM" for fast, efficient analysis
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // Using gemini-3.6-flash per the latest API requirements
+    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
     const prompt = `You are an automated Cyber Intelligence (OSINT) analyst for a law enforcement dashboard. 
     Analyze the following scraped dark web data:
