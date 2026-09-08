@@ -210,7 +210,7 @@ export default function EntityIntelligence() {
                       onClick={async () => {
                         toast.info("Generating Legal Request via Backend...");
                         try {
-                          const res = await fetch('http://127.0.0.1:8000/api/legal/draft_request', {
+                          const res = await fetch('/backend-api/api/legal/draft_request', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ entity_id: entity.id, label: entity.label })
@@ -363,7 +363,7 @@ export default function EntityIntelligence() {
                       <button onClick={async () => {
                         toast.info("Generating Legal Request via Backend...");
                         try {
-                          const res = await fetch('http://127.0.0.1:8000/api/legal/draft_request', {
+                          const res = await fetch('/backend-api/api/legal/draft_request', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ entity_id: entity.id, label: entity.label })
@@ -409,7 +409,7 @@ export default function EntityIntelligence() {
                 <button onClick={async () => {
                   toast.info("Generating Request...");
                   try {
-                    const res = await fetch('http://127.0.0.1:8000/api/legal/draft_request', {
+                    const res = await fetch('/backend-api/api/legal/draft_request', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ entity_id: entity.id, label: entity.label })
@@ -435,7 +435,7 @@ export default function EntityIntelligence() {
                 <button onClick={async () => {
                   toast.info("Packaging Evidence...");
                   try {
-                    const res = await fetch('http://127.0.0.1:8000/api/search?q=' + entity.label);
+                    const res = await fetch('/backend-api/api/search?q=' + entity.label);
                     if (res.ok) {
                       toast.success("Escalation Package Compiled!", { description: "Evidence zipped and ready for export." });
                     }

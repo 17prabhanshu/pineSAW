@@ -485,7 +485,7 @@ export default function IngestionPanel() {
   const handleManualVectorize = async (post: any) => {
     setVectorizingPostId(post.id);
     try {
-      const res = await fetch("http://127.0.0.1:5055/index", {
+      const res = await fetch("/faiss-api/index", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -590,7 +590,7 @@ export default function IngestionPanel() {
   useEffect(() => {
     if (!isWireLive) return;
 
-    const eventSource = new EventSource('http://127.0.0.1:8000/api/zmq_stream');
+    const eventSource = new EventSource('/backend-api/api/zmq_stream');
     
     eventSource.onmessage = (event) => {
       try {
@@ -1090,7 +1090,7 @@ export default function IngestionPanel() {
                       onClick={async () => {
                         toast.info("Ingesting entity into Knowledge Graph...");
                         try {
-                          const res = await fetch("http://127.0.0.1:8000/api/parse_text", {
+                          const res = await fetch("/backend-api/api/parse_text", {
                             method: "POST",
                             headers: {
                               "Content-Type": "application/json",

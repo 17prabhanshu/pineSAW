@@ -192,7 +192,7 @@ ${linkedWallet ? `LINKED CRYPTO WALLET: ${linkedWallet.label}\n` : ""}STATUTORY 
     });
     
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(label)}&topK=5`);
+      const res = await fetch(`/backend-api/api/search?q=${encodeURIComponent(label)}&topK=5`);
       if (res.ok) {
         const data = await res.json();
         toast.success("GNN Deep-Walk Complete!", {
