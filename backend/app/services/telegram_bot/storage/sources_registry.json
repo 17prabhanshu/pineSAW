@@ -1,0 +1,558 @@
+{
+  "sources": {
+    "intel_corridor_fentanyl": {
+      "channel_username": "intel_corridor_fentanyl",
+      "title": "Public Corridor Intel (fentanyl)",
+      "description": "Public channel monitoring defensive indicators for fentanyl",
+      "discovered_via_keyword": "fentanyl",
+      "subscriber_count": 1420,
+      "verified_public": true,
+      "status": "CANDIDATE",
+      "discovered_at": "2026-09-08T08:52:56.263591+00:00"
+    },
+    "dispatch_hub_fentanyl": {
+      "channel_username": "dispatch_hub_fentanyl",
+      "title": "Logistics Dispatch Monitor (fentanyl)",
+      "description": "Clearweb broadcast feed referencing fentanyl",
+      "discovered_via_keyword": "fentanyl",
+      "subscriber_count": 890,
+      "verified_public": false,
+      "status": "CANDIDATE",
+      "discovered_at": "2026-09-08T08:52:56.263591+00:00"
+    },
+    "intel_corridor_chitta": {
+      "channel_username": "intel_corridor_chitta",
+      "title": "Public Corridor Intel (chitta)",
+      "description": "Public channel monitoring defensive indicators for chitta",
+      "discovered_via_keyword": "chitta",
+      "subscriber_count": 1420,
+      "verified_public": true,
+      "status": "CANDIDATE",
+      "discovered_at": "2026-09-08T08:52:56.263591+00:00"
+    },
+    "dispatch_hub_chitta": {
+      "channel_username": "dispatch_hub_chitta",
+      "title": "Logistics Dispatch Monitor (chitta)",
+      "description": "Clearweb broadcast feed referencing chitta",
+      "discovered_via_keyword": "chitta",
+      "subscriber_count": 890,
+      "verified_public": false,
+      "status": "CANDIDATE",
+      "discovered_at": "2026-09-08T08:52:56.263591+00:00"
+    },
+    "crypto_3": {
+      "channel_username": "crypto_3",
+      "title": "Crypto",
+      "description": "Crypto",
+      "public_url": "https://t.me/crypto_3",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-crypto_3",
+      "discovered_keywords": [
+        "crypto"
+      ],
+      "discovered_at": "2026-09-08T09:06:09.628461+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "qwuww": {
+      "channel_username": "qwuww",
+      "title": "Crypto",
+      "description": "Crypto",
+      "public_url": "https://t.me/qwuww",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-qwuww",
+      "discovered_keywords": [
+        "crypto"
+      ],
+      "discovered_at": "2026-09-08T09:06:09.628461+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "mock_border_tra_alpha": {
+      "channel_username": "mock_border_tra_alpha",
+      "channel_id": "tg-mock-mock_border_tra_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (BORDER_TRANSIT_BETA)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term BORDER_TRANSIT_BETA",
+      "public_url": "https://t.me/mock_border_tra_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "border_transit_beta"
+      ],
+      "discovered_at": "2026-09-08T09:06:26.876639+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_border_tra_beta": {
+      "channel_username": "mock_border_tra_beta",
+      "channel_id": "tg-mock-mock_border_tra_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (BORDER_TRANSIT_BETA)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term BORDER_TRANSIT_BETA",
+      "public_url": "https://t.me/mock_border_tra_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "border_transit_beta"
+      ],
+      "discovered_at": "2026-09-08T09:06:26.876639+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_comm_handl_alpha": {
+      "channel_username": "mock_comm_handl_alpha",
+      "channel_id": "tg-mock-mock_comm_handl_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (COMM_HANDLE_B)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term COMM_HANDLE_B",
+      "public_url": "https://t.me/mock_comm_handl_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "comm_handle_a",
+        "comm_handle_b"
+      ],
+      "discovered_at": "2026-09-08T09:06:26.876639+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_comm_handl_beta": {
+      "channel_username": "mock_comm_handl_beta",
+      "channel_id": "tg-mock-mock_comm_handl_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (COMM_HANDLE_B)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term COMM_HANDLE_B",
+      "public_url": "https://t.me/mock_comm_handl_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "comm_handle_a",
+        "comm_handle_b"
+      ],
+      "discovered_at": "2026-09-08T09:06:26.876639+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "test_corridor_channel": {
+      "channel_username": "test_corridor_channel",
+      "title": "test_corridor_channel",
+      "description": "Public Telegram source (test_corridor_channel)",
+      "verified_public": true,
+      "discovered_keywords": [
+        "manual_queue"
+      ],
+      "status": "MONITORING",
+      "discovered_at": "2026-09-08T09:06:46.245534+00:00"
+    },
+    "mock_fentanyl_alpha": {
+      "channel_username": "mock_fentanyl_alpha",
+      "channel_id": "tg-mock-mock_fentanyl_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (fentanyl)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term fentanyl",
+      "public_url": "https://t.me/mock_fentanyl_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_fentanyl_beta": {
+      "channel_username": "mock_fentanyl_beta",
+      "channel_id": "tg-mock-mock_fentanyl_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (fentanyl)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term fentanyl",
+      "public_url": "https://t.me/mock_fentanyl_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_chitta_alpha": {
+      "channel_username": "mock_chitta_alpha",
+      "channel_id": "tg-mock-mock_chitta_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (chitta)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term chitta",
+      "public_url": "https://t.me/mock_chitta_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "chitta"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_chitta_beta": {
+      "channel_username": "mock_chitta_beta",
+      "channel_id": "tg-mock-mock_chitta_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (chitta)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term chitta",
+      "public_url": "https://t.me/mock_chitta_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "chitta"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_meth_alpha": {
+      "channel_username": "mock_meth_alpha",
+      "channel_id": "tg-mock-mock_meth_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (meth)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term meth",
+      "public_url": "https://t.me/mock_meth_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "meth"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_meth_beta": {
+      "channel_username": "mock_meth_beta",
+      "channel_id": "tg-mock-mock_meth_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (meth)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term meth",
+      "public_url": "https://t.me/mock_meth_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "meth"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_monero_alpha": {
+      "channel_username": "mock_monero_alpha",
+      "channel_id": "tg-mock-mock_monero_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (monero)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term monero",
+      "public_url": "https://t.me/mock_monero_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "monero"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_monero_beta": {
+      "channel_username": "mock_monero_beta",
+      "channel_id": "tg-mock-mock_monero_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (monero)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term monero",
+      "public_url": "https://t.me/mock_monero_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "monero"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_molly_alpha": {
+      "channel_username": "mock_molly_alpha",
+      "channel_id": "tg-mock-mock_molly_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (Molly)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term Molly",
+      "public_url": "https://t.me/mock_molly_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "molly"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_molly_beta": {
+      "channel_username": "mock_molly_beta",
+      "channel_id": "tg-mock-mock_molly_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (Molly)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term Molly",
+      "public_url": "https://t.me/mock_molly_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "molly"
+      ],
+      "discovered_at": "2026-09-08T09:10:28.356421+00:00",
+      "verified_public": true,
+      "status": "MONITORING"
+    },
+    "mock_payment_in_alpha": {
+      "channel_username": "mock_payment_in_alpha",
+      "channel_id": "tg-mock-mock_payment_in_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (PAYMENT_INDICATOR_A)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term PAYMENT_INDICATOR_A",
+      "public_url": "https://t.me/mock_payment_in_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "payment_indicator_a",
+        "payment_indicator_b"
+      ],
+      "discovered_at": "2026-09-08T09:19:40.291925+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_payment_in_beta": {
+      "channel_username": "mock_payment_in_beta",
+      "channel_id": "tg-mock-mock_payment_in_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (PAYMENT_INDICATOR_A)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term PAYMENT_INDICATOR_A",
+      "public_url": "https://t.me/mock_payment_in_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "payment_indicator_a",
+        "payment_indicator_b"
+      ],
+      "discovered_at": "2026-09-08T09:19:40.291925+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_quantity_f_alpha": {
+      "channel_username": "mock_quantity_f_alpha",
+      "channel_id": "tg-mock-mock_quantity_f_alpha",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (QUANTITY_FLAG_A)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term QUANTITY_FLAG_A",
+      "public_url": "https://t.me/mock_quantity_f_alpha",
+      "subscriber_count": 1200,
+      "discovered_keywords": [
+        "quantity_flag_a"
+      ],
+      "discovered_at": "2026-09-08T09:19:40.291925+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "mock_quantity_f_beta": {
+      "channel_username": "mock_quantity_f_beta",
+      "channel_id": "tg-mock-mock_quantity_f_beta",
+      "title": "[SYNTHETIC TEST DATA] Public Monitor (QUANTITY_FLAG_A)",
+      "description": "[SYNTHETIC TEST DATA] Synthetic OSINT channel indicator for threat term QUANTITY_FLAG_A",
+      "public_url": "https://t.me/mock_quantity_f_beta",
+      "subscriber_count": 1550,
+      "discovered_keywords": [
+        "quantity_flag_a"
+      ],
+      "discovered_at": "2026-09-08T09:19:40.291925+00:00",
+      "verified_public": true,
+      "status": "CANDIDATE"
+    },
+    "tri_city_dead_drops": {
+      "channel_username": "tri_city_dead_drops",
+      "channel_id": "tg-cti-tri_city_dead_drops",
+      "title": "Tri-City Dead Drops (Narcotics & Pharma)",
+      "description": "Tactical narcotics corridor intercept feed for Chandigarh, Mohali, and Panchkula. Dead drop coordinates and crypto settlements.",
+      "public_url": "https://t.me/tri_city_dead_drops",
+      "subscriber_count": 4820,
+      "discovered_keywords": [
+        "chitta",
+        "fentanyl",
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "verified_public": false,
+      "status": "CANDIDATE"
+    },
+    "dark_pharm_reup": {
+      "channel_username": "dark_pharm_reup",
+      "channel_id": "tg-cti-dark_pharm_reup",
+      "title": "Darknet Pharma Wholesale & Synthetics",
+      "description": "Bulk synthetic opioids, pressed pharmaceutical tablets, and research chemicals catalog stream.",
+      "public_url": "https://t.me/dark_pharm_reup",
+      "subscriber_count": 5820,
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "verified_public": false,
+      "status": "CANDIDATE"
+    },
+    "fentanylberlin0": {
+      "channel_username": "fentanylberlin0",
+      "title": "Fentanyl Berlin",
+      "description": "Fentanyl Berlin",
+      "public_url": "https://t.me/fentanylberlin0",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-fentanylberlin0",
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "fentanyl030": {
+      "channel_username": "fentanyl030",
+      "title": "Fentanyl - Berlin -",
+      "description": "Fentanyl - Berlin -",
+      "public_url": "https://t.me/fentanyl030",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-fentanyl030",
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "fentanylpach": {
+      "channel_username": "fentanylpach",
+      "title": "Fentanyl patch",
+      "description": "Fentanyl patch",
+      "public_url": "https://t.me/fentanylpach",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-fentanylpach",
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "fentanylpowder": {
+      "channel_username": "fentanylpowder",
+      "title": "Fentanyl Powder",
+      "description": "Fentanyl Powder",
+      "public_url": "https://t.me/fentanylpowder",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-fentanylpowder",
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "techfentanyl": {
+      "channel_username": "techfentanyl",
+      "title": "Tech Fentanyl",
+      "description": "Tech Fentanyl",
+      "public_url": "https://t.me/techfentanyl",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-techfentanyl",
+      "discovered_keywords": [
+        "fentanyl"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "moderncomposersdropdead": {
+      "channel_username": "moderncomposersdropdead",
+      "title": "moderncomposersdropdead",
+      "description": "MODERN COMPOSERS DROP DEAD",
+      "public_url": "https://t.me/moderncomposersdropdead",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-moderncomposersdropdead",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "we_are_alldead": {
+      "channel_username": "we_are_alldead",
+      "title": "\u0412\u0438\u0434\u0435\u043e \u0438 \u041c\u0443\u0437\u044b\u043a\u0430",
+      "description": "dead",
+      "public_url": "https://t.me/we_are_alldead",
+      "subscriber_count": 31,
+      "channel_id": "tg-chan-we_are_alldead",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": true
+    },
+    "haruka_shitposting": {
+      "channel_username": "haruka_shitposting",
+      "title": "dead",
+      "description": "dead",
+      "public_url": "https://t.me/haruka_shitposting",
+      "subscriber_count": 11,
+      "channel_id": "tg-chan-haruka_shitposting",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": true
+    },
+    "fakeson": {
+      "channel_username": "fakeson",
+      "title": "Dead",
+      "description": "Dead",
+      "public_url": "https://t.me/fakeson",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-fakeson",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "primebox1": {
+      "channel_username": "primebox1",
+      "title": "Dead",
+      "description": "Dead",
+      "public_url": "https://t.me/primebox1",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-primebox1",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:54:48.439694+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "sayonara_boyzz": {
+      "channel_username": "sayonara_boyzz",
+      "title": "Dead",
+      "description": "Dead",
+      "public_url": "https://t.me/sayonara_boyzz",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-sayonara_boyzz",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:55:21.958583+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "teton_xd_reserve": {
+      "channel_username": "teton_xd_reserve",
+      "title": "Dead",
+      "description": "Dead",
+      "public_url": "https://t.me/teton_xd_reserve",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-teton_xd_reserve",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:55:21.958583+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "crabinz007": {
+      "channel_username": "crabinz007",
+      "title": "dead",
+      "description": "dead",
+      "public_url": "https://t.me/crabinz007",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-crabinz007",
+      "discovered_keywords": [
+        "dead drop"
+      ],
+      "discovered_at": "2026-09-08T09:55:21.958583+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    }
+  },
+  "last_discovery": "2026-09-08T10:18:36.518097+00:00",
+  "keywords_scanned": 3,
+  "mode": "MOCK",
+  "monitoring_queue": [
+    "test_corridor_channel",
+    "mock_molly_beta"
+  ]
+}

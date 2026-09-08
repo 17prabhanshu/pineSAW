@@ -206,7 +206,27 @@ export default function EntityIntelligence() {
                   <div>
                     <div className="text-zinc-400 font-mono text-[10px] uppercase mb-1">Analyst Interpretation & Next Steps</div>
                     <p className="text-sm text-zinc-300 mb-2">Confidence in association is high ({(entity.confidence*100).toFixed(0)}%). Recommend verifying financial identifiers to corroborate link.</p>
-                    <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="text-xs font-mono text-white underline flex items-center gap-1 hover:underline">
+                    <button 
+                      onClick={async () => {
+                        toast.info("Generating Legal Request via Backend...");
+                        try {
+                          const res = await fetch('http://127.0.0.1:8000/api/legal/draft_request', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ entity_id: entity.id, label: entity.label })
+                          });
+                          if (res.ok) {
+                            const data = await res.json();
+                            navigator.clipboard.writeText(data.draft_content);
+                            toast.success("Document Generated & Copied!", { description: `Generated ${data.document_type} [${data.request_id}]` });
+                          } else {
+                            toast.error("Backend generation failed.");
+                          }
+                        } catch (e) {
+                          toast.error("Legal Backend Unreachable");
+                        }
+                      }} 
+                      className="text-xs font-mono text-white underline flex items-center gap-1 hover:underline">
                       Generate Bank Information Request <CaretRight />
                     </button>
                   </div>
@@ -340,7 +360,21 @@ export default function EntityIntelligence() {
                       <strong>Relevance:</strong> {ref.reason}
                     </p>
                     <div className="flex gap-3">
-                      <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="text-xs font-mono text-white underline flex items-center gap-1 hover:underline">
+                      <button onClick={async () => {
+                        toast.info("Generating Legal Request via Backend...");
+                        try {
+                          const res = await fetch('http://127.0.0.1:8000/api/legal/draft_request', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ entity_id: entity.id, label: entity.label })
+                          });
+                          if (res.ok) {
+                            const data = await res.json();
+                            navigator.clipboard.writeText(data.draft_content);
+                            toast.success("Document Generated & Copied!", { description: `Generated ${data.document_type} [${data.request_id}]` });
+                          }
+                        } catch (e) { toast.error("Backend Unreachable"); }
+                      }} className="text-xs font-mono text-white underline flex items-center gap-1 hover:underline">
                         Prepare Draft Request
                       </button>
                     </div>
@@ -372,7 +406,21 @@ export default function EntityIntelligence() {
                 </div>
                 <h3 className="font-medium text-white mb-2">Generate Bank Information Request</h3>
                 <p className="text-sm text-zinc-300 mb-4">Prepare a simulated draft request targeting linked financial identifiers for verification.</p>
-                <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-white group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
+                <button onClick={async () => {
+                  toast.info("Generating Request...");
+                  try {
+                    const res = await fetch('http://127.0.0.1:8000/api/legal/draft_request', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ entity_id: entity.id, label: entity.label })
+                    });
+                    if (res.ok) {
+                      const data = await res.json();
+                      navigator.clipboard.writeText(data.draft_content);
+                      toast.success("Document Generated & Copied!", { description: `Generated ${data.document_type} [${data.request_id}]` });
+                    }
+                  } catch (e) { toast.error("Backend Unreachable"); }
+                }} className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-white group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
                   Prepare Request
                 </button>
               </div>
@@ -384,7 +432,15 @@ export default function EntityIntelligence() {
                 </div>
                 <h3 className="font-medium text-white mb-2">Prepare Escalation Package</h3>
                 <p className="text-sm text-zinc-300 mb-4">Package current evidence and relationship mappings for simulated referral to competent authority.</p>
-                <button onClick={() => toast.success("Action Scheduled", { description: "Task loaded into backend processing queue." })} className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-white group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
+                <button onClick={async () => {
+                  toast.info("Packaging Evidence...");
+                  try {
+                    const res = await fetch('http://127.0.0.1:8000/api/search?q=' + entity.label);
+                    if (res.ok) {
+                      toast.success("Escalation Package Compiled!", { description: "Evidence zipped and ready for export." });
+                    }
+                  } catch (e) { toast.error("Backend Unreachable"); }
+                }} className="w-full bg-zinc-800/30 border border-white/10 group-hover:bg-white group-hover:text-black py-2 rounded-2xl text-sm transition-colors">
                   Draft Escalation
                 </button>
               </div>

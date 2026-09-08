@@ -377,7 +377,7 @@ export default function FinancialPage() {
                     <span className="badge-neutral text-[10px] font-mono uppercase shrink-0 ml-3">TAMPER-EVIDENT</span>
                   </div>
 
-                  <div className="bg-zinc-900 border border-white/10 p-5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-300 overflow-x-auto select-all">
+                  <div id="print-section" className="bg-zinc-900 border border-white/10 p-5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-300 overflow-x-auto select-all">
                     {legalNoticeDoc.formattedText}
                   </div>
                 </>

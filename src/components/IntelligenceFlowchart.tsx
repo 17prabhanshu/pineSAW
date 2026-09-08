@@ -1,123 +1,145 @@
 "use client";
-
-import { useMemo, useCallback } from 'react';
-import { ReactFlow, MiniMap, Controls, Background, useNodesState, useEdgesState, Handle, Position, MarkerType } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import { useRouter } from 'next/navigation';
-
-// Custom Node to make it look incredibly aesthetic and sleek
-const CustomNode = ({ data, isConnectable }: any) => {
-  return (
-    <div className="bg-black border border-white/20 rounded-xl p-4 min-w-[200px] shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all hover:border-white/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] cursor-pointer">
-      <Handle type="target" position={Position.Left} isConnectable={isConnectable} className="w-2 h-2 !bg-white/50 !border-none" />
-      
-      <div className="flex flex-col gap-1">
-        <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">{data.group || "Entity"}</div>
-        <div className="text-sm font-bold text-white tracking-wide font-mono break-words">{data.label}</div>
-        {data.priorityScore && (
-          <div className="mt-2 text-xs font-mono text-zinc-400">
-            RISK: <span className="text-white">{data.priorityScore}</span>
-          </div>
-        )}
-      </div>
-
-      <Handle type="source" position={Position.Right} isConnectable={isConnectable} className="w-2 h-2 !bg-white/50 !border-none" />
-    </div>
-  );
-};
-
-const nodeTypes = {
-  custom: CustomNode,
-};
+import React, { useEffect, useState, useMemo } from 'react';
+import ReactECharts from 'echarts-for-react';
 
 export function IntelligenceFlowchart({ data, onNodeClick }: { data: any, onNodeClick?: (node: any) => void }) {
-  const router = useRouter();
+  const [option, setOption] = useState<any>({});
 
-  // Convert graphData { nodes, links } to React Flow { nodes, edges }
-  const initialNodes = useMemo(() => {
-    if (!data?.nodes) return [];
-    
-    // Distribute nodes in a structured left-to-right hierarchy (dagre-style approximation)
-    // Find central node (highest degree or first)
-    const centralNode = data.nodes[0];
-    
-    const nodes = data.nodes.map((n: any, i: number) => {
-      const isMain = i === 0;
-      
-      // Attempt a hierarchical layout. 
-      // Main node at left. Children fan out to the right.
-      let x = 100;
-      let y = 300;
-      
-      if (!isMain) {
-        x = 500;
-        // Distribute y evenly around center
-        y = 100 + (i * 120);
-      }
+  useEffect(() => {
+    if (!data || !data.nodes || !data.links) return;
+
+    // Advanced, sleek color palette for OSINT
+    const groupStyles: Record<string, { color: string, border: string }> = {
+      'ACTOR': { color: 'rgba(14, 165, 233, 0.8)', border: '#0ea5e9' },          // Sky blue
+      'BANK_ACCOUNT': { color: 'rgba(16, 185, 129, 0.8)', border: '#10b981' }, // Emerald
+      'WALLET': { color: 'rgba(245, 158, 11, 0.8)', border: '#f59e0b' },       // Amber
+      'IDENTIFIER': { color: 'rgba(168, 85, 247, 0.8)', border: '#a855f7' },   // Purple
+      'LISTING': { color: 'rgba(239, 68, 68, 0.8)', border: '#ef4444' }        // Red
+    };
+
+    const nodes = data.nodes.map((n: any) => {
+      const style = groupStyles[n.group] || { color: 'rgba(100, 116, 139, 0.8)', border: '#94a3b8' };
+      const size = n.group === 'ACTOR' ? 38 : n.group === 'WALLET' ? 28 : 22;
       
       return {
         id: n.id,
-        type: 'custom',
-        position: { x, y },
-        data: { ...n },
-      };
-    });
-    return nodes;
-  }, [data]);
-
-  const initialEdges = useMemo(() => {
-    if (!data?.links) return [];
-    return data.links.map((l: any, i: number) => {
-      const sourceId = typeof l.source === 'object' ? l.source.id : l.source;
-      const targetId = typeof l.target === 'object' ? l.target.id : l.target;
-      
-      return {
-        id: `e${i}-${sourceId}-${targetId}`,
-        source: sourceId,
-        target: targetId,
-        label: l.label,
-        animated: true,
-        style: { stroke: 'rgba(255,255,255,0.3)', strokeWidth: 1.5 },
-        labelStyle: { fill: '#ffffff', fontWeight: 600, fontSize: 10, fontFamily: 'monospace' },
-        labelBgStyle: { fill: '#000000', fillOpacity: 0.8 },
-        labelBgBorderRadius: 4,
-        labelBgPadding: [4, 2],
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: 20,
-          height: 20,
-          color: 'rgba(255,255,255,0.5)',
+        name: n.label || n.id,
+        symbolSize: size,
+        itemStyle: {
+          color: style.color,
+          borderColor: style.border,
+          borderWidth: 1.5,
+          shadowBlur: 15,
+          shadowColor: style.border
         },
+        label: {
+          show: true,
+          position: 'right',
+          formatter: '{b}',
+          color: '#e4e4e7',
+          fontSize: 11,
+          fontFamily: '"Space Grotesk", monospace',
+          textBorderColor: 'rgba(0,0,0,0.8)',
+          textBorderWidth: 3,
+        },
+        // Store raw node data for click events
+        raw: n
       };
     });
+
+    const links = data.links.map((l: any) => ({
+      source: typeof l.source === 'object' ? l.source.id : l.source,
+      target: typeof l.target === 'object' ? l.target.id : l.target,
+      value: l.value || 1,
+      lineStyle: {
+        width: 1.5,
+        color: 'rgba(255, 255, 255, 0.15)',
+        curveness: 0.15
+      }
+    }));
+
+    const newOption = {
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'item',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(8px)',
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderWidth: 1,
+        textStyle: {
+          color: '#fff',
+          fontFamily: '"Space Grotesk", monospace',
+          fontSize: 12
+        },
+        formatter: (params: any) => {
+          if (params.dataType === 'node') {
+            const r = params.data.raw;
+            const style = groupStyles[r.group] || { border: '#fff' };
+            return `
+              <div style="font-weight:700;margin-bottom:4px;color:${style.border};letter-spacing:0.05em">${r.group}</div>
+              <div style="font-size:14px;color:#fff;">${r.label || r.id}</div>
+              ${r.priorityScore ? `<div style="margin-top:6px;font-size:11px;color:#a1a1aa">Risk Priority: <span style="color:#fff">${r.priorityScore}</span></div>` : ''}
+            `;
+          }
+          return null;
+        }
+      },
+      animationDuration: 1500,
+      animationEasingUpdate: 'quinticInOut',
+      series: [
+        {
+          type: 'graph',
+          layout: 'force',
+          data: nodes,
+          links: links,
+          roam: true,
+          force: {
+            repulsion: 400,
+            edgeLength: 150,
+            gravity: 0.05,
+            friction: 0.1
+          },
+          emphasis: {
+            focus: 'adjacency',
+            scale: true,
+            lineStyle: {
+              width: 3,
+              color: '#ffffff'
+            },
+            itemStyle: {
+              borderWidth: 2,
+              shadowBlur: 20
+            }
+          }
+        }
+      ]
+    };
+
+    setOption(newOption);
   }, [data]);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  const handleNodeClick = useCallback((event: any, node: any) => {
-    if (onNodeClick) {
-      onNodeClick(node.data);
-    } else {
-      router.push(`/entities/${node.id}`);
+  const onEvents = useMemo(() => ({
+    click: (e: any) => {
+      if (e.dataType === 'node' && onNodeClick) {
+        onNodeClick(e.data.raw);
+      }
     }
-  }, [onNodeClick, router]);
+  }), [onNodeClick]);
 
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '600px' }} className="bg-[#050505]">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onNodeClick={handleNodeClick}
-        fitView
-        proOptions={{ hideAttribution: true }}
-      >
-        <Background color="#222" gap={16} />
-        <Controls className="!bg-black !border-white/10 !fill-white" />
-      </ReactFlow>
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
+      {/* Background styling for a deep, slick look */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+        background: 'radial-gradient(circle at center, #18181b 0%, #000000 100%)',
+        zIndex: -1
+      }} />
+      <ReactECharts 
+        option={option} 
+        style={{ width: '100%', height: '100%' }} 
+        onEvents={onEvents}
+        notMerge={true}
+      />
     </div>
   );
 }

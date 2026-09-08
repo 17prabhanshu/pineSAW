@@ -1,12 +1,9 @@
 import os
 import joblib
-from gliner import GLiNER
 import re
 from typing import Dict, Any, List
-
-# Load GLiNER model (CPU friendly, zero-shot NER)
-# Fallback to regex if we can't load it for some reason
 try:
+    from gliner import GLiNER
     gliner_model = GLiNER.from_pretrained("urchade/gliner_small-v2.1")
 except Exception as e:
     gliner_model = None
@@ -21,15 +18,54 @@ VECTORIZER_PATH = "artifacts/models/tfidf_vectorizer.joblib"
 
 # Fallback keywords for baseline explainability
 ILLICIT_KEYWORDS = [
-    "oxycontin", "fentanyl", "xanax", "mdma", "adderall", 
+    # Core substance names (original)
+    "oxycontin", "fentanyl", "xanax", "mdma", "molly", "adderall",
     "cocaine", "heroin", "lsd", "meth", "shrooms", "ketamine",
-    "stealth packaging", "wickr", "telegram", "escrow", "vendor",
-    "top quality", "fast shipping"
+    "methamphetamine", "amphetamine", "ecstasy", "morphine", "opium",
+    
+    # Extended drug slang & common names
+    "snow", "blow", "yayo", "crack", "rock", "white girl", "flakka", "bath salts", 
+    "spice", "k2", "dabs", "edibles", "shatter", "wax", "lean", "purple drank", 
+    "sizzurp", "codeine", "percocet", "perc", "oxy", "norco", "vicodin", "suboxone", 
+    "subutex", "dmt", "ayahuasca", "psilocybin", "2cb", "2ci", "nbome", "carfentanil", 
+    "acetylfentanyl", "ghb", "rohypnol", "roofies", "ice", "crystal meth", "glass",
+    "shards", "speed", "m30", "dirty 30s", "china white", "fent", "xannies", "bars",
+    "k-hole", "special k", "acid", "tabs", "hash", "hashish",
+    
+    # Indian street slang
+    "chitta", "maal", "stuff", "gard", "nasha", "charas", "ganja", "sulpha", 
+    "brown sugar", "smack", "pudiya", "afghan kush", "weed",
+
+    # Marketplace/operational terms
+    "dead drop", "stealth", "mylar", "vacuum sealed", "next day delivery", "overnight", 
+    "express", "bulk discount", "sample pack", "free sample", "test kit", "reagent", 
+    "domestic only", "no signature", "pgp encrypted", "finalize early", "fe", "multisig", 
+    "dispute", "reship", "wickr", "telegram", "escrow", "vendor", "top quality", 
+    "fast shipping", "stealth packaging"
 ]
+
+def normalize_obfuscation(text: str) -> str:
+    """Normalizes l33tspeak and dot-separated text."""
+    # Remove dots between single characters, e.g. f.e.n.t.a.n.y.l -> fentanyl
+    text = re.sub(r'(?<=\w)\.(?=\w)', '', text)
+    
+    # Replace common l33t substitutions
+    l33t_map = {'0': 'o', '1': 'i', '3': 'e', '4': 'a', '5': 's', '7': 't'}
+    for k, v in l33t_map.items():
+        text = text.replace(k, v)
+        
+    return text
 
 def classify_text(text: str) -> Dict[str, Any]:
     text_lower = text.lower()
-    matches = [kw for kw in ILLICIT_KEYWORDS if kw in text_lower]
+    text_norm = normalize_obfuscation(text_lower)
+    # Use regex word boundaries to avoid false positives (e.g. 'fe' matching 'safe')
+    matches = []
+    for kw in ILLICIT_KEYWORDS:
+        pattern = r'\b' + re.escape(kw) + r'\b'
+        if re.search(pattern, text_lower) or re.search(pattern, text_norm):
+            matches.append(kw)
+    matches = list(set(matches))
     
     anomaly_score = 0.0
     model_version = "v1-heuristic"
@@ -84,6 +120,31 @@ def extract_entities(text: str) -> List[Dict[str, Any]]:
     for w in wickr_matches:
         if not any(e["value"] == w for e in entities):
             entities.append({"type": "contact_handle", "value": w, "confidence": 0.90})
+            
+    xmr_matches = re.findall(r'4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}', text)
+    for w in xmr_matches:
+        if not any(e["value"] == w for e in entities):
+            entities.append({"type": "wallet", "value": w, "confidence": 0.95})
+            
+    session_matches = re.findall(r'05[0-9a-f]{64}', text)
+    for w in session_matches:
+        if not any(e["value"] == w for e in entities):
+            entities.append({"type": "contact_handle", "value": w, "confidence": 0.95})
+            
+    signal_matches = re.findall(r'signal\.me/[^\s]+', text)
+    for w in signal_matches:
+        if not any(e["value"] == w for e in entities):
+            entities.append({"type": "contact_handle", "value": w, "confidence": 0.95})
+            
+    telegram_matches = re.findall(r't\.me/[a-zA-Z0-9_]{5,32}', text)
+    for w in telegram_matches:
+        if not any(e["value"] == w for e in entities):
+            entities.append({"type": "contact_handle", "value": w, "confidence": 0.95})
+            
+    email_matches = re.findall(r'[a-zA-Z0-9_.+-]+@(?:protonmail\.com|proton\.me|tutanota\.com|cock\.li)', text.lower())
+    for w in email_matches:
+        if not any(e["value"] == w for e in entities):
+            entities.append({"type": "contact_handle", "value": w, "confidence": 0.95})
             
     return entities
 

@@ -1,0 +1,44 @@
+{
+  "crypto": {
+    "keyword": "crypto",
+    "last_run": "2026-09-08T09:06:09.628461+00:00",
+    "results_seen": 2,
+    "last_cursor": "cursor_crypto_1788858371"
+  },
+  "border_transit_beta": {
+    "keyword": "border_transit_beta",
+    "last_run": "2026-09-08T09:07:33.851201+00:00",
+    "results_seen": 0,
+    "last_cursor": "cursor_border_transit_beta_1788858455"
+  },
+  "comm_handle_a": {
+    "keyword": "comm_handle_a",
+    "last_run": "2026-09-08T09:07:33.851201+00:00",
+    "results_seen": 0,
+    "last_cursor": "cursor_comm_handle_a_1788858457"
+  },
+  "comm_handle_b": {
+    "keyword": "comm_handle_b",
+    "last_run": "2026-09-08T09:07:33.851201+00:00",
+    "results_seen": 0,
+    "last_cursor": "cursor_comm_handle_b_1788858458"
+  },
+  "chitta": {
+    "keyword": "chitta",
+    "last_run": "2026-09-08T09:54:48.439694+00:00",
+    "results_seen": 0,
+    "last_cursor": "cursor_chitta_1788861290"
+  },
+  "fentanyl": {
+    "keyword": "fentanyl",
+    "last_run": "2026-09-08T09:55:21.958583+00:00",
+    "results_seen": 5,
+    "last_cursor": "cursor_fentanyl_1788861323"
+  },
+  "dead drop": {
+    "keyword": "dead drop",
+    "last_run": "2026-09-08T09:55:21.958583+00:00",
+    "results_seen": 5,
+    "last_cursor": "cursor_dead drop_1788861325"
+  }
+}

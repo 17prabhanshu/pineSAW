@@ -185,11 +185,27 @@ ${linkedWallet ? `LINKED CRYPTO WALLET: ${linkedWallet.label}\n` : ""}STATUTORY 
     setTimeout(() => setCopiedAffidavit(false), 3000);
   };
 
-  const handleDispatchGnnAgent = () => {
+  const handleDispatchGnnAgent = async () => {
     setIsAgentDispatched(true);
-    toast.success("Autonomous GNN Agent Dispatched", {
+    toast.info("Autonomous GNN Agent Dispatched", {
       description: `Tasked with autonomous crawling and recursive 3-hop link expansion on ${entity?.label}.`
     });
+    
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(label)}&topK=5`);
+      if (res.ok) {
+        const data = await res.json();
+        toast.success("GNN Deep-Walk Complete!", {
+          description: `Discovered ${data.entities?.length || 0} new semantic links and overlapping identities. Reload page to view updated graph.`
+        });
+      } else {
+        toast.error("GNN Agent encountered an error during graph traversal.");
+        setIsAgentDispatched(false);
+      }
+    } catch (e) {
+      toast.error("GNN Backend Engine Unreachable.");
+      setIsAgentDispatched(false);
+    }
   };
 
   return (

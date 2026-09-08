@@ -1,429 +1,136 @@
 "use client";
-import dynamic from 'next/dynamic';
-import { useCallback, useRef, useEffect, useState } from 'react';
-import { MagnifyingGlassPlus, MagnifyingGlassMinus, ArrowsOutSimple, X, Robot, Lightning, ArrowSquareOut, Fingerprint, ShareNetwork } from '@phosphor-icons/react';
-import { motion, AnimatePresence } from 'motion/react';
-import Link from 'next/link';
-import { toast } from 'sonner';
-
-const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
+import React, { useEffect, useState, useMemo } from 'react';
+import ReactECharts from 'echarts-for-react';
 
 export function NetworkGraph({ data, onNodeClick }: { data: any, onNodeClick?: (node: any) => void }) {
-  const fgRef = useRef<any>(null);
-  const [mounted, setMounted] = useState(false);
-  const [filterType, setFilterType] = useState<string>("ALL");
-  const [selectedNode, setSelectedNode] = useState<any | null>(null);
-  const [hoveredNode, setHoveredNode] = useState<any | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  const [pulses, setPulses] = useState<any[]>([]);
+  const [option, setOption] = useState<any>({});
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!data || !data.nodes || !data.links) return;
 
-  // Filter nodes if requested
-  const filteredData = {
-    nodes: data?.nodes?.filter((n: any) => filterType === "ALL" || n.group === filterType) || [],
-    links: data?.links?.filter((l: any) => {
-      if (filterType === "ALL") return true;
-      const srcId = typeof l.source === 'object' ? l.source.id : l.source;
-      const tgtId = typeof l.target === 'object' ? l.target.id : l.target;
-      const srcNode = data?.nodes?.find((n: any) => n.id === srcId);
-      const tgtNode = data?.nodes?.find((n: any) => n.id === tgtId);
-      return srcNode?.group === filterType || tgtNode?.group === filterType;
-    }) || []
-  };
-  useEffect(() => {
-    if (!mounted || !filteredData.links || !filteredData.links.length) return;
-    
-    const interval = setInterval(() => {
-      setPulses(prev => {
-        const now = Date.now();
-        const activePulses = prev.filter(p => now - p.createdAt < 2000);
-        
-        for (let i = 0; i < 2; i++) {
-          const randomLink = filteredData.links[Math.floor(Math.random() * filteredData.links.length)];
-          if (randomLink && randomLink.source && randomLink.target && fgRef.current) {
-            const src = typeof randomLink.source === 'object' ? randomLink.source : null;
-            const tgt = typeof randomLink.target === 'object' ? randomLink.target : null;
-            if (src && tgt && src.x !== undefined && tgt.x !== undefined) {
-              try {
-                const start = fgRef.current.graph2ScreenCoords(src.x, src.y);
-                const end = fgRef.current.graph2ScreenCoords(tgt.x, tgt.y);
-                if (start && end) {
-                  activePulses.push({
-                    id: Math.random().toString(),
-                    createdAt: now,
-                    startX: start.x,
-                    startY: start.y,
-                    endX: end.x,
-                    endY: end.y,
-                  });
-                }
-              } catch(e) {}
+    // Advanced, sleek color palette
+    const groupStyles: Record<string, { color: string, border: string }> = {
+      'ACTOR': { color: 'rgba(14, 165, 233, 0.8)', border: '#0ea5e9' },          // Sky blue
+      'BANK_ACCOUNT': { color: 'rgba(16, 185, 129, 0.8)', border: '#10b981' }, // Emerald
+      'WALLET': { color: 'rgba(245, 158, 11, 0.8)', border: '#f59e0b' },       // Amber
+      'IDENTIFIER': { color: 'rgba(168, 85, 247, 0.8)', border: '#a855f7' },   // Purple
+      'LISTING': { color: 'rgba(239, 68, 68, 0.8)', border: '#ef4444' }        // Red
+    };
+
+    const nodes = data.nodes.map((n: any) => {
+      const style = groupStyles[n.group] || { color: 'rgba(100, 116, 139, 0.8)', border: '#94a3b8' };
+      const size = n.group === 'ACTOR' ? 38 : n.group === 'WALLET' ? 28 : 22;
+      
+      return {
+        id: n.id,
+        name: n.label || n.id,
+        symbolSize: size,
+        itemStyle: {
+          color: style.color,
+          borderColor: style.border,
+          borderWidth: 1.5,
+          shadowBlur: 15,
+          shadowColor: style.border
+        },
+        label: {
+          show: true,
+          position: 'right',
+          formatter: '{b}',
+          color: '#e4e4e7',
+          fontSize: 11,
+          fontFamily: '"Space Grotesk", monospace',
+          textBorderColor: 'rgba(0,0,0,0.8)',
+          textBorderWidth: 3,
+        },
+        raw: n
+      };
+    });
+
+    const links = data.links.map((l: any) => ({
+      source: typeof l.source === 'object' ? l.source.id : l.source,
+      target: typeof l.target === 'object' ? l.target.id : l.target,
+      value: l.value || 1,
+      lineStyle: {
+        width: 1.5,
+        color: 'rgba(255, 255, 255, 0.15)',
+        curveness: 0.15
+      }
+    }));
+
+    const newOption = {
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'item',
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(8px)',
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderWidth: 1,
+        textStyle: {
+          color: '#fff',
+          fontFamily: '"Space Grotesk", monospace',
+          fontSize: 12
+        },
+        formatter: (params: any) => {
+          if (params.dataType === 'node') {
+            const r = params.data.raw;
+            const style = groupStyles[r.group] || { border: '#fff' };
+            return `
+              <div style="font-weight:700;margin-bottom:4px;color:${style.border};letter-spacing:0.05em">${r.group}</div>
+              <div style="font-size:14px;color:#fff;">${r.label || r.id}</div>
+            `;
+          }
+          return null;
+        }
+      },
+      animationDuration: 1500,
+      animationEasingUpdate: 'quinticInOut',
+      series: [
+        {
+          type: 'graph',
+          layout: 'force',
+          data: nodes,
+          links: links,
+          roam: true,
+          force: {
+            repulsion: 400,
+            edgeLength: 150,
+            gravity: 0.05,
+            friction: 0.1
+          },
+          emphasis: {
+            focus: 'adjacency',
+            scale: true,
+            lineStyle: {
+              width: 3,
+              color: '#ffffff'
+            },
+            itemStyle: {
+              borderWidth: 2,
+              shadowBlur: 20
             }
           }
         }
-        return activePulses;
-      });
-    }, 600);
-    return () => clearInterval(interval);
-  }, [mounted, filteredData.links]);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      ]
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
-  const handleNodeClick = useCallback((node: any) => {
-    if (onNodeClick) onNodeClick(node);
-    setSelectedNode(node);
-    if (fgRef.current) {
-      fgRef.current.centerAt(node.x, node.y, 800);
-      fgRef.current.zoom(3.5, 800);
+    setOption(newOption);
+  }, [data]);
+
+  const onEvents = useMemo(() => ({
+    click: (e: any) => {
+      if (e.dataType === 'node' && onNodeClick) {
+        onNodeClick(e.data.raw);
+      }
     }
-  }, [onNodeClick]);
-
-  const handleZoomIn = () => {
-    if (fgRef.current) fgRef.current.zoom(fgRef.current.zoom() * 1.3, 400);
-  };
-
-  const handleZoomOut = () => {
-    if (fgRef.current) fgRef.current.zoom(fgRef.current.zoom() * 0.7, 400);
-  };
-
-  const handleResetZoom = () => {
-    if (fgRef.current) fgRef.current.zoomToFit(600, 40);
-  };
-
-
-  if (!mounted) return (
-    <div className="w-full h-full bg-transparent flex items-center justify-center text-zinc-400 font-mono text-xs">
-      INITIALIZING GNN-POWERED PROPERTY GRAPH...
-    </div>
-  );
+  }), [onNodeClick]);
 
   return (
-        <div className="w-full h-full relative bg-transparent overflow-hidden">
-      {/* SVG Pulse Overlay */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-        <AnimatePresence>
-          {pulses.map(p => {
-            const dx = p.endX - p.startX;
-            const dy = p.endY - p.startY;
-            const length = Math.sqrt(dx * dx + dy * dy);
-            return (
-              <motion.path
-                key={p.id}
-                d={`M ${p.startX} ${p.startY} L ${p.endX} ${p.endY}`}
-                stroke="#0EA5E9"
-                strokeWidth="3"
-                fill="none"
-                strokeDasharray={`${length * 0.2} ${length}`}
-                initial={{ strokeDashoffset: length, opacity: 0 }}
-                animate={{ strokeDashoffset: -length * 0.2, opacity: [0, 1, 1, 0] }}
-                transition={{ duration: 1.2, ease: "linear" }}
-              />
-            );
-          })}
-        </AnimatePresence>
-      </svg>
-      {/* Top Legend and Filter Toolbar */}
-      <div className="absolute top-4 left-4 z-20 flex gap-1.5 bg-zinc-900/80 p-2 border border-white/5 shadow-2xl rounded-full text-xs font-mono">
-        {[
-          { key: "ALL", label: "ALL NODES", color: "bg-zinc-800 text-white" },
-          { key: "ACTOR", label: "ACTORS", color: "bg-zinc-950 text-white" },
-          { key: "BANK_ACCOUNT", label: "BANKS (FIAT)", color: "bg-emerald-700 text-white" },
-          { key: "WALLET", label: "CRYPTO WALLETS", color: "bg-amber-600 text-white" },
-          { key: "IDENTIFIER", label: "IDENTIFIERS", color: "bg-blue-600 text-white" }
-        ].map(btn => (
-          <button
-            key={btn.key}
-            onClick={() => setFilterType(btn.key)}
-            className={`px-3 py-1.5 text-[10px] font-mono font-bold tracking-widest rounded-full transition-colors ${
-              filterType === btn.key ? btn.color : "bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800"
-            }`}
-          >
-            {btn.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Zoom Control Overlay */}
-      <div className="absolute bottom-4 right-4 z-20 flex flex-col gap-1 bg-zinc-900/60 p-1 border border-white/5 shadow-sm rounded-xl">
-        <button 
-          onClick={handleZoomIn} 
-          title="Zoom In"
-          className="p-2 hover:bg-zinc-800/50 text-zinc-700 transition-colors"
-        >
-          <MagnifyingGlassPlus size={16} weight="bold" />
-        </button>
-        <button 
-          onClick={handleZoomOut} 
-          title="Zoom Out"
-          className="p-2 hover:bg-zinc-800/50 text-zinc-700 transition-colors"
-        >
-          <MagnifyingGlassMinus size={16} weight="bold" />
-        </button>
-        <button 
-          onClick={handleResetZoom} 
-          title="Fit to Screen"
-          className="p-2 hover:bg-zinc-800/50 text-zinc-700 transition-colors"
-        >
-          <ArrowsOutSimple size={16} weight="bold" />
-        </button>
-      </div>
-
-      {/* Hover Tooltip */}
-      <AnimatePresence>
-        {hoveredNode && !selectedNode && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
-            style={{
-              position: 'fixed',
-              top: mousePos.y + 15,
-              left: mousePos.x + 15,
-              pointerEvents: 'none',
-              zIndex: 50,
-            }}
-            className="bg-black/50 text-white text-xs font-mono p-3 rounded-md shadow-xl border border-zinc-700 min-w-[200px]"
-            layoutId={`node-panel-${hoveredNode.id}`}
-          >
-            <div className="font-bold text-sm mb-1">{hoveredNode.label}</div>
-            <div className="text-zinc-400 mb-2">Group: {hoveredNode.group}</div>
-            {hoveredNode.priorityScore && (
-              <div className="flex justify-between items-center border-t border-zinc-800 pt-2 mt-2">
-                <span>Priority</span>
-                <span className="text-amber-400 font-bold">{hoveredNode.priorityScore}</span>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Selected Node Detail Panel */}
-      <AnimatePresence>
-        {selectedNode && (
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="absolute top-4 right-4 z-40 w-80 bg-zinc-900/80 backdrop-blur-md shadow-2xl border border-white/10 rounded-[2rem] overflow-hidden flex flex-col max-h-[calc(100vh-2rem)]"
-            layoutId={`node-panel-${selectedNode.id}`}
-          >
-            <div className="p-5 bg-zinc-900/50 text-white flex justify-between items-start">
-              <div>
-                <motion.h2 className="text-lg font-bold font-mono" layoutId={`node-title-${selectedNode.id}`}>
-                  {selectedNode.label}
-                </motion.h2>
-                <motion.div className="text-xs text-zinc-400 mt-1 uppercase tracking-wider" layoutId={`node-group-${selectedNode.id}`}>
-                  {selectedNode.group}
-                </motion.div>
-              </div>
-              <button 
-                onClick={() => setSelectedNode(null)}
-                className="text-zinc-400 hover:text-white transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="p-4 flex-1 overflow-y-auto space-y-4">
-              <div className="space-y-4 text-xs font-mono">
-                <div>
-                  <div className="text-[10px] text-zinc-400 font-mono mb-1 uppercase tracking-wider">Target Identifier</div>
-                  <div className="font-mono text-zinc-200 bg-black/60 border border-white/10 p-2 rounded text-[11px] break-all select-all">
-                    {selectedNode.id}
-                  </div>
-                </div>
-
-                {selectedNode.priorityScore !== undefined && (
-                  <div>
-                    <div className="flex justify-between items-center text-[10px] text-zinc-400 font-mono mb-1 uppercase tracking-wider">
-                      <span>Priority Risk Score</span>
-                      <span className="font-bold text-white">{selectedNode.priorityScore}/100</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                      <div 
-                        className={selectedNode.priorityScore >= 80 ? "h-full bg-red-500" : "h-full bg-white"}
-                        style={{ width: `${Math.min(100, selectedNode.priorityScore)}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* MIT-CSAIL De-anonymization Engine Box */}
-                <div className="p-3 rounded-xl border border-white/15 bg-black/80 space-y-2.5">
-                  {(() => {
-                    const nodeHash = Math.abs((selectedNode.label || "").split("").reduce((acc: number, char: string) => ((acc << 5) - acc) + char.charCodeAt(0), 0));
-                    const nodeMatchPct = Math.min(98.8, Math.max(71.2, ((selectedNode.priorityScore || 70) * 0.35 + 62) + (nodeHash % 50) / 10)).toFixed(1);
-                    const pVal = ((selectedNode.priorityScore || 70) / 100 * 0.32 + 0.65 + (nodeHash % 25) / 1000).toFixed(3);
-                    const isWallet = selectedNode.group === "WALLET" || (selectedNode.label || "").startsWith("0x") || (selectedNode.label || "").startsWith("bc1");
-                    const isActor = selectedNode.group === "ACTOR";
-                    const btcWeight = isWallet ? (48 + (nodeHash % 14)) : isActor ? (36 + (nodeHash % 12)) : (22 + (nodeHash % 10));
-                    const pgpWeight = isActor ? (38 + ((nodeHash >> 2) % 12)) : (28 + ((nodeHash >> 2) % 10));
-                    const nlpWeight = Math.max(8, 100 - btcWeight - pgpWeight);
-
-                    return (
-                      <>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 text-white font-bold text-[11px] uppercase tracking-wider">
-                            <Fingerprint size={14} className="text-white" />
-                            MIT-CSAIL Overlap
-                          </div>
-                          <span className="px-1.5 py-0.5 rounded bg-white/10 text-white text-[10px] font-bold">
-                            {nodeMatchPct}% Match
-                          </span>
-                        </div>
-
-                        <div className="text-[10px] text-zinc-400 leading-relaxed">
-                          PyTorch GNN link prediction confidence: <span className="text-white font-bold">p = {pVal}</span> across Tor vendor handles & Telegram session traces.
-                        </div>
-
-                        {/* SHAP Feature Attribution Waterfall */}
-                        <div className="pt-2 border-t border-white/10 space-y-1.5">
-                          <span className="text-[9px] text-zinc-400 uppercase tracking-widest block">SHAP Explainability:</span>
-                          {[
-                            { factor: "Shared BTC Cluster", weight: btcWeight },
-                            { factor: "PGP Key Overlap", weight: pgpWeight },
-                            { factor: "Stylometric NLP", weight: nlpWeight }
-                          ].map((shap, i) => (
-                            <div key={i} className="flex items-center justify-between text-[10px]">
-                              <span className="text-zinc-300">{shap.factor}</span>
-                              <div className="flex items-center gap-2">
-                                <div className="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
-                                  <div className="h-full bg-white" style={{ width: `${shap.weight}%` }} />
-                                </div>
-                                <span className="text-zinc-400 w-7 text-right">+{shap.weight}%</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
-
-                {/* 1-Click Operational Actions */}
-                <div className="pt-2 border-t border-white/10 space-y-2">
-                  <button
-                    onClick={() => {
-                      toast.success(`Autonomous Agent Assigned to ${selectedNode.label}`, {
-                        description: "Deep graph walker agent dispatched to resolve adjacent onion clusters."
-                      });
-                    }}
-                    className="w-full py-1.5 px-3 rounded-lg bg-white/10 hover:bg-white hover:text-black border border-white/15 transition-all text-[11px] flex items-center justify-center gap-1.5 text-white"
-                  >
-                    <Robot size={13} />
-                    Dispatch GNN Agent
-                  </button>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <Link
-                      href="/financial"
-                      className="py-1.5 px-2 rounded-lg bg-black border border-white/10 hover:border-white/30 transition-colors text-[10px] text-center text-zinc-300 hover:text-white flex items-center justify-center gap-1"
-                    >
-                      <Lightning size={11} />
-                      Trace Peels
-                    </Link>
-                    <Link
-                      href={`/entities/${selectedNode.id}`}
-                      className="py-1.5 px-2 rounded-lg bg-white text-black font-semibold hover:bg-zinc-200 transition-colors text-[10px] text-center flex items-center justify-center gap-1"
-                    >
-                      Dossier
-                      <ArrowSquareOut size={11} />
-                    </Link>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <ForceGraph2D
-        ref={fgRef}
-        graphData={filteredData}
-        nodeLabel={() => ''} // Disable default tooltip since we use custom hover
-        onNodeHover={(node: any) => {
-          setHoveredNode(node || null);
-          if (node) {
-            document.body.style.cursor = 'pointer';
-          } else {
-            document.body.style.cursor = 'default';
-          }
-        }}
-        nodeColor={(node: any) => {
-          if (node === selectedNode || node === hoveredNode) return '#0EA5E9'; // Sky Blue highlight
-          if (node.group === 'ACTOR') return '#002244';
-          if (node.group === 'BANK_ACCOUNT') return '#047857';
-          if (node.group === 'WALLET') return '#D97706';
-          if (node.group === 'IDENTIFIER') return '#2563EB';
-          if (node.group === 'LISTING') return '#DC2626';
-          return '#64748B';
-        }}
-        nodeRelSize={7}
-        nodeCanvasObjectMode={() => 'after'}
-        nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
-          if (globalScale < 1.8 && node !== hoveredNode && node !== selectedNode) return;
-          
-          // Draw highlight ring if selected or hovered
-          if (node === selectedNode || node === hoveredNode) {
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI, false);
-            ctx.strokeStyle = '#0EA5E9';
-            ctx.lineWidth = 2 / globalScale;
-            ctx.stroke();
-          }
-
-          const label = node.label || '';
-          const fontSize = (node === selectedNode ? 14 : 11) / globalScale;
-          ctx.font = `${node === selectedNode ? 'bold ' : ''}${fontSize}px Space Grotesk, monospace`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          
-          // Text background for better readability
-          const textWidth = ctx.measureText(label).width;
-          const bgHeight = fontSize + 4 / globalScale;
-          
-          if (node === selectedNode || node === hoveredNode) {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-            ctx.fillRect(node.x - textWidth/2 - 2, node.y + 10 - bgHeight/2, textWidth + 4, bgHeight);
-          }
-
-          ctx.fillStyle = node === selectedNode ? '#3b82f6' : '#f4f4f5';
-          ctx.fillText(label.length > 18 && node !== selectedNode ? label.substring(0, 16) + '...' : label, node.x, node.y + 12);
-        }}
-        linkColor={(link: any) => {
-          if (selectedNode) {
-            const isConnected = link.source.id === selectedNode.id || link.target.id === selectedNode.id;
-            return isConnected ? 'rgba(14, 165, 233, 0.8)' : 'rgba(148, 163, 184, 0.2)';
-          }
-          if (hoveredNode) {
-            const isConnected = link.source.id === hoveredNode.id || link.target.id === hoveredNode.id;
-            return isConnected ? 'rgba(14, 165, 233, 0.6)' : 'rgba(148, 163, 184, 0.3)';
-          }
-          return 'rgba(148, 163, 184, 0.5)';
-        }}
-        linkWidth={(link: any) => {
-          if (selectedNode && (link.source.id === selectedNode.id || link.target.id === selectedNode.id)) return 2.5;
-          if (hoveredNode && (link.source.id === hoveredNode.id || link.target.id === hoveredNode.id)) return 2;
-          return 1.5;
-        }}
-        linkDirectionalArrowLength={4}
-        linkDirectionalArrowRelPos={1}
-        linkDirectionalArrowColor={() => '#64748B'}
-        onNodeClick={handleNodeClick}
-        backgroundColor="transparent"
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
+      <ReactECharts 
+        option={option} 
+        style={{ width: '100%', height: '100%' }} 
+        onEvents={onEvents}
+        notMerge={true}
       />
     </div>
   );

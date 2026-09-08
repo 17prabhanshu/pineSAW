@@ -158,7 +158,7 @@ def ingest_event(event: NormalizedEvent, db: Session = Depends(get_db)):
         model_version=classification["model_version"]
     )
     db.add(ev_class)
-    
+
     # Create an alert if suspicious
     if classification["is_suspicious"]:
         alert = Alert(
@@ -302,3 +302,49 @@ def add_intercept_route(router):
         except Exception as e:
             db.rollback()
 add_intercept_route(router)
+
+class ParseTextRequest(BaseModel):
+    text: str
+
+@router.get("/search")
+def search_endpoint(q: str, denseWeight: float = 0.70, threshold: float = 0.50, topK: int = 30):
+    # Use the fast hybrid retriever (FAISS + BM25)
+    results = hybrid_retriever.search(q, top_k=topK)
+    # We map the results to the expected FAISS engine format
+    entities = []
+    for r in results:
+        entities.append({
+            "id": r["id"],
+            "type": "DOCUMENT",
+            "label": r.get("text", "")[:30] + "...",
+            "text": r.get("text", ""),
+            "confidence": r.get("score", 0.0),
+            "priorityScore": 50,
+            "riskFactors": ""
+        })
+    return {
+        "entities": entities,
+        "metadata": {
+            "query": q,
+            "denseWeight": denseWeight,
+            "indexType": "FastAPI Hybrid Search"
+        }
+    }
+
+@router.post("/parse_text")
+def parse_text_endpoint(req: ParseTextRequest):
+    # 1. NLP Classification
+    classification = classify_text(req.text)
+    
+    # 2. Entity Extraction via GLiNER
+    entities = extract_entities(req.text)
+    
+    # 3. Chainalysis Transaction Tracking
+    from app.services.financial.chain_tracker import extract_and_trace_wallets
+    chain_traces = extract_and_trace_wallets(req.text)
+    
+    return {
+        "classification": classification,
+        "entities": entities,
+        "chain_traces": chain_traces
+    }

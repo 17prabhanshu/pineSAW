@@ -142,3 +142,24 @@ body::before {
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-section, #print-section * {
+    visibility: visible;
+  }
+  #print-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: black !important;
+    background: white !important;
+    font-family: monospace;
+    font-size: 12pt;
+    white-space: pre-wrap;
+    padding: 1cm;
+  }
+}

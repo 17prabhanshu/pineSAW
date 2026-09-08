@@ -49,6 +49,9 @@ def on_shutdown():
 # 2.1 Protect all routes except health with API Key
 app.include_router(routes.router, prefix="/api", dependencies=[Depends(verify_api_key)])
 
+from app.api.stream import stream_router
+app.include_router(stream_router, prefix="/api")
+
 @app.get("/api/system/health")
 def health_check():
     return {

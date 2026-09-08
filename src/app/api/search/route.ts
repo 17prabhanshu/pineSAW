@@ -34,13 +34,16 @@ async function queryFaissEngine(
     topK: "30"
   });
 
-  // Attempt 1: Fast HTTP query to in-memory FAISS daemon (sub-5ms)
+  // Attempt 1: Fast HTTP query to FastAPI backend
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 1800);
     
-    const res = await fetch(`http://127.0.0.1:5055/search?${params.toString()}`, {
-      signal: controller.signal
+    const res = await fetch(`http://127.0.0.1:8000/api/search?${params.toString()}`, {
+      signal: controller.signal,
+      headers: {
+        "x-api-key": "testkey123"
+      }
     });
     clearTimeout(timeoutId);
 
@@ -48,29 +51,9 @@ async function queryFaissEngine(
       const data = await res.json();
       return data;
     }
-  } catch {
-    // Daemon not reached; falling back to direct Python CLI invocation
-  }
-
-  // Attempt 2: Direct CLI execution via virtualenv Python
-  try {
-    const projectRoot = process.cwd();
-    const pythonBin = process.env.PYTHON_BIN || path.join(os.homedir(), ".pinesaw-venv", "bin", "python");
-    const scriptPath = path.resolve(projectRoot, "backend", "scripts", "faiss_engine.py");
-
-    const { stdout } = await execFileAsync(pythonBin, [
-      scriptPath,
-      "--query", query,
-      "--dense-weight", denseWeight.toString(),
-      "--threshold", threshold.toString(),
-      "--index-type", indexType,
-      "--top-k", "30"
-    ]);
-
-    const data = JSON.parse(stdout);
-    return data;
+    throw new Error(`FAISS daemon returned HTTP ${res.status}`);
   } catch (err: any) {
-    console.error("FAISS CLI execution error:", err);
+    console.error("FastAPI search execution error:", err);
     return {
       entities: [],
       metadata: {

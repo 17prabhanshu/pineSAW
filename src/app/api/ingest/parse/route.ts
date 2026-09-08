@@ -11,8 +11,80 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing text payload" }, { status: 400 });
     }
 
-    // Run Cambridge iCrime NLP Extraction
-    const parsed = DarknetNLPExtractor.parse(text);
+    // Run Python FastAPI Backend Extraction
+    // Fallback to local NLP if backend is unreachable
+    let parsed: any;
+    try {
+      const pyRes = await fetch("http://127.0.0.1:8000/api/parse_text", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "testkey123"
+        },
+        body: JSON.stringify({ text })
+      });
+      if (pyRes.ok) {
+        const pyData = await pyRes.json();
+        
+        // Map Python output to Next.js expected format
+        const isIllicit = pyData.classification.is_suspicious;
+        const confidenceScore = pyData.classification.anomaly_score;
+        let threatLevel = "LOW";
+        if (confidenceScore > 0.8) threatLevel = "CRITICAL";
+        else if (confidenceScore > 0.6) threatLevel = "HIGH";
+        else if (confidenceScore > 0.4) threatLevel = "MEDIUM";
+
+        // Map GLiNER entities
+        const narcotics = pyData.entities
+          .filter((e: any) => e.type === "product" || e.type === "substance" || pyData.classification.matches.includes(e.value.toLowerCase()))
+          .map((e: any) => ({
+            substanceClass: "UNKNOWN",
+            detectedSlang: e.value,
+            standardizedName: e.value,
+            confidence: e.confidence
+          }));
+          
+        // Add exact keyword matches from Python classifier if missed by GLiNER
+        for (const match of pyData.classification.matches) {
+           if (!narcotics.find((n: any) => n.detectedSlang.toLowerCase() === match)) {
+             narcotics.push({
+               substanceClass: "UNKNOWN",
+               detectedSlang: match,
+               standardizedName: match.toUpperCase(),
+               confidence: 0.9
+             });
+           }
+        }
+
+        const cryptoAddresses = pyData.entities
+          .filter((e: any) => e.type === "wallet")
+          .map((e: any) => ({ address: e.value, network: "UNKNOWN" }));
+          
+        const communicationHandles = pyData.entities
+          .filter((e: any) => e.type === "contact_handle")
+          .map((e: any) => ({ platform: "UNKNOWN", handle: e.value }));
+
+        parsed = {
+          textSnippet: text.substring(0, 100),
+          isIllicitListing: isIllicit,
+          threatLevel,
+          narcotics,
+          identifiers: {
+            cryptoAddresses,
+            pgpKeyBlocks: [],
+            communicationHandles
+          },
+          confidenceScore,
+          extractedAt: new Date().toISOString(),
+          chainTraces: pyData.chain_traces // added chainalysis tracking!
+        };
+      } else {
+        throw new Error("Python backend failed");
+      }
+    } catch (e) {
+      console.warn("Falling back to local TS extractor:", e);
+      parsed = DarknetNLPExtractor.parse(text);
+    }
 
     // If autoIngest is requested, persist new entities/alerts to database
     let createdEntities: any[] = [];

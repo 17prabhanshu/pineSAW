@@ -18,7 +18,7 @@ export interface ExtractedNarcoticsEntity {
 export interface ExtractedIdentifiers {
   cryptoAddresses: { address: string; network: "BITCOIN" | "ETHEREUM" | "MONERO" }[];
   pgpKeyBlocks: string[];
-  communicationHandles: { platform: "TELEGRAM" | "SESSION" | "WICKR" | "PROTONMAIL"; handle: string }[];
+  communicationHandles: { platform: "TELEGRAM" | "SESSION" | "WICKR" | "PROTONMAIL" | "WHATSAPP"; handle: string }[];
 }
 
 export interface NLPParseResult {
@@ -52,6 +52,7 @@ export class DarknetNLPExtractor {
     "smack": { std: "Heroin (Brown Sugar)", cat: "SYNTHETIC_OPIOID" },
     "chitta": { std: "Adulterated Heroin / Synthetic Opioid (Tri-city vernacular)", cat: "SYNTHETIC_OPIOID" },
     "mdma": { std: "MDMA / Ecstasy", cat: "STIMULANT" },
+    "molly": { std: "MDMA / Ecstasy", cat: "STIMULANT" },
     "mdma rock": { std: "MDMA Crystal / Ecstasy", cat: "STIMULANT" },
     "xannies": { std: "Alprazolam / Xanax", cat: "BENZODIAZEPINE" },
     "xanax": { std: "Alprazolam / Xanax", cat: "BENZODIAZEPINE" },
@@ -68,6 +69,50 @@ export class DarknetNLPExtractor {
     "charas": { std: "Cannabis Resin / Hashish", cat: "CANNABINOID" },
     "ganja": { std: "Cannabis / Marijuana", cat: "CANNABINOID" },
     "weed": { std: "Cannabis Flower", cat: "CANNABINOID" },
+    "snow": { std: "Cocaine Hydrochloride", cat: "STIMULANT" },
+    "blow": { std: "Cocaine Hydrochloride", cat: "STIMULANT" },
+    "yayo": { std: "Cocaine Hydrochloride", cat: "STIMULANT" },
+    "crack": { std: "Crack Cocaine (Freebase)", cat: "STIMULANT" },
+    "rock": { std: "Crack Cocaine (Freebase)", cat: "STIMULANT" },
+    "flakka": { std: "Alpha-PVP / Flakka", cat: "STIMULANT" },
+    "bath salts": { std: "Synthetic Cathinones", cat: "STIMULANT" },
+    "mephedrone": { std: "Mephedrone (4-MMC)", cat: "STIMULANT" },
+    "lean": { std: "Codeine/Promethazine Syrup", cat: "SYNTHETIC_OPIOID" },
+    "purple drank": { std: "Codeine/Promethazine Syrup", cat: "SYNTHETIC_OPIOID" },
+    "sizzurp": { std: "Codeine/Promethazine Syrup", cat: "SYNTHETIC_OPIOID" },
+    "percocet": { std: "Oxycodone/Acetaminophen", cat: "SYNTHETIC_OPIOID" },
+    "perc": { std: "Oxycodone/Acetaminophen", cat: "SYNTHETIC_OPIOID" },
+    "norco": { std: "Hydrocodone/Acetaminophen", cat: "SYNTHETIC_OPIOID" },
+    "vicodin": { std: "Hydrocodone/Acetaminophen", cat: "SYNTHETIC_OPIOID" },
+    "suboxone": { std: "Buprenorphine/Naloxone", cat: "SYNTHETIC_OPIOID" },
+    "carfentanil": { std: "Carfentanil (Elephant Tranquilizer)", cat: "SYNTHETIC_OPIOID" },
+    "brown sugar": { std: "Impure Heroin (South Asian)", cat: "SYNTHETIC_OPIOID" },
+    "sulpha": { std: "Low-grade Heroin / Opium derivative", cat: "SYNTHETIC_OPIOID" },
+    "pudiya": { std: "Single-dose Heroin Sachet", cat: "SYNTHETIC_OPIOID" },
+    "maal": { std: "Generic Drug Slang (Hindi)", cat: "STIMULANT" },
+    "nasha": { std: "Intoxicant / Drug (Hindi)", cat: "STIMULANT" },
+    "dmt": { std: "N,N-Dimethyltryptamine", cat: "DISSOCIATIVE" },
+    "ayahuasca": { std: "DMT / Ayahuasca Brew", cat: "DISSOCIATIVE" },
+    "psilocybin": { std: "Psilocybin Mushrooms", cat: "DISSOCIATIVE" },
+    "magic mushrooms": { std: "Psilocybin Mushrooms", cat: "DISSOCIATIVE" },
+    "2cb": { std: "2C-B (Phenethylamine)", cat: "DISSOCIATIVE" },
+    "nbome": { std: "NBOMe (Synthetic Psychedelic)", cat: "DISSOCIATIVE" },
+    "ghb": { std: "Gamma-Hydroxybutyrate", cat: "DISSOCIATIVE" },
+    "rohypnol": { std: "Flunitrazepam / Rohypnol", cat: "BENZODIAZEPINE" },
+    "roofies": { std: "Flunitrazepam / Rohypnol", cat: "BENZODIAZEPINE" },
+    "valium": { std: "Diazepam / Valium", cat: "BENZODIAZEPINE" },
+    "diazepam": { std: "Diazepam", cat: "BENZODIAZEPINE" },
+    "clonazepam": { std: "Clonazepam / Klonopin", cat: "BENZODIAZEPINE" },
+    "klonopin": { std: "Clonazepam / Klonopin", cat: "BENZODIAZEPINE" },
+    "acid": { std: "LSD / Lysergic Acid Diethylamide", cat: "DISSOCIATIVE" },
+    "lsd": { std: "LSD / Lysergic Acid Diethylamide", cat: "DISSOCIATIVE" },
+    "tabs": { std: "LSD Blotter Tabs", cat: "DISSOCIATIVE" },
+    "spice": { std: "Synthetic Cannabinoid", cat: "CANNABINOID" },
+    "k2": { std: "Synthetic Cannabinoid", cat: "CANNABINOID" },
+    "dabs": { std: "Cannabis Concentrate / Dabs", cat: "CANNABINOID" },
+    "edibles": { std: "Cannabis Edibles", cat: "CANNABINOID" },
+    "hash": { std: "Hashish / Cannabis Resin", cat: "CANNABINOID" },
+    "hashish": { std: "Hashish / Cannabis Resin", cat: "CANNABINOID" },
   };
 
   public static parse(rawText: string): NLPParseResult {
@@ -113,6 +158,13 @@ export class DarknetNLPExtractor {
       cryptoAddresses.push({ address: addr, network: "ETHEREUM" });
     }
 
+    // Monero XMR Address
+    const xmrRegex = /\b(4[0-9AB][1-9A-HJ-NP-Za-km-z]{93})\b/g;
+    const xmrMatches = rawText.match(xmrRegex) || [];
+    for (const addr of xmrMatches) {
+      cryptoAddresses.push({ address: addr, network: "MONERO" });
+    }
+
     // 3. Communication Handles & PGP Blocks
     const communicationHandles: ExtractedIdentifiers["communicationHandles"] = [];
     
@@ -128,6 +180,33 @@ export class DarknetNLPExtractor {
     let protonMatch;
     while ((protonMatch = protonRegex.exec(rawText)) !== null) {
       communicationHandles.push({ platform: "PROTONMAIL", handle: protonMatch[1] });
+    }
+
+    // Wickr handles
+    const wickrRegex = /wickr(?:\s+me)?(?:\s*[:@]\s*)([a-zA-Z0-9_]{3,20})/gi;
+    let wickrMatch;
+    while ((wickrMatch = wickrRegex.exec(rawText)) !== null) {
+      communicationHandles.push({ platform: "WICKR" as any, handle: wickrMatch[1] });
+    }
+
+    // Session IDs
+    const sessionRegex = /\b(05[0-9a-f]{64})\b/g;
+    let sessionMatch;
+    while ((sessionMatch = sessionRegex.exec(rawText)) !== null) {
+      communicationHandles.push({ platform: "SESSION" as any, handle: sessionMatch[1] });
+    }
+
+    // WhatsApp Invites & Phone Numbers
+    const waInviteRegex = /(?:chat\.whatsapp\.com\/)([a-zA-Z0-9_-]{20,26})/gi;
+    let waMatch;
+    while ((waMatch = waInviteRegex.exec(rawText)) !== null) {
+      communicationHandles.push({ platform: "WHATSAPP", handle: `chat.whatsapp.com/${waMatch[1]}` });
+    }
+
+    const phoneRegex = /\+?91[\s-]?[6-9]\d{4}[\s-]?\d{5}\b/g;
+    const phoneMatches = rawText.match(phoneRegex) || [];
+    for (const ph of phoneMatches) {
+      communicationHandles.push({ platform: "WHATSAPP", handle: ph.trim() });
     }
 
     // PGP Public Key Blocks
