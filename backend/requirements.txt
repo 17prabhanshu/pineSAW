@@ -18,7 +18,7 @@ rank-bm25==0.2.2
 # Graph Neural Network
 torch==2.13.0
 torch-geometric==2.8.0.post1
-networkx==3.6.1
+networkx==3.4.2
 
 # Explainability
 shap==0.52.0
