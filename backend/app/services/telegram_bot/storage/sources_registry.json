@@ -7,7 +7,7 @@
       "discovered_via_keyword": "fentanyl",
       "subscriber_count": 1420,
       "verified_public": true,
-      "status": "CANDIDATE",
+      "status": "MONITORING",
       "discovered_at": "2026-09-08T08:52:56.263591+00:00"
     },
     "dispatch_hub_fentanyl": {
@@ -17,7 +17,7 @@
       "discovered_via_keyword": "fentanyl",
       "subscriber_count": 890,
       "verified_public": false,
-      "status": "CANDIDATE",
+      "status": "MONITORING",
       "discovered_at": "2026-09-08T08:52:56.263591+00:00"
     },
     "intel_corridor_chitta": {
@@ -345,7 +345,8 @@
       "discovered_keywords": [
         "chitta",
         "fentanyl",
-        "dead drop"
+        "dead drop",
+        "monero"
       ],
       "discovered_at": "2026-09-08T09:54:48.439694+00:00",
       "verified_public": false,
@@ -546,13 +547,155 @@
       "discovered_at": "2026-09-08T09:55:21.958583+00:00",
       "status": "CANDIDATE",
       "verified_public": false
+    },
+    "methstores": {
+      "channel_username": "methstores",
+      "title": "Meth",
+      "description": "Meth",
+      "public_url": "https://t.me/methstores",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-methstores",
+      "discovered_keywords": [
+        "meth"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "methshards": {
+      "channel_username": "methshards",
+      "title": "meth shards",
+      "description": "meth shards",
+      "public_url": "https://t.me/methshards",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-methshards",
+      "discovered_keywords": [
+        "meth"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "siegen_dusseldorf_hamm3": {
+      "channel_username": "siegen_dusseldorf_hamm3",
+      "title": "METH SPEED",
+      "description": "METH SPEED",
+      "public_url": "https://t.me/siegen_dusseldorf_hamm3",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-siegen_dusseldorf_hamm3",
+      "discovered_keywords": [
+        "meth"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "narcosyerevan": {
+      "channel_username": "narcosyerevan",
+      "title": "METH YEREVAN",
+      "description": "METH YEREVAN",
+      "public_url": "https://t.me/narcosyerevan",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-narcosyerevan",
+      "discovered_keywords": [
+        "meth"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "furthernotis": {
+      "channel_username": "furthernotis",
+      "title": "gc meth updates",
+      "description": "gc meth updates",
+      "public_url": "https://t.me/furthernotis",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-furthernotis",
+      "discovered_keywords": [
+        "meth"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "monero_us": {
+      "channel_username": "monero_us",
+      "title": "Monero",
+      "description": "Monero",
+      "public_url": "https://t.me/monero_us",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-monero_us",
+      "discovered_keywords": [
+        "monero"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "monero_coin": {
+      "channel_username": "monero_coin",
+      "title": "Monero",
+      "description": "Monero",
+      "public_url": "https://t.me/monero_coin",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-monero_coin",
+      "discovered_keywords": [
+        "monero"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
+    },
+    "monerocurrency": {
+      "channel_username": "monerocurrency",
+      "title": "Monero Currency",
+      "description": "Monero",
+      "public_url": "https://t.me/monerocurrency",
+      "subscriber_count": 5,
+      "channel_id": "tg-chan-monerocurrency",
+      "discovered_keywords": [
+        "monero"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": true
+    },
+    "moneroger": {
+      "channel_username": "moneroger",
+      "title": "Monero Germany",
+      "description": "Monero Germany",
+      "public_url": "https://t.me/moneroger",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-moneroger",
+      "discovered_keywords": [
+        "monero"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": true
+    },
+    "monerowhi": {
+      "channel_username": "monerowhi",
+      "title": "MONERO WHITE",
+      "description": "MONERO WHITE",
+      "public_url": "https://t.me/monerowhi",
+      "subscriber_count": 0,
+      "channel_id": "tg-chan-monerowhi",
+      "discovered_keywords": [
+        "monero"
+      ],
+      "discovered_at": "2026-09-08T13:08:58.376028+00:00",
+      "status": "CANDIDATE",
+      "verified_public": false
     }
   },
-  "last_discovery": "2026-09-08T10:18:36.518097+00:00",
-  "keywords_scanned": 3,
-  "mode": "MOCK",
+  "last_discovery": "2026-09-08T13:08:58.375928+00:00",
+  "keywords_scanned": 4,
+  "mode": "LIVE",
   "monitoring_queue": [
     "test_corridor_channel",
-    "mock_molly_beta"
+    "mock_molly_beta",
+    "intel_corridor_fentanyl",
+    "dispatch_hub_fentanyl"
   ]
 }

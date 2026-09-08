@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { IntelligenceFlowchart } from "@/components/IntelligenceFlowchart";
+import { TorScrapeModal } from "@/components/TorScrapeModal";
 
 import { ShieldWarning, MagnifyingGlass, Funnel, Clock, CaretRight, Info, Eye, DownloadSimple, Printer, Checks, HandCoins, Lightning, Bank, ArrowsClockwise, FileText, CheckCircle } from "@phosphor-icons/react";
 import clsx from "clsx";
@@ -19,6 +20,7 @@ export default function InvestigationWorkspace() {
   const [graphData, setGraphData] = useState<any>(null);
   const [selectedEntity, setSelectedEntity] = useState<any>(null);
   const [activePane, setActivePane] = useState<"GRAPH" | "BACKTRACK" | "REPORT" | "EVIDENCE">("GRAPH");
+  const [torModalOpen, setTorModalOpen] = useState(false);
 
   // Bidirectional Backtracking Trace Data
   const [traceData, setTraceData] = useState<any>(null);
@@ -201,6 +203,30 @@ export default function InvestigationWorkspace() {
             <Link href="/reports" className="w-full text-zinc-400 hover:text-white py-1 text-xs text-center block text-[11px] font-mono">
               Custom Statutory Generator (/reports) ➔
             </Link>
+            <button
+              onClick={() => setTorModalOpen(true)}
+              className="w-full py-2 text-xs font-mono text-center border transition-all flex items-center justify-center gap-2"
+              style={{
+                background: "rgba(0,240,255,0.04)",
+                borderColor: "rgba(0,240,255,0.25)",
+                color: "#00f0ff",
+                boxShadow: "0 0 18px rgba(0,240,255,0.08)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(0,240,255,0.10)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 28px rgba(0,240,255,0.18)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(0,240,255,0.04)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 18px rgba(0,240,255,0.08)";
+              }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full animate-pulse"
+                style={{ background: "#00f0ff", boxShadow: "0 0 6px #00f0ff" }}
+              />
+              Scrape via Tor
+            </button>
           </div>
         </div>
 
@@ -535,6 +561,13 @@ export default function InvestigationWorkspace() {
           </motion.div>
         )}
       </div>
+
+      {/* Tor Scrape Modal */}
+      <TorScrapeModal
+        open={torModalOpen}
+        onClose={() => setTorModalOpen(false)}
+        investigationId={id}
+      />
     </div>
   );
 }

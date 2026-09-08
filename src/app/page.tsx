@@ -24,6 +24,7 @@ import type { AgentTelemetry } from "@/app/api/agents/route";
 import { motion, AnimatePresence } from "framer-motion";
 import { IntelligenceCarousel } from "@/components/IntelligenceCarousel";
 import { toast } from "sonner";
+import { TorScrapeModal } from "@/components/TorScrapeModal";
 
 // Available Autonomous & Tactical Agents
 const AVAILABLE_AGENTS = [
@@ -38,6 +39,7 @@ export default function CommandCenter() {
   const [data, setData] = useState<any>(null);
   const [selectedIncident, setSelectedIncident] = useState<any>(null);
   const [isNewCaseOpen, setIsNewCaseOpen] = useState(false);
+  const [torModalOpen, setTorModalOpen] = useState(false);
   const [selectedAgentForModal, setSelectedAgentForModal] = useState<AgentTelemetry | null>(null);
   const [agentTelemetryList, setAgentTelemetryList] = useState<AgentTelemetry[]>([]);
   
@@ -128,6 +130,30 @@ export default function CommandCenter() {
           <Link href="/actions" className="btn-gov text-xs py-2 px-3.5 flex items-center gap-1.5">
             <CheckSquareOffset size={15} /> Action Center
           </Link>
+          <button
+            onClick={() => setTorModalOpen(true)}
+            className="text-xs py-2 px-3.5 flex items-center gap-2 font-mono border transition-all"
+            style={{
+              background: "rgba(0,240,255,0.05)",
+              borderColor: "rgba(0,240,255,0.30)",
+              color: "#00f0ff",
+              boxShadow: "0 0 16px rgba(0,240,255,0.10)",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(0,240,255,0.12)";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 28px rgba(0,240,255,0.22)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(0,240,255,0.05)";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 16px rgba(0,240,255,0.10)";
+            }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
+              style={{ background: "#00f0ff", boxShadow: "0 0 6px #00f0ff" }}
+            />
+            Scrape via Tor
+          </button>
           <button 
             onClick={() => setIsNewCaseOpen(true)}
             className="btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer"
@@ -136,6 +162,11 @@ export default function CommandCenter() {
           </button>
         </div>
       </header>
+
+      <TorScrapeModal
+        open={torModalOpen}
+        onClose={() => setTorModalOpen(false)}
+      />
 
       {/* Priority Threat Targets & Autonomous Agent Assignment Table */}
       <div className="w-full bg-zinc-950 border border-white/10 rounded-xl overflow-hidden shadow-sm">

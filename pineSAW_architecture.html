@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>pineSAW — System Architecture</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050507;--card:#0d0d12;--border:rgba(255,255,255,0.08);--glow-blue:#0ea5e9;--glow-green:#10b981;--glow-amber:#f59e0b;--glow-purple:#a855f7;--glow-red:#ef4444;--glow-orange:#f97316;--text:#e4e4e7;--muted:#71717a}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:48px 32px;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:500px;background:radial-gradient(ellipse at center,rgba(14,165,233,0.04) 0%,transparent 70%);pointer-events:none;z-index:0}
+.page-wrap{max-width:1360px;margin:0 auto;position:relative;z-index:1}
+.header{text-align:center;margin-bottom:64px}
+.header-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.25);border-radius:999px;padding:6px 18px;margin-bottom:20px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--glow-blue);text-transform:uppercase}
+.header-badge::before{content:'◉';font-size:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.header h1{font-size:clamp(28px,4vw,52px);font-weight:700;letter-spacing:-0.03em;background:linear-gradient(135deg,#fff 30%,rgba(14,165,233,0.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.header p{color:var(--muted);font-size:16px;max-width:560px;margin:0 auto;line-height:1.6}
+.legend{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin-bottom:56px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.section-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.timeline-divider{display:flex;align-items:center;gap:20px;margin:56px 0;font-family:'Space Mono',monospace}
+.timeline-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)}
+.timeline-pill{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.4);border-radius:999px;padding:8px 24px;color:var(--glow-amber);font-size:11px;letter-spacing:0.15em;white-space:nowrap;box-shadow:0 0 20px rgba(245,158,11,0.15)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1100px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.grid-3,.grid-4,.grid-2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s}
+.card:hover{transform:translateY(-3px)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0}
+.card-blue::before{background:linear-gradient(90deg,transparent,var(--glow-blue),transparent)}
+.card-green::before{background:linear-gradient(90deg,transparent,var(--glow-green),transparent)}
+.card-amber::before{background:linear-gradient(90deg,transparent,var(--glow-amber),transparent)}
+.card-purple::before{background:linear-gradient(90deg,transparent,var(--glow-purple),transparent)}
+.card-red::before{background:linear-gradient(90deg,transparent,var(--glow-red),transparent)}
+.card-orange::before{background:linear-gradient(90deg,transparent,var(--glow-orange),transparent)}
+.card-blue:hover{border-color:rgba(14,165,233,0.3);box-shadow:0 0 30px rgba(14,165,233,0.08)}
+.card-green:hover{border-color:rgba(16,185,129,0.3);box-shadow:0 0 30px rgba(16,185,129,0.08)}
+.card-amber:hover{border-color:rgba(245,158,11,0.3);box-shadow:0 0 30px rgba(245,158,11,0.08)}
+.card-purple:hover{border-color:rgba(168,85,247,0.3);box-shadow:0 0 30px rgba(168,85,247,0.08)}
+.card-red:hover{border-color:rgba(239,68,68,0.3);box-shadow:0 0 30px rgba(239,68,68,0.08)}
+.card-orange:hover{border-color:rgba(249,115,22,0.3);box-shadow:0 0 30px rgba(249,115,22,0.08)}
+.card-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px}
+.bg-blue{background:rgba(14,165,233,0.12)}.bg-green{background:rgba(16,185,129,0.12)}.bg-amber{background:rgba(245,158,11,0.12)}.bg-purple{background:rgba(168,85,247,0.12)}.bg-red{background:rgba(239,68,68,0.12)}.bg-orange{background:rgba(249,115,22,0.12)}
+.card-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px}
+.cl-blue{color:var(--glow-blue)}.cl-green{color:var(--glow-green)}.cl-amber{color:var(--glow-amber)}.cl-purple{color:var(--glow-purple)}.cl-red{color:var(--glow-red)}.cl-orange{color:var(--glow-orange)}.cl-muted{color:var(--muted)}
+.card h3{font-size:14px;font-weight:600;margin-bottom:10px;color:#fff}
+.card p{font-size:12px;color:var(--muted);line-height:1.65}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tag{padding:3px 10px;border-radius:999px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.05em}
+.tag-blue{background:rgba(14,165,233,0.1);color:var(--glow-blue);border:1px solid rgba(14,165,233,0.2)}
+.tag-green{background:rgba(16,185,129,0.1);color:var(--glow-green);border:1px solid rgba(16,185,129,0.2)}
+.tag-amber{background:rgba(245,158,11,0.1);color:var(--glow-amber);border:1px solid rgba(245,158,11,0.2)}
+.tag-purple{background:rgba(168,85,247,0.1);color:var(--glow-purple);border:1px solid rgba(168,85,247,0.2)}
+.tag-red{background:rgba(239,68,68,0.1);color:var(--glow-red);border:1px solid rgba(239,68,68,0.2)}
+.tag-orange{background:rgba(249,115,22,0.1);color:var(--glow-orange);border:1px solid rgba(249,115,22,0.2)}
+.flow-row{display:flex;align-items:center;gap:0;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.flow-node{padding:12px 22px;border-radius:10px;font-size:12px;font-weight:600;text-align:center;border:1px solid;white-space:nowrap;min-width:130px;line-height:1.4}
+.fn-blue{background:rgba(14,165,233,0.08);border-color:rgba(14,165,233,0.35);color:var(--glow-blue)}
+.fn-green{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.35);color:var(--glow-green)}
+.fn-amber{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.35);color:var(--glow-amber)}
+.fn-purple{background:rgba(168,85,247,0.08);border-color:rgba(168,85,247,0.35);color:var(--glow-purple)}
+.fn-red{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.35);color:var(--glow-red)}
+.fn-orange{background:rgba(249,115,22,0.08);border-color:rgba(249,115,22,0.35);color:var(--glow-orange)}
+.fn-white{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.15);color:#fff}
+.flow-arrow{display:flex;align-items:center;padding:0 8px;color:var(--muted);font-size:14px;flex-shrink:0}
+.pipeline{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden}
+.pipeline-glow{position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;opacity:0.06;pointer-events:none}
+.new-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:999px;padding:2px 10px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--glow-amber);text-transform:uppercase;vertical-align:middle;margin-left:8px}
+.change-card{border-radius:14px;padding:22px 20px;position:relative;overflow:hidden;border:1px solid rgba(245,158,11,0.2);background:linear-gradient(135deg,rgba(245,158,11,0.04) 0%,rgba(249,115,22,0.02) 100%)}
+.change-card::before{content:'CHANGE';position:absolute;top:14px;right:14px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--glow-amber);opacity:0.5}
+.change-number{width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--glow-amber);margin-bottom:12px}
+.change-card h3{font-size:13px;font-weight:600;color:#fff;margin-bottom:8px}
+.change-card p{font-size:12px;color:var(--muted);line-height:1.65}
+.file-path{font-family:'Space Mono',monospace;font-size:10px;color:rgba(14,165,233,0.7);margin-top:10px;padding:4px 10px;background:rgba(14,165,233,0.05);border-radius:6px;display:inline-block;border:1px solid rgba(14,165,233,0.1)}
+.flow-block{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;padding:20px;margin:16px 0}
+.flow-block h4{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:12px;letter-spacing:0.05em}
+.flow-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.flow-step-num{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;margin-top:1px}
+.fsn-g{background:rgba(16,185,129,0.15);color:var(--glow-green)}
+.fsn-a{background:rgba(245,158,11,0.15);color:var(--glow-amber)}
+.flow-step-text{font-size:12px;color:var(--muted);line-height:1.55}
+.flow-step-text strong{color:var(--text);font-weight:600}
+.vconnect{display:flex;justify-content:center;align-items:center;height:40px;color:var(--muted);font-size:18px;position:relative}
+.vconnect::before{content:'';position:absolute;top:6px;bottom:6px;left:50%;width:1px;background:linear-gradient(180deg,var(--border),rgba(255,255,255,0.18),var(--border))}
+.vconnect span{background:var(--bg);padding:0 8px;position:relative;z-index:1}
+.footer{text-align:center;margin-top:72px;padding-top:32px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;letter-spacing:0.05em}
+code{font-family:'Space Mono',monospace;font-size:10px;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;color:#e4e4e7}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<div class="header">
+  <div class="header-badge">pineSAW &nbsp;·&nbsp; System Architecture Map &nbsp;·&nbsp; 2026-09-08</div>
+  <h1>OSINT Platform Architecture</h1>
+  <p>Full-stack intelligence pipeline — backend services, API routes, NLP modules, and all changes made after 15:00 IST during today's session.</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--glow-blue)"></div>Next.js Frontend / API Routes</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--glow-green)"></div>Python SSE Backend</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--glow-amber)"></div>NLP / ML Services</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--glow-purple)"></div>Data Stores</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--glow-red)"></div>External Targets</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--glow-orange)"></div>Post-3pm Changes</div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section-label">01 &nbsp; Ingestion Layer — External Targets</div>
+<div class="grid-3" style="margin-bottom:20px">
+  <div class="card card-red">
+    <div class="card-icon bg-red">📡</div>
+    <div class="card-label cl-red">Source A</div>
+    <h3>Telegram Channels</h3>
+    <p>Public channels scraped via <code>t.me/s/{handle}</code> web preview. DOM parsed for <code>.tgme_widget_message_wrap</code> blocks, sorted descending.</p>
+    <div class="tag-list"><span class="tag tag-red">HTML Parse</span><span class="tag tag-red">No API Key</span><span class="tag tag-red">Stealth HTTP</span></div>
+  </div>
+  <div class="card card-red">
+    <div class="card-icon bg-red">🔍</div>
+    <div class="card-label cl-red">Source B</div>
+    <h3>Telegram Supergroups</h3>
+    <p>No public <code>/s/</code> preview. Probed via embed widget using exponential search + binary search + backwards gap scan to avoid deleted-message traps.</p>
+    <div class="tag-list"><span class="tag tag-red">Embed Widget</span><span class="tag tag-red">Concurrent</span><span class="tag tag-red">Gap Recovery</span></div>
+  </div>
+  <div class="card card-red">
+    <div class="card-icon bg-red">🌐</div>
+    <div class="card-label cl-red">Source C</div>
+    <h3>WhatsApp / Web URLs</h3>
+    <p>WhatsApp invite links generate Group Dossiers. Web URLs are semantically scraped via <code>SemanticWebScraper</code> with Camoufox stealth headers and BeautifulSoup noise stripping.</p>
+    <div class="tag-list"><span class="tag tag-red">Invite Probe</span><span class="tag tag-red">E2EE Aware</span><span class="tag tag-red">Semantic Clean</span></div>
+  </div>
+</div>
+
+<div class="flow-row">
+  <div class="flow-node fn-red">External Target</div>
+  <div class="flow-arrow">──▶</div>
+  <div class="flow-node fn-blue">Next.js /api/ingest/scrape</div>
+  <div class="flow-arrow">──▶</div>
+  <div class="flow-node fn-green">Python SSE :8000</div>
+  <div class="flow-arrow">──▶</div>
+  <div class="flow-node fn-amber">NLP Pipeline</div>
+  <div class="flow-arrow">──▶</div>
+  <div class="flow-node fn-purple">FAISS / Store</div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section-label" style="margin-top:48px">02 &nbsp; Next.js API Routes (src/app/api/)</div>
+<div class="grid-4" style="margin-bottom:20px">
+  <div class="card card-blue"><div class="card-icon bg-blue">⚡</div><div class="card-label cl-blue">Route</div><h3>/api/ingest/scrape</h3><p>Main orchestrator. Routes by type: TELEGRAM → embed probe, WHATSAPP → dossier generator, WEB → Python semantic scraper.</p><div class="tag-list"><span class="tag tag-blue">POST</span><span class="tag tag-blue">Orchestrator</span></div></div>
+  <div class="card card-blue"><div class="card-icon bg-blue">🔎</div><div class="card-label cl-blue">Route</div><h3>/api/search</h3><p>Semantic FAISS search across vectorized intelligence. Returns ranked entity matches from the HNSWlib index.</p><div class="tag-list"><span class="tag tag-blue">GET</span><span class="tag tag-blue">FAISS</span></div></div>
+  <div class="card card-blue"><div class="card-icon bg-blue">🕸️</div><div class="card-label cl-blue">Route</div><h3>/api/graph</h3><p>Returns the property graph data (nodes + links) for the network visualizer. Groups: ACTOR, WALLET, IDENTIFIER, LISTING.</p><div class="tag-list"><span class="tag tag-blue">GET</span><span class="tag tag-blue">Graph</span></div></div>
+  <div class="card card-blue"><div class="card-icon bg-blue">⚖️</div><div class="card-label cl-blue">Route</div><h3>/api/legal/*</h3><p>Section 65B certificate generation, statutory dispatch to LEAs, MLAT evidence packaging, admissibility scoring.</p><div class="tag-list"><span class="tag tag-blue">POST</span><span class="tag tag-blue">Legal</span></div></div>
+  <div class="card card-blue"><div class="card-icon bg-blue">🤖</div><div class="card-label cl-blue">Route</div><h3>/api/agents/*</h3><p>Autonomous GNN agent dispatch — deep graph walker for resolving adjacent onion clusters and expanding entity networks.</p><div class="tag-list"><span class="tag tag-blue">POST</span><span class="tag tag-blue">Agents</span></div></div>
+  <div class="card card-blue"><div class="card-icon bg-blue">📊</div><div class="card-label cl-blue">Route</div><h3>/api/financial/*</h3><p>Chainalysis-style wallet risk scoring, BTC peel chain, cross-exchange taint propagation, OFAC sanctions lookup.</p><div class="tag-list"><span class="tag tag-blue">POST</span><span class="tag tag-blue">Crypto</span></div></div>
+  <div class="card card-blue"><div class="card-icon bg-blue">📡</div><div class="card-label cl-blue">Route</div><h3>/api/ingest/telegram-osint</h3><p>SSE streaming endpoint bridging the Python collector daemon to the React Live Harvester UI with real-time cards.</p><div class="tag-list"><span class="tag tag-blue">SSE</span><span class="tag tag-blue">Stream</span></div></div>
+  <div class="card card-blue"><div class="card-icon bg-blue">🧬</div><div class="card-label cl-blue">Route</div><h3>/api/entities, /api/evidence</h3><p>Entity CRUD, evidence timeline management, verify chain-of-custody for collected intelligence artefacts.</p><div class="tag-list"><span class="tag tag-blue">REST</span><span class="tag tag-blue">CRUD</span></div></div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section-label" style="margin-top:48px">03 &nbsp; Python SSE Backend (backend/simple_sse.py :8000)</div>
+<div class="pipeline" style="margin-bottom:24px">
+  <div class="pipeline-glow" style="background:var(--glow-green)"></div>
+  <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--glow-green);margin-bottom:20px">THREADINGHTTPSERVER · 127.0.0.1:8000 · CORS-ENABLED</div>
+  <div class="grid-3" style="gap:14px">
+    <div class="flow-block">
+      <h4>Telegram OSINT Routes</h4>
+      <div class="flow-step"><div class="flow-step-num fsn-g">1</div><div class="flow-step-text"><strong>/api/telegram_osint/collect</strong> — SSE stream of ingested messages</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">2</div><div class="flow-step-text"><strong>/api/telegram_osint/discover</strong> — Automated channel discovery</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">3</div><div class="flow-step-text"><strong>/api/telegram_osint/sources</strong> — Registered source registry</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">4</div><div class="flow-step-text"><strong>/api/telegram_osint/command</strong> — Direct control commands</div></div>
+    </div>
+    <div class="flow-block">
+      <h4>Ingestion Routes</h4>
+      <div class="flow-step"><div class="flow-step-num fsn-g">1</div><div class="flow-step-text"><strong>/api/ingest/semantic-scrape</strong> — SemanticWebScraper with Camoufox stealth</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">2</div><div class="flow-step-text"><strong>/api/financial/wallet-analyze</strong> — Chain risk engine</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">3</div><div class="flow-step-text"><strong>/api/search</strong> — FAISS nearest-neighbour lookup</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">4</div><div class="flow-step-text"><strong>/api/ingest/vendor-link-similarity</strong> — Stylometric alias score <span style="background:rgba(249,115,22,0.15);color:var(--glow-orange);font-family:'Space Mono',monospace;font-size:9px;padding:1px 6px;border-radius:4px">NEW</span></div></div>
+    </div>
+    <div class="flow-block">
+      <h4>Legal &amp; Utility Routes</h4>
+      <div class="flow-step"><div class="flow-step-num fsn-g">1</div><div class="flow-step-text"><strong>/api/legal/draft_request</strong> — Section 65B certificate drafting</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">2</div><div class="flow-step-text"><strong>/api/zmq_publish</strong> — ZeroMQ cross-service pub/sub broker</div></div>
+      <div class="flow-step"><div class="flow-step-num fsn-g">3</div><div class="flow-step-text"><strong>/api/telegram_osint/review_source</strong> — Source review/approval flow</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section-label" style="margin-top:48px">04 &nbsp; NLP &amp; ML Services (backend/app/services/)</div>
+<div class="grid-3" style="margin-bottom:20px">
+  <div class="card card-amber"><div class="card-icon bg-amber">🧠</div><div class="card-label cl-amber">NLP · Classifier</div><h3>classifier.py</h3><p>Heuristic keyword matching with l33tspeak normalisation + GLiNER semantic NER. Falls back from TF-IDF+LogReg ML model to heuristics when no trained model found.</p><div class="tag-list"><span class="tag tag-amber">GLiNER</span><span class="tag tag-amber">TF-IDF</span><span class="tag tag-amber">Regex</span></div></div>
+  <div class="card card-amber"><div class="card-icon bg-amber">💉</div><div class="card-label cl-amber">NLP · Extractor</div><h3>slangExtractor.ts</h3><p>TypeScript slang dictionary (80+ entries). Extracts: narcotic substance classes, BTC/ETH/XMR wallet addresses, PGP key blocks, Wickr/Session/Telegram handles, ProtonMail contacts.</p><div class="tag-list"><span class="tag tag-amber">Slang Dict</span><span class="tag tag-amber">Regex</span><span class="tag tag-amber">Crypto</span></div></div>
+  <div class="card card-amber"><div class="card-icon bg-amber">📐</div><div class="card-label cl-amber">Embeddings</div><h3>FAISS Vector Store</h3><p>Dual-index: <code>faiss_index_flat.bin</code> (exact) + <code>faiss_index_hnsw.bin</code> (approximate NN). Mapped via <code>faiss_mapping.json</code> for entity retrieval.</p><div class="tag-list"><span class="tag tag-amber">FAISS</span><span class="tag tag-amber">HNSW</span><span class="tag tag-amber">Neural</span></div></div>
+  <div class="card card-amber"><div class="card-icon bg-amber">🔗</div><div class="card-label cl-amber">Telegram Pipeline</div><h3>collector.py</h3><p>Concurrent thread-pool scraper. Discovers highest message ID via exponential probe + binary search. Scans backwards skipping deleted messages. Checkpoints persisted to JSON.</p><div class="tag-list"><span class="tag tag-amber">ThreadPool</span><span class="tag tag-amber">Binary Search</span><span class="tag tag-amber">Checkpoint</span></div></div>
+  <div class="card card-amber"><div class="card-icon bg-amber">💰</div><div class="card-label cl-amber">Financial</div><h3>chain_tracker.py</h3><p>Cryptocurrency risk engine. BTC peel chain analysis, OFAC sanction matching, multi-hop taint propagation, Monero/ETH risk scoring.</p><div class="tag-list"><span class="tag tag-amber">Chainalysis</span><span class="tag tag-amber">OFAC</span><span class="tag tag-amber">BTC/XMR</span></div></div>
+  <div class="card card-amber"><div class="card-icon bg-amber">🏗️</div><div class="card-label cl-amber">Web Scraper</div><h3>semantic_scraper.py</h3><p>Two-stage scraper: (1) Camoufox stealth HTTP fetch spoofing TLS/WebGL fingerprints. (2) BeautifulSoup DOM cleaner strips all boilerplate → clean Markdown output.</p><div class="tag-list"><span class="tag tag-amber">Camoufox</span><span class="tag tag-amber">BeautifulSoup</span><span class="tag tag-amber">Markdown</span></div></div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section-label" style="margin-top:48px">05 &nbsp; Data Stores</div>
+<div class="grid-4" style="margin-bottom:20px">
+  <div class="card card-purple"><div class="card-icon bg-purple">📦</div><div class="card-label cl-purple">Store</div><h3>FAISS Index</h3><p>Dual-mode vector index for sub-millisecond nearest-neighbour retrieval across intelligence documents.</p></div>
+  <div class="card card-purple"><div class="card-icon bg-purple">📌</div><div class="card-label cl-purple">Store</div><h3>Checkpoints JSON</h3><p>Persists the last ingested Telegram message ID per channel to avoid re-processing on restart.</p></div>
+  <div class="card card-purple"><div class="card-icon bg-purple">🗂️</div><div class="card-label cl-purple">Store</div><h3>Sources Registry</h3><p>Tracks all registered Telegram and darkweb source handles with discovery metadata and review status.</p></div>
+  <div class="card card-purple"><div class="card-icon bg-purple">🧬</div><div class="card-label cl-purple">Store</div><h3>Entity Graph (API)</h3><p>In-memory entity-relationship graph served via <code>/api/graph</code>. Groups: ACTOR, WALLET, BANK_ACCOUNT, IDENTIFIER, LISTING.</p></div>
+</div>
+
+<!-- TIMELINE DIVIDER -->
+<div class="timeline-divider">
+  <div class="timeline-line"></div>
+  <div class="timeline-pill">⏱ &nbsp; CHANGES MADE AFTER 15:00 IST — 8 SEP 2026 &nbsp; ⏱</div>
+  <div class="timeline-line"></div>
+</div>
+
+<!-- POST-3PM CHANGES -->
+<div class="section-label">06 &nbsp; Post-3pm Changes — 5 Major Upgrades</div>
+<div class="grid-2" style="gap:20px;margin-bottom:20px">
+
+  <div class="change-card">
+    <div class="change-number">1</div>
+    <h3>VendorLink Stylometric Integration <span class="new-badge">★ New</span></h3>
+    <p>Cloned and integrated the ACL 2023 <strong>VendorLink</strong> research repository (Maastricht Law Tech) for cross-market darknet vendor alias detection using authorial stylometry.</p>
+    <div style="margin:14px 0">
+      <div class="flow-block" style="margin:0;padding:14px">
+        <div class="flow-step"><div class="flow-step-num fsn-a">1</div><div class="flow-step-text"><strong>New:</strong> <code>backend/VendorLink/</code> — Full ACL 2023 paper codebase (BERT, BiGRU, feature extractors)</div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">2</div><div class="flow-step-text"><strong>New:</strong> <code>vendor_link_bridge.py</code> — Python bridge; heuristic stylometry fallback when BERT model absent</div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">3</div><div class="flow-step-text"><strong>New endpoint:</strong> <code>POST /api/ingest/vendor-link-similarity</code> — takes two texts, returns cosine similarity score 0–1</div></div>
+      </div>
+    </div>
+    <div class="tag-list"><span class="tag tag-orange">ACL 2023</span><span class="tag tag-orange">Stylometry</span><span class="tag tag-orange">Alias Detection</span><span class="tag tag-orange">BERT Fallback</span></div>
+    <div class="file-path">backend/app/services/nlp/vendor_link_bridge.py</div>
+  </div>
+
+  <div class="change-card">
+    <div class="change-number">2</div>
+    <h3>Targeted Drug-Keyword Web Extraction <span class="new-badge">★ New</span></h3>
+    <p>Web scraper now operates in <strong>Targeted Extraction Mode</strong>. Paragraph-filters the clean Markdown output — returning only sections containing drug slang, crypto wallets, or vendor contact handles.</p>
+    <div style="margin:14px 0">
+      <div class="flow-block" style="margin:0;padding:14px">
+        <div class="flow-step"><div class="flow-step-num fsn-a">1</div><div class="flow-step-text"><strong>Modified:</strong> <code>SemanticWebScraper.scrape_url(extract_targeted=True)</code> — new optional flag</div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">2</div><div class="flow-step-text">Paragraph splitter runs <code>ILLICIT_KEYWORDS</code> regex + checks for BTC/XMR/Wickr patterns per chunk</div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">3</div><div class="flow-step-text"><code>route.ts</code> now passes <code>extract_targeted: true</code> by default for all <code>type=WEB</code> requests</div></div>
+      </div>
+    </div>
+    <div class="tag-list"><span class="tag tag-orange">Paragraph Filter</span><span class="tag tag-orange">Keyword Match</span><span class="tag tag-orange">OSINT Focus</span></div>
+    <div class="file-path">backend/app/services/ingestion/semantic_scraper.py</div>
+  </div>
+
+  <div class="change-card">
+    <div class="change-number">3</div>
+    <h3>NLP False-Positive Fix — Word Boundary Regex</h3>
+    <p>Discovered a critical false-positive bug: <code>classifier.py</code> used Python substring matching causing innocent words to trigger drug alerts — "fe" in "safe", "ice" in "police", "meth" in "methodology".</p>
+    <div style="margin:14px 0">
+      <div class="flow-block" style="margin:0;padding:14px">
+        <div class="flow-step"><div class="flow-step-num fsn-a">❌</div><div class="flow-step-text" style="font-family:'Space Mono',monospace;font-size:10px"><code style="color:#ef4444">[kw for kw in KEYWORDS if kw in text_lower]</code></div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">✅</div><div class="flow-step-text" style="font-family:'Space Mono',monospace;font-size:10px"><code style="color:#10b981">re.search(r'\b' + re.escape(kw) + r'\b', text)</code></div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">→</div><div class="flow-step-text">Wikipedia OSINT page went from "HIGH THREAT" false positive to correctly "LOW" with zero false narcotics matches</div></div>
+      </div>
+    </div>
+    <div class="tag-list"><span class="tag tag-orange">Bug Fix</span><span class="tag tag-orange">Regex Boundary</span><span class="tag tag-orange">Precision</span></div>
+    <div class="file-path">backend/app/services/nlp/classifier.py · Line 62</div>
+  </div>
+
+  <div class="change-card">
+    <div class="change-number">4</div>
+    <h3>Network Graph Replaced with ECharts 2D <span class="new-badge">★ New</span></h3>
+    <p>The jiggly 3D Three.js force graph was replaced with <strong>Apache ECharts</strong> — same enterprise visualization engine used by Palantir and GitLab. Dramatically smoother physics, adjacency-focus hover, cinematic node glow.</p>
+    <div style="margin:14px 0">
+      <div class="flow-block" style="margin:0;padding:14px">
+        <div class="flow-step"><div class="flow-step-num fsn-a">❌</div><div class="flow-step-text"><code>react-force-graph-3d</code> + Three.js — infinite physics jitter, no adjacency focus, React hook order violation crash</div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">✅</div><div class="flow-step-text"><code>echarts-for-react</code> — stabilised force layout, friction/gravity damping, <code>quinticInOut</code> transitions, adjacency dim-on-hover, glowing node borders</div></div>
+        <div class="flow-step"><div class="flow-step-num fsn-a">🔧</div><div class="flow-step-text">Fixed React <em>Rules of Hooks</em> violation — <code>useCallback</code> was called after early return causing white-screen crash</div></div>
+      </div>
+    </div>
+    <div class="tag-list"><span class="tag tag-orange">ECharts</span><span class="tag tag-orange">Smooth Physics</span><span class="tag tag-orange">Adjacency Focus</span><span class="tag tag-orange">Hook Fix</span></div>
+    <div class="file-path">src/components/IntelligenceFlowchart.tsx &amp; NetworkGraph.tsx</div>
+  </div>
+
+</div>
+
+<div class="change-card" style="margin-bottom:0">
+  <div class="change-number">5</div>
+  <h3>Git Merge &amp; Push to <code>17prabhanshu/pineSAW</code> <span class="new-badge">Deployed</span></h3>
+  <p>All changes committed and pushed to the production GitHub repository. Remote contained diverged commits (new legal routes + faiss index updates). Merge conflicts in <code>route.ts</code> and <code>slangExtractor.ts</code> resolved by accepting our upgraded versions. VendorLink embedded-git issue fixed by stripping the nested <code>.git/</code> directory before staging as a regular folder.</p>
+  <div class="tag-list"><span class="tag tag-orange">git add -A</span><span class="tag tag-orange">merge resolved</span><span class="tag tag-orange">69 files changed</span><span class="tag tag-orange">7,982 insertions</span><span class="tag tag-orange">main → origin/main</span></div>
+</div>
+
+<!-- SECTION 7 — Data Flow Summary -->
+<div class="section-label" style="margin-top:56px">07 &nbsp; End-to-End Data Flow Summary</div>
+<div class="pipeline">
+  <div class="pipeline-glow" style="background:var(--glow-blue)"></div>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div class="flow-row">
+      <div class="flow-node fn-red" style="min-width:170px">Telegram / WhatsApp<br>/ Web URL</div>
+      <div class="flow-arrow">─────▶</div>
+      <div class="flow-node fn-blue" style="min-width:230px">Next.js /api/ingest/scrape<br><span style="font-size:10px;opacity:0.6">type: TELEGRAM | WHATSAPP | WEB</span></div>
+    </div>
+    <div class="vconnect"><span>▼</span></div>
+    <div class="flow-row">
+      <div class="flow-node fn-green" style="min-width:220px">Python SSE :8000<br><span style="font-size:10px;opacity:0.6">/api/ingest/semantic-scrape</span></div>
+      <div class="flow-arrow">─────▶</div>
+      <div class="flow-node fn-amber" style="min-width:230px">SemanticWebScraper<br><span style="font-size:10px;opacity:0.6">Camoufox Stealth + BeautifulSoup</span></div>
+      <div class="flow-arrow">─────▶</div>
+      <div class="flow-node fn-orange" style="min-width:200px">Targeted Extraction<br><span style="font-size:10px;opacity:0.6">Keyword-filtered Markdown ★</span></div>
+    </div>
+    <div class="vconnect"><span>▼</span></div>
+    <div class="flow-row">
+      <div class="flow-node fn-amber" style="min-width:200px">classifier.py<br><span style="font-size:10px;opacity:0.6">GLiNER + \b Regex ★</span></div>
+      <div class="flow-arrow">────▶</div>
+      <div class="flow-node fn-amber" style="min-width:200px">slangExtractor.ts<br><span style="font-size:10px;opacity:0.6">80+ slang terms + crypto</span></div>
+      <div class="flow-arrow">────▶</div>
+      <div class="flow-node fn-orange" style="min-width:220px">VendorLink Bridge ★<br><span style="font-size:10px;opacity:0.6">Stylometric alias detection</span></div>
+    </div>
+    <div class="vconnect"><span>▼</span></div>
+    <div class="flow-row">
+      <div class="flow-node fn-purple" style="min-width:160px">FAISS Embed<br><span style="font-size:10px;opacity:0.6">Flat + HNSW</span></div>
+      <div class="flow-arrow">────▶</div>
+      <div class="flow-node fn-blue" style="min-width:200px">Live Harvester UI<br><span style="font-size:10px;opacity:0.6">Intelligence Cards</span></div>
+      <div class="flow-arrow">────▶</div>
+      <div class="flow-node fn-orange" style="min-width:220px">ECharts Network Graph ★<br><span style="font-size:10px;opacity:0.6">Smooth 2D Force Layout</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  pineSAW · OSINT Intelligence Platform &nbsp;·&nbsp; Architecture Snapshot 2026-09-08 &nbsp;·&nbsp; Session by Tanisha Singh
+</div>
+</div>
+</body>
+</html>

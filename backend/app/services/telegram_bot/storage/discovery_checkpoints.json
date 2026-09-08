@@ -25,20 +25,32 @@
   },
   "chitta": {
     "keyword": "chitta",
-    "last_run": "2026-09-08T09:54:48.439694+00:00",
+    "last_run": "2026-09-08T13:08:58.376028+00:00",
     "results_seen": 0,
-    "last_cursor": "cursor_chitta_1788861290"
+    "last_cursor": "cursor_chitta_1788872942"
   },
   "fentanyl": {
     "keyword": "fentanyl",
-    "last_run": "2026-09-08T09:55:21.958583+00:00",
+    "last_run": "2026-09-08T13:08:58.376028+00:00",
     "results_seen": 5,
-    "last_cursor": "cursor_fentanyl_1788861323"
+    "last_cursor": "cursor_fentanyl_1788872940"
   },
   "dead drop": {
     "keyword": "dead drop",
     "last_run": "2026-09-08T09:55:21.958583+00:00",
     "results_seen": 5,
     "last_cursor": "cursor_dead drop_1788861325"
+  },
+  "meth": {
+    "keyword": "meth",
+    "last_run": "2026-09-08T13:08:58.376028+00:00",
+    "results_seen": 5,
+    "last_cursor": "cursor_meth_1788872944"
+  },
+  "monero": {
+    "keyword": "monero",
+    "last_run": "2026-09-08T13:08:58.376028+00:00",
+    "results_seen": 5,
+    "last_cursor": "cursor_monero_1788872946"
   }
 }
