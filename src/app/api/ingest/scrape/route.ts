@@ -90,8 +90,12 @@ export async function POST(request: Request) {
     };
 
     if (type === "TELEGRAM") {
-      // Clean channel handle e.g. "@shadow" or "https://t.me/shadow" -> "shadow"
-      let handle = cleanTarget.replace(/^@/, "").replace(/^https?:\/\/t\.me\/(s\/)?/, "").replace(/\/$/, "");
+      // Clean channel or group handle e.g. "t.me/ice_chd", "@ice_chd", "https://t.me/ice_chd", or "ice_chd"
+      let handle = cleanTarget
+        .replace(/^(?:https?:\/\/)?(?:www\.)?(?:telegram\.me|t\.me)\/(?:s\/)?/i, "")
+        .replace(/^@/, "")
+        .replace(/\/.*$/, "")
+        .trim();
 
       // Check if it's one of our CTI demonstration presets
       const lowerHandle = handle.toLowerCase();
@@ -101,14 +105,16 @@ export async function POST(request: Request) {
         scrapeTelemetry.networkLatencyMs = Math.round(performance.now() - startTime + 85);
         scrapeTelemetry.method = "CTI_TACTICAL_TELEMETRY";
       } else {
-        // Perform real live HTTP scrape against public Telegram web channel preview
         const reqStart = performance.now();
-        const tgUrl = `https://t.me/s/${handle}`;
+        const tgChannelUrl = `https://t.me/s/${handle}`;
+        let totalBytes = 0;
+
         try {
+          // 1. First attempt: standard Telegram Channel public web view
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 6000);
-          
-          const res = await fetch(tgUrl, {
+
+          const res = await fetch(tgChannelUrl, {
             headers: {
               "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
               "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -119,46 +125,155 @@ export async function POST(request: Request) {
           clearTimeout(timeoutId);
 
           scrapeTelemetry.httpStatus = res.status;
-          scrapeTelemetry.networkLatencyMs = Math.round(performance.now() - reqStart);
 
           if (res.ok) {
             const html = await res.text();
-            scrapeTelemetry.bytesReceived = html.length;
+            totalBytes += html.length;
 
-            // Parse messages from Telegram HTML
-            const messageRegex = /<div class="tgme_widget_message_wrap[^"]*"[\s\S]*?<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>[\s\S]*?(?:<time datetime="([^"]+)")?/g;
-            let match;
-            let count = 0;
+            // Check if this is a Channel with public widget messages
+            if (html.includes('<div class="tgme_widget_message_wrap')) {
+              scrapeTelemetry.method = "REAL_TELEGRAM_CHANNEL_SCRAPE";
+              const blocks = html.split('<div class="tgme_widget_message_wrap');
+              let count = 0;
 
-            while ((match = messageRegex.exec(html)) !== null && count < 10) {
-              count++;
-              const rawText = match[1]
-                .replace(/<br\s*\/?>/gi, "\n")
-                .replace(/<a[^>]*>(.*?)<\/a>/gi, "$1")
-                .replace(/<[^>]+>/g, "")
-                .trim();
+              for (const block of blocks.slice(1)) {
+                if (count >= 15) break;
+                const textMatch = block.match(/<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+                if (!textMatch) continue;
+
+                count++;
+                const timeMatch = block.match(/datetime="([^"]+)"/);
+                const viewsMatch = block.match(/class="tgme_widget_message_views">([^<]+)<\/span>/);
+
+                const rawText = textMatch[1]
+                  .replace(/<br\s*\/?>/gi, "\n")
+                  .replace(/<a[^>]*>(.*?)<\/a>/gi, "$1")
+                  .replace(/<[^>]+>/g, "")
+                  .replace(/&#036;/g, "$")
+                  .replace(/&amp;/g, "&")
+                  .replace(/&quot;/g, '"')
+                  .replace(/&lt;/g, "<")
+                  .replace(/&gt;/g, ">")
+                  .trim();
+
+                const timestamp = timeMatch ? timeMatch[1] : new Date().toISOString();
+                const views = viewsMatch ? viewsMatch[1] : `${Math.floor(Math.random() * 800) + 120}`;
+
+                if (rawText.length > 2) {
+                  scrapedPosts.push({
+                    id: `tg-${handle}-${count}`,
+                    channel: `@${handle}`,
+                    sender: `@${handle} (Channel Post)`,
+                    timestamp,
+                    text: rawText,
+                    views,
+                    source: "Telegram Public Channel Stream"
+                  });
+                }
+              }
+            } else {
+              // 2. Telegram Group / Supergroup handling
+              // Groups redirect /s/<group> to /<group> and do not have an /s/ timeline.
+              // We extract group metadata and probe the public embed widget messages.
+              scrapeTelemetry.method = "REAL_TELEGRAM_GROUP_SCRAPE";
               
-              const timestamp = match[2] || new Date().toISOString();
+              const titleMatch = html.match(/class="tgme_page_title"[^>]*>[\s\S]*?<span[^>]*>([^<]+)<\/span>/i);
+              const extraMatch = html.match(/class="tgme_page_extra">([^<]+)<\/div>/i);
+              const groupTitle = titleMatch ? titleMatch[1].trim() : handle;
+              const groupExtra = extraMatch ? extraMatch[1].trim() : "Public Group";
 
-              if (rawText.length > 5) {
+              // Probe messages in pairs to avoid TLS connection resets while maintaining fast speed (~1.5s)
+              let reachedEnd = false;
+              let msgId = 1;
+              const maxProbe = 30;
+
+              while (!reachedEnd && msgId <= maxProbe) {
+                const pair = [msgId, msgId + 1];
+                msgId += 2;
+
+                const pairResults = await Promise.all(pair.map(async mId => {
+                  try {
+                    const embedUrl = `https://t.me/${handle}/${mId}?embed=1`;
+                    const mRes = await fetch(embedUrl, {
+                      headers: {
+                        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+                      }
+                    });
+                    if (!mRes.ok) return { error: true, mId };
+                    const mHtml = await mRes.text();
+                    totalBytes += mHtml.length;
+
+                    if (mHtml.includes("Post not found") || mHtml.includes("tgme_widget_message_error")) {
+                      return { notFound: true, mId };
+                    }
+
+                    const textMatch = mHtml.match(/class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+                    const authorMatch = mHtml.match(/class="tgme_widget_message_author_name"[^>]*>[\s\S]*?<span[^>]*>([^<]+)<\/span>/);
+                    const timeMatch = mHtml.match(/datetime="([^"]+)"/);
+
+                    if (textMatch) {
+                      const cleanText = textMatch[1]
+                        .replace(/<br\s*\/?>/gi, "\n")
+                        .replace(/<a[^>]*>(.*?)<\/a>/gi, "$1")
+                        .replace(/<[^>]+>/g, "")
+                        .replace(/&#036;/g, "$")
+                        .replace(/&amp;/g, "&")
+                        .replace(/&quot;/g, '"')
+                        .replace(/&lt;/g, "<")
+                        .replace(/&gt;/g, ">")
+                        .trim();
+
+                      const author = authorMatch ? authorMatch[1].trim() : "Member";
+                      const timestamp = timeMatch ? timeMatch[1] : new Date().toISOString();
+
+                      return {
+                        id: `tg-${handle}-${mId}`,
+                        channel: `@${handle}`,
+                        sender: `${author} (@${handle})`,
+                        timestamp,
+                        text: cleanText,
+                        views: "Group Intercept",
+                        source: `Telegram Group (${groupTitle} · ${groupExtra})`
+                      };
+                    }
+                    return { serviceMessage: true, mId };
+                  } catch {
+                    return { error: true, mId };
+                  }
+                }));
+
+                for (const item of pairResults) {
+                  if ((item as any).notFound) {
+                    reachedEnd = true;
+                  } else if ((item as any).text) {
+                    scrapedPosts.push(item);
+                  }
+                }
+              }
+
+              // If group was found but has 0 text messages yet, provide the live group intercept metadata
+              if (scrapedPosts.length === 0 && (titleMatch || extraMatch)) {
                 scrapedPosts.push({
-                  id: `tg-${handle}-${count}`,
+                  id: `tg-${handle}-header`,
                   channel: `@${handle}`,
-                  sender: `@${handle} (Channel Post)`,
-                  timestamp,
-                  text: rawText,
-                  views: `${Math.floor(Math.random() * 800) + 120}`,
-                  source: "Telegram Public Web Stream"
+                  sender: `${groupTitle} (Group Info)`,
+                  timestamp: new Date().toISOString(),
+                  text: `PUBLIC TELEGRAM GROUP INTERCEPT: Monitored group "${groupTitle}" (${groupExtra}). Surveillance active.`,
+                  views: groupExtra,
+                  source: `Telegram Group Registry (${groupTitle})`
                 });
               }
             }
           }
         } catch (fetchErr: any) {
           scrapeTelemetry.httpStatus = 504;
-          scrapeTelemetry.networkLatencyMs = Math.round(performance.now() - reqStart);
         }
 
-        // If public scraping yielded no messages (private channel, rate limited, or empty), provide tactical CTI telemetry
+        scrapeTelemetry.bytesReceived = totalBytes;
+        scrapeTelemetry.networkLatencyMs = Math.round(performance.now() - reqStart);
+
+        // Ultimate fallback only if Telegram completely failed / network down
         if (scrapedPosts.length === 0) {
           scrapedPosts = [
             {
@@ -258,7 +373,7 @@ export async function POST(request: Request) {
       let faissIndexingResult = null;
 
       // 3. Live FAISS Vectorization
-      if (autoVectorize && (parsed.isIllicitListing || parsed.threatLevel === "CRITICAL" || parsed.threatLevel === "HIGH" || onionDomains.length > 0)) {
+      if (autoVectorize && vectorizedCount < 5) {
         try {
           const docId = `SCRAPE-${post.id || Math.random().toString(36).substring(2, 9)}`;
           const docLabel = `${post.sender || post.title || post.channel}: ${post.text.substring(0, 45)}...`;
@@ -324,6 +439,53 @@ export async function POST(request: Request) {
               }
             });
             newEntitiesCreated++;
+          }
+
+          // Persist Telegram group or channel
+          if (post.channel) {
+            const chanClean = post.channel.replace(/^@/, "");
+            await prisma.entity.upsert({
+              where: { id: `HANDLE-${chanClean}` },
+              update: { priorityScore: Math.max(priorityScore, 78) },
+              create: {
+                id: `HANDLE-${chanClean}`,
+                type: "IDENTIFIER",
+                label: `${post.channel} (Telegram)`,
+                confidence: 0.95,
+                priorityScore: priorityScore || 80,
+                riskFactors: JSON.stringify([
+                  `Harvested from live Telegram scrape`,
+                  `${parsed.threatLevel} threat tier`,
+                  ...parsed.narcotics.map(n => n.standardizedName)
+                ])
+              }
+            });
+            newEntitiesCreated++;
+          }
+
+          // Persist message author / actor if extracted from group
+          if (post.sender && !post.sender.includes("Direct Operator") && !post.sender.includes("Channel Post") && !post.sender.includes("Group Info")) {
+            const cleanAuthor = post.sender.replace(/\s*\(@.*?\)/, "").replace(/\s*\(.*?\)/, "").trim();
+            if (cleanAuthor && cleanAuthor.length > 1) {
+              const actorId = `ACTOR-${cleanAuthor.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
+              await prisma.entity.upsert({
+                where: { id: actorId },
+                update: { priorityScore: Math.max(priorityScore, 82) },
+                create: {
+                  id: actorId,
+                  type: "ACTOR",
+                  label: `${cleanAuthor} (${post.channel || "Telegram"})`,
+                  confidence: 0.92,
+                  priorityScore: Math.max(priorityScore, 82),
+                  riskFactors: JSON.stringify([
+                    `Identified poster in live Telegram stream`,
+                    `${parsed.threatLevel} threat tier`,
+                    ...parsed.narcotics.map(n => n.standardizedName)
+                  ])
+                }
+              });
+              newEntitiesCreated++;
+            }
           }
 
           // Generate alert if high-risk
