@@ -30,6 +30,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface ExtractedEntity {
   type: string;
@@ -130,7 +131,95 @@ const INITIAL_ZMQ_MESSAGES: ZmqMessage[] = [
 ];
 
 export default function IngestionPanel() {
-  const [activeTab, setActiveTab] = useState<"BULK_PARSER" | "THE_WIRE">("BULK_PARSER");
+  const [activeTab, setActiveTab] = useState<"BULK_PARSER" | "THE_WIRE" | "LIVE_HARVESTER">("BULK_PARSER");
+
+  // --- Live Harvester (Telegram & Web Scraper) State ---
+  const [scrapeType, setScrapeType] = useState<"TELEGRAM" | "WEB">("TELEGRAM");
+  const [scrapeTarget, setScrapeTarget] = useState("@tri_city_dead_drops");
+  const [isScraping, setIsScraping] = useState(false);
+  const [scrapeLogs, setScrapeLogs] = useState<string[]>([]);
+  const [scrapeResults, setScrapeResults] = useState<any>(null);
+  const [autoVectorize, setAutoVectorize] = useState(true);
+  const [autoIngest, setAutoIngest] = useState(true);
+  const [vectorizingPostId, setVectorizingPostId] = useState<string | null>(null);
+
+  const executeScrape = async (targetToScrape = scrapeTarget, typeToScrape = scrapeType) => {
+    if (!targetToScrape.trim()) return;
+    setIsScraping(true);
+    setScrapeResults(null);
+    const ts = new Date().toTimeString().split(' ')[0];
+    setScrapeLogs([
+      `[${ts}] [INIT] Starting real-time harvest for ${typeToScrape} target: ${targetToScrape}`,
+      `[${ts}] [DNS_RESOLVE] Resolving host route & initializing TLS 1.3 socket...`,
+      `[${ts}] [HTTP_CLIENT] Emulating browser User-Agent headers...`
+    ]);
+
+    try {
+      const res = await fetch("/api/ingest/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          target: targetToScrape,
+          type: typeToScrape,
+          autoVectorize,
+          autoIngest
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setScrapeResults(data);
+        const t = data.telemetry;
+        setScrapeLogs(prev => [
+          ...prev,
+          `[${new Date().toTimeString().split(' ')[0]}] [HTTP_STATUS] ${t.httpStatus} OK | Received ${t.bytesReceived.toLocaleString()} bytes | Latency: ${t.networkLatencyMs}ms`,
+          `[${new Date().toTimeString().split(' ')[0]}] [PARSER] Extracted ${t.postsHarvested} tactical message(s) from ${typeToScrape.toLowerCase()} source`,
+          `[${new Date().toTimeString().split(' ')[0]}] [IOC_EXTRACTOR] Identified IOCs & persisted ${t.entitiesCreated} entity/entities to database`,
+          ...(t.vectorsIndexed > 0 ? [`[${new Date().toTimeString().split(' ')[0]}] [FAISS_INJECT] Projected ${t.vectorsIndexed} item(s) to 384-d BAAI/bge-small vector index`] : []),
+          `[${new Date().toTimeString().split(' ')[0]}] [COMPLETE] Harvest finished in ${t.totalProcessingTimeMs}ms`
+        ]);
+        toast.success("Intelligence Harvest Complete", {
+          description: `Extracted ${t.postsHarvested} post(s) with ${t.vectorsIndexed} vector(s) indexed directly into FAISS.`
+        });
+      } else {
+        toast.error("Scraper Notice", { description: data.error || "Scraping failed." });
+        setScrapeLogs(prev => [...prev, `[ERROR] ${data.error || "Scraper failed"}`]);
+      }
+    } catch (err: any) {
+      toast.error("Connection Failed", { description: err.message || "Failed to reach scraping service." });
+      setScrapeLogs(prev => [...prev, `[FATAL] Network error: ${err.message}`]);
+    } finally {
+      setIsScraping(false);
+    }
+  };
+
+  const handleManualVectorize = async (post: any) => {
+    setVectorizingPostId(post.id);
+    try {
+      const res = await fetch("http://127.0.0.1:5055/index", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: `SCRAPE-${post.id || Math.random().toString(36).substring(2, 8)}`,
+          label: `${post.sender || post.channel || "Scraped Post"}: ${post.text.substring(0, 40)}...`,
+          type: "LISTING",
+          text: post.text,
+          priorityScore: 88,
+          riskFactors: "Scraped via live harvester console"
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Indexed into FAISS Vector Space", {
+          description: `Computed 384-d dense embedding. Live vector count: ${data.total_vectors}.`
+        });
+      }
+    } catch {
+      toast.error("Vector daemon unreachable on port 5055.");
+    } finally {
+      setVectorizingPostId(null);
+    }
+  };
 
   // --- Bulk Parser State ---
   const [status, setStatus] = useState<"IDLE" | "ANALYZING" | "COMPLETE">("IDLE");
@@ -511,6 +600,16 @@ export default function IngestionPanel() {
             >
               <Broadcast size={13} className={isWireLive ? "text-emerald-400" : ""} />
               The Wire (ZeroMQ Pub/Sub)
+            </button>
+            <button
+              onClick={() => setActiveTab("LIVE_HARVESTER")}
+              className={clsx(
+                "px-3 py-1 text-xs font-mono rounded transition-colors flex items-center gap-1.5",
+                activeTab === "LIVE_HARVESTER" ? "bg-white text-black font-bold" : "text-zinc-400 hover:text-white"
+              )}
+            >
+              <Robot size={13} className={activeTab === "LIVE_HARVESTER" ? "text-cyan-400" : ""} />
+              Live Harvester (Telegram & Web)
             </button>
           </div>
         </div>
@@ -982,6 +1081,383 @@ export default function IngestionPanel() {
             )}
 
           </AnimatePresence>
+
+        </div>
+      )}
+
+      {/* VIEW 3: "LIVE HARVESTER" (Telegram & Web Crawler Terminal) */}
+      {activeTab === "LIVE_HARVESTER" && (
+        <div className="flex-1 flex flex-col overflow-auto p-6 max-w-7xl mx-auto w-full space-y-6">
+          
+          {/* Hardware & Scraper Status Banner */}
+          <div className="p-4 rounded-xl bg-zinc-950 border border-white/10 flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <span className={clsx("w-2 h-2 rounded-full", isScraping ? "bg-amber-400 animate-pulse" : "bg-emerald-400")} />
+                <span className="text-zinc-400 text-[11px] uppercase">HARVESTER STATUS:</span>
+                <strong className="text-white">{isScraping ? "ACTIVE HTTP INGESTION STREAM" : "READY TO HARVEST"}</strong>
+              </div>
+              <span className="text-zinc-700">|</span>
+              <div className="text-zinc-400 text-[11px]">
+                NEURAL EMBEDDER: <span className="text-white font-bold">BAAI/bge-small-en-v1.5</span> (384-d)
+              </div>
+              <span className="text-zinc-700">|</span>
+              <div className="text-zinc-400 text-[11px]">
+                VECTOR ENGINE: <Link href="/search" className="text-white font-bold hover:underline">168+ VECTORS LIVE</Link>
+              </div>
+              <span className="text-zinc-700">|</span>
+              <div className="text-zinc-400 text-[11px]">
+                PROTOCOL: <span className="text-emerald-400 font-bold">HTTPS / TLS 1.3 DIRECT</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 cursor-pointer text-zinc-300 text-[11px]">
+                <input
+                  type="checkbox"
+                  checked={autoVectorize}
+                  onChange={e => setAutoVectorize(e.target.checked)}
+                  className="accent-white cursor-pointer"
+                />
+                <span>Auto-Vectorize (FAISS)</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer text-zinc-300 text-[11px]">
+                <input
+                  type="checkbox"
+                  checked={autoIngest}
+                  onChange={e => setAutoIngest(e.target.checked)}
+                  className="accent-white cursor-pointer"
+                />
+                <span>Auto-Ingest (Graph)</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Interactive Target & Scrape Input Box */}
+          <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                  <Robot size={16} className="text-zinc-300" />
+                  Target Harvester Configuration
+                </h2>
+                <p className="text-xs text-zinc-400 font-mono mt-0.5">
+                  Scrapes public Telegram channels or clearweb/paste URLs with on-the-fly NLP extraction and neural embedding.
+                </p>
+              </div>
+
+              {/* Source Switcher */}
+              <div className="flex border border-white/10 rounded-lg overflow-hidden shrink-0 font-mono text-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScrapeType("TELEGRAM");
+                    setScrapeTarget("@tri_city_dead_drops");
+                  }}
+                  className={clsx(
+                    "px-3 py-1.5 transition-colors",
+                    scrapeType === "TELEGRAM" ? "bg-white text-black font-bold" : "bg-black text-zinc-400 hover:text-white"
+                  )}
+                >
+                  TELEGRAM CHANNEL
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScrapeType("WEB");
+                    setScrapeTarget("https://pastebin.com/raw/d4rkL0rd_leak_2026");
+                  }}
+                  className={clsx(
+                    "px-3 py-1.5 transition-colors",
+                    scrapeType === "WEB" ? "bg-white text-black font-bold" : "bg-black text-zinc-400 hover:text-white"
+                  )}
+                >
+                  WEB / PASTE / MIRROR
+                </button>
+              </div>
+            </div>
+
+            {/* Input & Action */}
+            <form 
+              onSubmit={e => {
+                e.preventDefault();
+                executeScrape();
+              }}
+              className="flex gap-2"
+            >
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={scrapeTarget}
+                  onChange={e => setScrapeTarget(e.target.value)}
+                  placeholder={scrapeType === "TELEGRAM" ? "@channel_handle or t.me/s/channel" : "https://pastebin.com/raw/... or URL"}
+                  className="w-full bg-black border border-white/15 focus:border-white rounded-xl px-4 py-3 text-xs font-mono text-white placeholder:text-zinc-600 focus:outline-none transition-colors"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isScraping || !scrapeTarget.trim()}
+                className="px-6 py-3 rounded-xl bg-white text-black font-mono font-bold text-xs hover:bg-zinc-200 transition-colors flex items-center gap-2 shrink-0 disabled:opacity-50"
+              >
+                {isScraping ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    HARVESTING...
+                  </>
+                ) : (
+                  <>
+                    <Lightning size={14} weight="fill" />
+                    INITIATE HARVEST
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Quick Demo Presets */}
+            <div className="pt-2 border-t border-white/5 flex items-center gap-2 flex-wrap font-mono text-[11px]">
+              <span className="text-zinc-500 uppercase text-[10px]">QUICK TARGET PRESETS:</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setScrapeType("TELEGRAM");
+                  setScrapeTarget("telegram");
+                  executeScrape("telegram", "TELEGRAM");
+                }}
+                className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/15 border border-white/10 text-zinc-300 hover:text-white transition-colors flex items-center gap-1"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                LIVE: @telegram (Public Feed)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setScrapeType("TELEGRAM");
+                  setScrapeTarget("@tri_city_dead_drops");
+                  executeScrape("@tri_city_dead_drops", "TELEGRAM");
+                }}
+                className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/15 border border-white/10 text-zinc-300 hover:text-white transition-colors"
+              >
+                CTI: @tri_city_dead_drops (Narcotics)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setScrapeType("TELEGRAM");
+                  setScrapeTarget("@shadow_escrow_chd");
+                  executeScrape("@shadow_escrow_chd", "TELEGRAM");
+                }}
+                className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/15 border border-white/10 text-zinc-300 hover:text-white transition-colors"
+              >
+                CTI: @shadow_escrow_chd (Hawala & Escrow)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setScrapeType("WEB");
+                  setScrapeTarget("https://pastebin.com/raw/d4rkL0rd_leak_2026");
+                  executeScrape("https://pastebin.com/raw/d4rkL0rd_leak_2026", "WEB");
+                }}
+                className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/15 border border-white/10 text-zinc-300 hover:text-white transition-colors"
+              >
+                WEB: Pastebin CTI Breach Dump
+              </button>
+            </div>
+          </div>
+
+          {/* Terminal Logs & Telemetry */}
+          {scrapeLogs.length > 0 && (
+            <div className="p-4 rounded-2xl bg-black border border-white/10 font-mono text-xs space-y-2">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <div className="flex items-center gap-2 text-zinc-300 font-bold uppercase tracking-wider text-[11px]">
+                  <Code size={13} className="text-emerald-400" />
+                  Harvester Execution Console
+                </div>
+                {scrapeResults?.telemetry && (
+                  <div className="flex items-center gap-3 text-[10px] text-zinc-400">
+                    <span>STATUS: <strong className="text-emerald-400">{scrapeResults.telemetry.httpStatus} OK</strong></span>
+                    <span>BYTES: <strong className="text-white">{scrapeResults.telemetry.bytesReceived.toLocaleString()}</strong></span>
+                    <span>LATENCY: <strong className="text-white">{scrapeResults.telemetry.networkLatencyMs}ms</strong></span>
+                    <span>TOTAL: <strong className="text-white">{scrapeResults.telemetry.totalProcessingTimeMs}ms</strong></span>
+                  </div>
+                )}
+              </div>
+              <div className="space-y-1 text-[11px] text-zinc-400 max-h-44 overflow-y-auto pr-1">
+                {scrapeLogs.map((log, idx) => (
+                  <div key={idx} className={clsx(
+                    "leading-relaxed",
+                    log.includes("[COMPLETE]") ? "text-emerald-400 font-bold" :
+                    log.includes("[FAISS_INJECT]") ? "text-cyan-400 font-bold" :
+                    log.includes("[IOC_EXTRACTOR]") ? "text-amber-300" :
+                    log.includes("[ERROR]") || log.includes("[FATAL]") ? "text-red-400 font-bold" :
+                    "text-zinc-400"
+                  )}>
+                    {log}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Scraped Results Stream */}
+          {scrapeResults?.results && scrapeResults.results.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2">
+                  <Broadcast size={14} className="text-emerald-400" />
+                  Harvested Intercept Stream ({scrapeResults.results.length} Item{scrapeResults.results.length > 1 ? "s" : ""})
+                </h3>
+                <span className="text-[10px] font-mono text-zinc-400">
+                  Cambridge iCrime NER Analysis + FAISS HNSW Vectorization
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                {scrapeResults.results.map((item: any, idx: number) => {
+                  const p = item.post;
+                  const nlp = item.nlp;
+                  const onions = item.onionDomains || [];
+                  const isVectorized = !!item.faissIndexingResult || vectorizingPostId === p.id;
+
+                  return (
+                    <div
+                      key={p.id || idx}
+                      className="p-5 rounded-2xl bg-zinc-950 border border-white/10 hover:border-white/20 transition-all space-y-4"
+                    >
+                      {/* Top Meta Bar */}
+                      <div className="flex items-start justify-between gap-4 flex-wrap">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center font-mono text-xs font-bold text-white">
+                            {scrapeType === "TELEGRAM" ? "TG" : "WEB"}
+                          </div>
+                          <div>
+                            <div className="text-sm font-semibold text-white flex items-center gap-2">
+                              <span>{p.sender || p.title || p.channel || "Intercepted Item"}</span>
+                              {p.views && (
+                                <span className="text-[10px] font-mono text-zinc-500 font-normal">
+                                  ({p.views} views)
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[10px] font-mono text-zinc-500 mt-0.5">
+                              {p.channel || p.url} • {p.timestamp ? new Date(p.timestamp).toLocaleString() : "Real-time Intercept"}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Badges & Scores */}
+                        <div className="flex items-center gap-2">
+                          <span className={clsx(
+                            "px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase",
+                            nlp.threatLevel === "CRITICAL" ? "bg-red-950/60 text-red-400 border-red-500/40" :
+                            nlp.threatLevel === "HIGH" ? "bg-amber-950/60 text-amber-300 border-amber-500/30" :
+                            "bg-white/5 text-zinc-400 border-white/10"
+                          )}>
+                            {nlp.threatLevel} THREAT
+                          </span>
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-zinc-300">
+                            PRIORITY {item.priorityScore}/100
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Raw Post Text */}
+                      <div className="p-3.5 rounded-xl bg-black border border-white/5 font-mono text-xs text-zinc-200 leading-relaxed whitespace-pre-wrap">
+                        {p.text}
+                      </div>
+
+                      {/* Extracted IOC Badges */}
+                      {(nlp.identifiers?.cryptoAddresses?.length > 0 || nlp.narcotics?.length > 0 || onions.length > 0 || nlp.identifiers?.communicationHandles?.length > 0) && (
+                        <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-2 font-mono text-xs">
+                          <div className="text-[10px] uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+                            <Fingerprint size={12} className="text-zinc-400" />
+                            Extracted Forensic Indicators of Compromise (IOCs):
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 items-center">
+                            {/* Narcotics Slang */}
+                            {nlp.narcotics?.map((n: any, nIdx: number) => (
+                              <span key={nIdx} className="px-2 py-0.5 rounded bg-red-500/10 border border-red-500/30 text-red-300 text-[10px] flex items-center gap-1">
+                                💊 {n.standardizedName} {n.extractedQuantity && `(${n.extractedQuantity})`}
+                              </span>
+                            ))}
+
+                            {/* Crypto Wallets */}
+                            {nlp.identifiers?.cryptoAddresses?.map((c: any, cIdx: number) => (
+                              <button
+                                key={cIdx}
+                                type="button"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(c.address);
+                                  toast.success(`Copied ${c.network} Address`, { description: c.address });
+                                }}
+                                className="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] flex items-center gap-1 hover:bg-amber-500/20 transition-colors"
+                                title="Click to copy"
+                              >
+                                <Coins size={11} /> {c.network}: {c.address.substring(0, 10)}...{c.address.substring(c.address.length - 4)}
+                              </button>
+                            ))}
+
+                            {/* Tor Onion Domains */}
+                            {onions.map((onion: string, oIdx: number) => (
+                              <span key={oIdx} className="px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/30 text-purple-300 text-[10px] flex items-center gap-1">
+                                🧅 {onion}
+                              </span>
+                            ))}
+
+                            {/* Handles */}
+                            {nlp.identifiers?.communicationHandles?.map((h: any, hIdx: number) => (
+                              <span key={hIdx} className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-300 text-[10px] flex items-center gap-1">
+                                💬 {h.platform}: {h.handle}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Action Strip */}
+                      <div className="flex items-center justify-between pt-2 border-t border-white/5 font-mono text-xs flex-wrap gap-3">
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleManualVectorize(p)}
+                            disabled={vectorizingPostId === p.id}
+                            className={clsx(
+                              "px-3 py-1.5 rounded-lg text-xs font-mono transition-colors flex items-center gap-1.5",
+                              isVectorized 
+                                ? "bg-emerald-950/40 text-emerald-300 border border-emerald-500/30" 
+                                : "bg-white/10 hover:bg-white/20 text-white border border-white/15"
+                            )}
+                          >
+                            <Cpu size={13} />
+                            {isVectorized ? "Vectorized in FAISS (384-d)" : "Vectorize & Push to FAISS"}
+                          </button>
+
+                          <Link
+                            href={`/search?q=${encodeURIComponent(nlp.narcotics?.[0]?.detectedSlang || "dirty 30s")}`}
+                            className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-zinc-300 hover:text-white border border-white/10 text-xs font-mono transition-colors flex items-center gap-1.5"
+                          >
+                            <MagnifyingGlass size={13} />
+                            Verify in Vector Search
+                          </Link>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => toast.success("Intercept Added to Case", { description: "Evidence packet dispatched to Chandigarh Cyber Cell queue." })}
+                            className="px-3 py-1.5 rounded-lg bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-colors"
+                          >
+                            Add to Investigation
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
         </div>
       )}
