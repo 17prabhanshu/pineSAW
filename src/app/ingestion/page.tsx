@@ -32,12 +32,14 @@ import {
   Sparkle,
   Eye,
   ShieldCheck,
-  Check
+  Check,
+  FolderPlus
 } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import { toast } from "sonner";
 import Link from "next/link";
+import { AddToInvestigationModal, AddToInvestigationItem } from "@/components/AddToInvestigationModal";
 
 interface ExtractedEntity {
   type: string;
@@ -414,6 +416,11 @@ export default function IngestionPanel() {
   const [autoIngest, setAutoIngest] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [vectorizingPostId, setVectorizingPostId] = useState<string | null>(null);
+
+  // Add to Investigation Modal State
+  const [investigationModalItem, setInvestigationModalItem] = useState<AddToInvestigationItem | null>(null);
+  const [isInvestigationModalOpen, setIsInvestigationModalOpen] = useState(false);
+  const [addedToCasesMap, setAddedToCasesMap] = useState<Record<string, { caseId: string; id: string }>>({});
   
   const isScrapingRef = useRef(false);
   useEffect(() => {
@@ -909,6 +916,11 @@ export default function IngestionPanel() {
               <span className="text-zinc-700">|</span>
               <div className="text-zinc-400 text-[11px]">
                 BUFFER LOSS: <span className="text-emerald-400 font-bold">0.00%</span>
+              </div>
+              <span className="text-zinc-700">|</span>
+              <div className="text-zinc-400 text-[11px] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <span>KAFKA EVENT BUS:</span> <span className="text-amber-300 font-bold">:9092 PARTITIONED</span>
               </div>
             </div>
 
@@ -1713,6 +1725,28 @@ export default function IngestionPanel() {
                     )}
                     <span>BYTES: <strong className="text-white">{scrapeResults.telemetry.bytesReceived.toLocaleString()}</strong></span>
                     <span>LATENCY: <strong className="text-white">{scrapeResults.telemetry.networkLatencyMs}ms</strong></span>
+                    {scrapeResults.results?.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const first = scrapeResults.results[0];
+                          setInvestigationModalItem({
+                            source: first.post?.url || first.post?.channel || scrapeTarget,
+                            text: first.post?.text,
+                            sender: first.post?.sender || first.post?.title || (scrapeType === "WEB" ? "Reddit Intercept" : "Scraped Intercept"),
+                            url: first.post?.url,
+                            threatLevel: first.nlp?.threatLevel || "HIGH",
+                            priorityScore: first.priorityScore || 85,
+                            timestamp: first.post?.timestamp
+                          });
+                          setIsInvestigationModalOpen(true);
+                        }}
+                        className="px-2 py-0.5 rounded bg-white text-black font-bold font-mono text-[10px] hover:bg-zinc-200 transition-colors flex items-center gap-1 cursor-pointer"
+                      >
+                        <FolderPlus size={12} weight="bold" />
+                        Add to Investigation Center
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -1884,13 +1918,41 @@ export default function IngestionPanel() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => toast.success("Intercept Added to Case", { description: "Evidence packet dispatched to Chandigarh Cyber Cell queue." })}
-                            className="px-3 py-1.5 rounded-lg bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-colors"
-                          >
-                            Add to Investigation
-                          </button>
+                          {addedToCasesMap[p.id || idx] ? (
+                            <Link
+                              href={`/investigations/${addedToCasesMap[p.id || idx].id}`}
+                              className="px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 font-bold text-xs hover:bg-emerald-900/60 transition-colors flex items-center gap-1.5"
+                            >
+                              <CheckCircle size={14} weight="fill" className="text-emerald-400" />
+                              Linked to {addedToCasesMap[p.id || idx].caseId} (Open Dossier ➔)
+                            </Link>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setInvestigationModalItem({
+                                  source: p.url || p.channel || scrapeTarget,
+                                  text: p.text,
+                                  sender: p.sender || p.title || (scrapeType === "WEB" ? "Reddit Intercept" : "Scraped Intercept"),
+                                  url: p.url,
+                                  threatLevel: nlp.threatLevel,
+                                  priorityScore: item.priorityScore,
+                                  iocs: {
+                                    narcotics: nlp.narcotics,
+                                    cryptoAddresses: nlp.identifiers?.cryptoAddresses,
+                                    communicationHandles: nlp.identifiers?.communicationHandles,
+                                    onionDomains: onions
+                                  },
+                                  timestamp: p.timestamp
+                                });
+                                setIsInvestigationModalOpen(true);
+                              }}
+                              className="px-3 py-1.5 rounded-lg bg-white text-black font-bold text-xs hover:bg-zinc-200 transition-colors flex items-center gap-1.5 shadow cursor-pointer"
+                            >
+                              <FolderPlus size={14} weight="bold" />
+                              Add to Investigation
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -2772,6 +2834,28 @@ export default function IngestionPanel() {
 
         </div>
       )}
+
+      {/* Add To Investigation Dispatch Modal */}
+      <AddToInvestigationModal
+        isOpen={isInvestigationModalOpen}
+        onClose={() => {
+          setIsInvestigationModalOpen(false);
+          setInvestigationModalItem(null);
+        }}
+        item={investigationModalItem}
+        onSuccess={(targetCase) => {
+          if (investigationModalItem) {
+            scrapeResults?.results?.forEach((r: any, i: number) => {
+              if (r.post?.text === investigationModalItem.text || r.post?.url === investigationModalItem.url) {
+                setAddedToCasesMap(prev => ({
+                  ...prev,
+                  [r.post.id || i]: { caseId: targetCase.caseId, id: targetCase.id }
+                }));
+              }
+            });
+          }
+        }}
+      />
 
     </div>
   );

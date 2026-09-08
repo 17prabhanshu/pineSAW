@@ -3,11 +3,12 @@ import prisma from '@/lib/db';
 
 export async function GET() {
   const investigations = await prisma.investigation.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { updatedAt: 'desc' },
     include: {
       entities: { include: { entity: true } },
       actionItems: true,
-      notes: true
+      notes: true,
+      evidence: true
     }
   });
   return NextResponse.json(investigations);

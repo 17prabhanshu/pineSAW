@@ -87,16 +87,16 @@ export function StatutoryDispatchModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 print:static print:inset-auto print:bg-transparent print:backdrop-blur-none print:p-0 print:m-0 print:block print:w-full print:h-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: "spring", stiffness: 350, damping: 30 }}
-          className="bg-zinc-950 border border-white/20 rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden font-mono text-white"
+          className="bg-zinc-950 border border-white/20 rounded-2xl w-full max-w-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden font-mono text-white print:static print:transform-none print:max-w-none print:max-h-none print:overflow-visible print:border-none print:shadow-none print:bg-white print:rounded-none print:w-full print:p-0 print:m-0"
         >
           {/* Modal Header */}
-          <div className="p-5 border-b border-white/10 flex items-start justify-between bg-black/50">
+          <div className="p-5 border-b border-white/10 flex items-start justify-between bg-black/50 print:hidden">
             <div className="flex items-center gap-3.5">
               <div className="p-2.5 bg-white/10 border border-white/20 rounded-xl text-white">
                 <Scales size={24} weight="bold" />
@@ -279,46 +279,62 @@ export function StatutoryDispatchModal({
               </>
             ) : (
               /* Statutory Dispatch Receipt */
-              <div className="space-y-5">
-                <div className="p-4 bg-emerald-950/30 border border-emerald-500/40 rounded-xl space-y-2">
+              <div 
+                id="print-section"
+                className="printable-dossier space-y-5 print:bg-white print:text-black print:p-0 print:overflow-visible print:w-full"
+              >
+                {/* Formal header for printed receipt */}
+                <div className="hidden print:block text-center border-b-2 border-black pb-4">
+                  <div className="text-[10px] font-bold tracking-widest text-black uppercase">
+                    CHANDIGARH POLICE // CYBER CRIME & NARCOTICS INTELLIGENCE CELL
+                  </div>
+                  <h1 className="text-base font-bold text-black uppercase tracking-wide">
+                    STATUTORY INSTITUTIONAL DISPATCH TRANSMISSION RECEIPT
+                  </h1>
+                  <p className="text-[10px] text-gray-700">
+                    COURT-ADMISSIBLE TRANSMISSION AUDIT RECORD UNDER SECTION 63 BSA / SECTION 91 CRPC
+                  </p>
+                </div>
+
+                <div className="p-4 bg-emerald-950/30 border border-emerald-500/40 rounded-xl space-y-2 print:bg-gray-100 print:border print:border-black print:text-black">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-                      <CheckCircle size={20} weight="fill" />
+                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm print:text-black">
+                      <CheckCircle size={20} weight="fill" className="print:text-black" />
                       <span>ORDER TRANSMITTED TO VERIFIED NODAL DESK</span>
                     </div>
-                    <span className="text-xs font-bold text-white bg-white/10 px-2.5 py-1 rounded">
+                    <span className="text-xs font-bold text-white bg-white/10 px-2.5 py-1 rounded print:bg-gray-200 print:text-black font-mono">
                       {dispatchReceipt.trackingNumber}
                     </span>
                   </div>
-                  <p className="text-xs text-emerald-200/90 leading-relaxed">
+                  <p className="text-xs text-emerald-200/90 leading-relaxed print:text-black font-medium">
                     Formal statutory order under {dispatchReceipt.order.statutoryAuthority} has been dispatched over encrypted LEA channel to {dispatchReceipt.institution.name}.
                   </p>
                 </div>
 
-                <div className="border border-white/15 rounded-xl p-4 bg-black/60 space-y-2 text-[10px]">
-                  <div className="flex justify-between border-b border-white/5 pb-1">
-                    <span className="text-zinc-400">Recipient Nodal Email:</span>
-                    <span className="text-white font-bold">{dispatchReceipt.institution.recipientEmail}</span>
+                <div className="border border-white/15 rounded-xl p-4 bg-black/60 space-y-2 text-[10px] print:bg-white print:border print:border-black print:text-black">
+                  <div className="flex justify-between border-b border-white/5 pb-1 print:border-b print:border-gray-300">
+                    <span className="text-zinc-400 print:text-gray-700 font-medium">Recipient Nodal Email:</span>
+                    <span className="text-white print:text-black font-bold">{dispatchReceipt.institution.recipientEmail}</span>
                   </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1">
-                    <span className="text-zinc-400">Nodal Officer In-Charge:</span>
-                    <span className="text-white font-bold">{dispatchReceipt.institution.nodalOfficerName} ({dispatchReceipt.institution.designation})</span>
+                  <div className="flex justify-between border-b border-white/5 pb-1 print:border-b print:border-gray-300">
+                    <span className="text-zinc-400 print:text-gray-700 font-medium">Nodal Officer In-Charge:</span>
+                    <span className="text-white print:text-black font-bold">{dispatchReceipt.institution.nodalOfficerName} ({dispatchReceipt.institution.designation})</span>
                   </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1">
-                    <span className="text-zinc-400">Compliance Timeframe:</span>
-                    <span className="text-amber-400 font-bold">{dispatchReceipt.complianceWindowHours} HOURS MANDATORY WINDOW</span>
+                  <div className="flex justify-between border-b border-white/5 pb-1 print:border-b print:border-gray-300">
+                    <span className="text-zinc-400 print:text-gray-700 font-medium">Compliance Timeframe:</span>
+                    <span className="text-amber-400 print:text-black font-bold">{dispatchReceipt.complianceWindowHours} HOURS MANDATORY WINDOW</span>
                   </div>
-                  <div className="flex justify-between border-b border-white/5 pb-1">
-                    <span className="text-zinc-400">Transmission Timestamp:</span>
-                    <span className="text-white font-bold">{new Date(dispatchReceipt.timestamp).toLocaleString("en-IN")}</span>
+                  <div className="flex justify-between border-b border-white/5 pb-1 print:border-b print:border-gray-300">
+                    <span className="text-zinc-400 print:text-gray-700 font-medium">Transmission Timestamp:</span>
+                    <span className="text-white print:text-black font-bold">{new Date(dispatchReceipt.timestamp).toLocaleString("en-IN")}</span>
                   </div>
                   <div className="flex flex-col gap-0.5 pt-1">
-                    <span className="text-zinc-400">SHA-256 Digital Transmission Seal:</span>
-                    <span className="text-emerald-400 font-mono select-all break-all">{dispatchReceipt.transmissionSeal}</span>
+                    <span className="text-zinc-400 print:text-gray-700 font-medium">SHA-256 Digital Transmission Seal:</span>
+                    <span className="text-emerald-400 print:text-black font-mono font-bold select-all break-all">{dispatchReceipt.transmissionSeal}</span>
                   </div>
                 </div>
 
-                <div className="p-3 bg-black border border-white/10 rounded-xl text-[10px] text-zinc-300 max-h-36 overflow-y-auto whitespace-pre-wrap font-mono">
+                <div className="p-3 bg-black border border-white/10 rounded-xl text-[10px] text-zinc-300 max-h-36 overflow-y-auto whitespace-pre-wrap font-mono print:bg-gray-50 print:border print:border-black print:text-black print:max-h-none print:overflow-visible">
                   {dispatchReceipt.order.formattedText}
                 </div>
               </div>
@@ -326,7 +342,7 @@ export function StatutoryDispatchModal({
           </div>
 
           {/* Modal Footer */}
-          <div className="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between gap-3">
+          <div className="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between gap-3 print:hidden">
             {!dispatchReceipt ? (
               <>
                 <div className="text-[10px] text-zinc-500">

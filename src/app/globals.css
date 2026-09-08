@@ -144,22 +144,169 @@ body::before {
 }
 
 @media print {
+  /* Hide non-printable app navigation and interactive elements */
+  aside,
+  nav,
+  header:not(.print-header),
+  button,
+  .no-print,
+  [data-radix-popper-content-wrapper],
+  [role="region"],
+  .sonner-toast,
+  .btn-gov,
+  .btn-secondary {
+    display: none !important;
+  }
+
+  /* Reset document for clean physical/PDF printing */
+  html, body {
+    background: #ffffff !important;
+    color: #09090b !important;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Prevent ancestor clipping on multi-page reports */
+  main, div, section, article {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* Unconstrain fixed modal overlays and animated wrappers during print */
+  div[class*="fixed"],
+  .fixed,
+  div[style*="transform"],
+  [data-projection-id] {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Hide everything by default except print targets */
   body * {
     visibility: hidden;
   }
-  #print-section, #print-section * {
-    visibility: visible;
+
+  #print-section,
+  #print-section *,
+  .printable-dossier,
+  .printable-dossier * {
+    visibility: visible !important;
   }
-  #print-section {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    color: black !important;
-    background: white !important;
-    font-family: monospace;
-    font-size: 12pt;
-    white-space: pre-wrap;
-    padding: 1cm;
+
+  /* Printable container styling */
+  #print-section,
+  .printable-dossier {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    background: #ffffff !important;
+    color: #09090b !important;
+    padding: 0.8cm 1.2cm !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  }
+
+  /* Text color normalization for paper printing */
+  #print-section *,
+  .printable-dossier * {
+    color: #09090b !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  #print-section .text-white,
+  .printable-dossier .text-white,
+  #print-section .text-zinc-200,
+  .printable-dossier .text-zinc-200,
+  #print-section .text-zinc-300,
+  .printable-dossier .text-zinc-300,
+  #print-section [class*="text-zinc"],
+  .printable-dossier [class*="text-zinc"],
+  #print-section [class*="text-white"],
+  .printable-dossier [class*="text-white"] {
+    color: #09090b !important;
+  }
+
+  #print-section .text-zinc-400,
+  .printable-dossier .text-zinc-400,
+  #print-section .text-zinc-500,
+  .printable-dossier .text-zinc-500 {
+    color: #334155 !important;
+  }
+
+  #print-section .text-emerald-400,
+  .printable-dossier .text-emerald-400,
+  #print-section .text-emerald-300,
+  .printable-dossier .text-emerald-300 {
+    color: #047857 !important;
+    font-weight: 600 !important;
+  }
+
+  #print-section .text-gov-blue,
+  .printable-dossier .text-gov-blue,
+  #print-section .text-cyan-400,
+  .printable-dossier .text-cyan-400 {
+    color: #0369a1 !important;
+    font-weight: 600 !important;
+  }
+
+  #print-section .bg-zinc-950,
+  .printable-dossier .bg-zinc-950,
+  #print-section .bg-black,
+  .printable-dossier .bg-black,
+  #print-section .bg-zinc-900,
+  .printable-dossier .bg-zinc-900,
+  #print-section .glass,
+  .printable-dossier .glass,
+  #print-section [class*="bg-black"],
+  .printable-dossier [class*="bg-black"],
+  #print-section [class*="bg-zinc"],
+  .printable-dossier [class*="bg-zinc"] {
+    background: #f8fafc !important;
+    border: 1px solid #000000 !important;
+    border-radius: 6px !important;
+  }
+
+  #print-section hr,
+  .printable-dossier hr,
+  #print-section .border-b,
+  .printable-dossier .border-b,
+  #print-section .border-t,
+  .printable-dossier .border-t {
+    border-color: #000000 !important;
+  }
+
+  /* Avoid breaking across critical sections */
+  section,
+  .page-break-avoid,
+  tr,
+  .printable-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 1.2cm;
   }
 }

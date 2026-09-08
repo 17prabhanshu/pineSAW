@@ -9,6 +9,7 @@
  */
 
 const PINESAW_API_ENDPOINT = process.env.PINESAW_API || "http://localhost:3000/api/ingest/parse";
+const PINESAW_KAFKA_ENDPOINT = process.env.PINESAW_KAFKA || "http://localhost:3000/api/kafka/publish";
 const TOR_PROXY_HOST = process.env.TOR_PROXY_HOST || "127.0.0.1";
 const TOR_PROXY_PORT = process.env.TOR_PROXY_PORT || 9050;
 
@@ -58,6 +59,27 @@ async function crawlAndIngest() {
         console.log(`  ✔ Ingested: Threat Level [${data.parsed.threatLevel}] | Extracted: ${data.parsed.narcotics.length} Drugs, ${data.parsed.identifiers.cryptoAddresses.length} Wallets, ${data.parsed.identifiers.communicationHandles.length} Handles.`);
       } else {
         console.log(`  ⚠ Ingest failed with status ${res.status}`);
+      }
+
+      // Stream to Apache Kafka Event Bus (pinesaw.raw.intercepts)
+      try {
+        await fetch(PINESAW_KAFKA_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            topic: "pinesaw.raw.intercepts",
+            source: `Tor SOCKS5 Node [${item.market}]`,
+            data: {
+              url: item.onionUrl,
+              market: item.market,
+              rawText: item.rawText,
+              timestamp: new Date().toISOString()
+            }
+          })
+        });
+        console.log(`  ✔ Dispatched to Kafka Topic [pinesaw.raw.intercepts]`);
+      } catch (kErr) {
+        // Kafka fallback handled gracefully
       }
     } catch (err) {
       console.log(`  ❌ Error connecting to pineSAW API: ${err.message}`);

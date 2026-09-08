@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CalligraphicMark } from "./CalligraphicMark";
+import { KafkaMonitorModal } from "./KafkaMonitorModal";
 import { 
   MagnifyingGlass, 
   CaretDown, 
@@ -23,11 +24,13 @@ const navSections = [
   { href: "/reports", label: "Evidence & Reports" },
   { href: "/actions", label: "Action Center" },
   { href: "/alerts", label: "Alerts" },
+  { href: "/kafka", label: "Kafka Bus" },
 ];
 
 export function TopNav() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [kafkaModalOpen, setKafkaModalOpen] = useState(false);
 
   return (
     <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl z-50 transition-all duration-300">
@@ -80,6 +83,16 @@ export function TopNav() {
 
         {/* Right: Telemetry pill & Command button */}
         <div className="flex items-center gap-3 shrink-0">
+          {/* Kafka Event Bus Status Indicator */}
+          <button
+            onClick={() => setKafkaModalOpen(true)}
+            className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 hover:border-amber-500/60 bg-amber-500/10 hover:bg-amber-500/20 font-mono text-[10px] text-amber-300 transition-all cursor-pointer shadow-[0_0_12px_rgba(245,158,11,0.15)]"
+            title="Inspect Apache Kafka Event Bus & Topics"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-pulse"></span>
+            <span>KAFKA :9092</span>
+          </button>
+
           {/* Status Indicator */}
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 font-mono text-[10px] text-zinc-300">
             <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] shadow-[0_0_8px_#00f0ff] animate-pulse"></span>
@@ -133,6 +146,9 @@ export function TopNav() {
           })}
         </div>
       )}
+
+      {/* Kafka Telemetry & Stream Inspector Modal */}
+      <KafkaMonitorModal isOpen={kafkaModalOpen} onClose={() => setKafkaModalOpen(false)} />
     </header>
   );
 }

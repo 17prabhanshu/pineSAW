@@ -151,7 +151,7 @@ export default function ReportsPage() {
       </div>
 
       {reportReady && (
-        <div className="surface-1 nexus-border rounded-2xl p-10 flex-1 overflow-auto glass text-zinc-200 shadow-2xl relative animate-in fade-in slide-in-from-bottom-4">
+        <div id="print-section" className="printable-dossier surface-1 nexus-border rounded-2xl p-10 flex-1 overflow-auto glass text-zinc-200 shadow-2xl relative animate-in fade-in slide-in-from-bottom-4">
           
           {/* Print specific branding */}
           <div className="hidden print:block absolute inset-0 pointer-events-none opacity-[0.03] flex items-center justify-center">

@@ -5,6 +5,7 @@ import {
   MagnifyingGlass, 
   User, 
   Folder, 
+  FolderPlus,
   CaretRight, 
   Cpu, 
   SlidersHorizontal, 
@@ -20,6 +21,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import clsx from "clsx";
+import { AddToInvestigationModal, AddToInvestigationItem } from "@/components/AddToInvestigationModal";
 
 interface SearchEntity {
   id: string;
@@ -68,6 +70,8 @@ export default function SearchPage() {
   const [indexType, setIndexType] = useState("HNSW");
   const [showControls, setShowControls] = useState(true);
   const [dispatchedAgents, setDispatchedAgents] = useState<Record<string, string>>({});
+  const [investigationModalItem, setInvestigationModalItem] = useState<AddToInvestigationItem | null>(null);
+  const [isInvestigationModalOpen, setIsInvestigationModalOpen] = useState(false);
 
   const executeSearch = async (searchQuery: string, dWeight = denseWeight, tHold = threshold, iType = indexType) => {
     if (!searchQuery.trim()) return;
@@ -159,6 +163,25 @@ export default function SearchPage() {
           <MagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 text-base" />
           
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setInvestigationModalItem({
+                  source: "FAISS Vector Search Engine",
+                  text: `Vector search query executed: "${query}" (Retrieved ${results.entities.length} nearest threat vectors)`,
+                  sender: "FAISS Vector Engine",
+                  threatLevel: "HIGH",
+                  priorityScore: 80,
+                  timestamp: new Date().toISOString()
+                });
+                setIsInvestigationModalOpen(true);
+              }}
+              className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-semibold rounded transition-colors flex items-center gap-1.5 border border-white/15 cursor-pointer"
+              title="Add current search query to an investigation case"
+            >
+              <FolderPlus size={13} weight="bold" />
+              <span className="hidden sm:inline">Add to Case</span>
+            </button>
             <button 
               type="submit" 
               disabled={searching}
@@ -417,6 +440,26 @@ export default function SearchPage() {
                                 </button>
                               )}
 
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setInvestigationModalItem({
+                                    source: ent.source || "FAISS Vector Space",
+                                    text: `Vector Intelligence Hit: "${ent.label}" (${ent.type})\n${ent.text || ent.riskFactors || "Forensic vector entity retrieved from FAISS space."}`,
+                                    sender: ent.label,
+                                    threatLevel: ent.priorityScore >= 80 ? "CRITICAL" : "HIGH",
+                                    priorityScore: ent.priorityScore || 80,
+                                    timestamp: new Date().toISOString()
+                                  });
+                                  setIsInvestigationModalOpen(true);
+                                }}
+                                className="text-[10px] font-mono px-2 py-1 rounded border border-white/15 bg-white/5 hover:bg-white hover:text-black transition-all flex items-center gap-1 text-zinc-300 cursor-pointer"
+                                title="Dispatch entity to investigation case"
+                              >
+                                <FolderPlus size={11} weight="bold" />
+                                Add to Case
+                              </button>
+
                               <Link
                                 href={`/entities/${ent.id}`}
                                 className="text-[10px] font-mono px-2 py-1 rounded bg-white/10 text-white hover:bg-white hover:text-black transition-colors flex items-center gap-1"
@@ -470,6 +513,19 @@ export default function SearchPage() {
 
         </div>
       </div>
+
+      {/* Add to Investigation Dispatch Modal */}
+      <AddToInvestigationModal
+        isOpen={isInvestigationModalOpen}
+        onClose={() => {
+          setIsInvestigationModalOpen(false);
+          setInvestigationModalItem(null);
+        }}
+        item={investigationModalItem}
+        onSuccess={() => {
+          executeSearch(query);
+        }}
+      />
     </div>
   );
 }

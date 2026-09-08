@@ -363,9 +363,9 @@ export default function FinancialPage() {
 
       {/* LEGAL NOTICE GENERATION MODAL */}
       {legalModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px] p-4">
-          <div className="glass border border-zinc-400 w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh]">
-            <div className="bg-zinc-950 text-white px-6 py-4 flex justify-between items-center shrink-0 border-b border-zinc-400">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px] p-4 print:static print:inset-auto print:bg-transparent print:backdrop-blur-none print:p-0 print:m-0 print:block print:w-full print:h-auto">
+          <div className="glass border border-zinc-400 w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] print:static print:max-w-none print:max-h-none print:overflow-visible print:border-none print:shadow-none print:bg-white print:rounded-none print:w-full print:p-0 print:m-0">
+            <div className="bg-zinc-950 text-white px-6 py-4 flex justify-between items-center shrink-0 border-b border-zinc-400 print:hidden">
               <div className="flex items-center gap-3">
                 <ShieldCheck size={20} className="text-white" />
                 <div>
@@ -380,31 +380,31 @@ export default function FinancialPage() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 print:p-0 print:overflow-visible">
               {legalLoading ? (
                 <div className="py-12 text-center font-mono text-xs text-zinc-400 animate-pulse">
                   CALCULATING SECTION 65B CRYPTOGRAPHIC HASH & GENERATING NOTICE...
                 </div>
               ) : legalNoticeDoc ? (
                 <>
-                  <div className="p-3 bg-zinc-800/30 border border-white/10 flex justify-between items-center text-xs">
+                  <div className="p-3 bg-zinc-800/30 border border-white/10 flex justify-between items-center text-xs print:bg-gray-50 print:border print:border-black print:text-black">
                     <div>
-                      <span className="font-mono text-[10px] text-zinc-400 uppercase block">Digital Evidence Hash (Section 65B)</span>
-                      <span className="font-mono text-white font-bold text-[11px] select-all break-all">
+                      <span className="font-mono text-[10px] text-zinc-400 print:text-gray-700 uppercase block font-semibold">Digital Evidence Hash (Section 65B)</span>
+                      <span className="font-mono text-white print:text-black font-bold text-[11px] select-all break-all">
                         SHA-256: {legalNoticeDoc.sha256EvidenceHash}
                       </span>
                     </div>
-                    <span className="badge-neutral text-[10px] font-mono uppercase shrink-0 ml-3">TAMPER-EVIDENT</span>
+                    <span className="badge-neutral text-[10px] font-mono uppercase shrink-0 ml-3 print:border-black print:text-black">TAMPER-EVIDENT</span>
                   </div>
 
-                  <div id="print-section" className="bg-zinc-900 border border-white/10 p-5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-300 overflow-x-auto select-all">
+                  <div id="print-section" className="printable-dossier bg-zinc-900 border border-white/10 p-5 font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-300 overflow-x-auto select-all print:bg-white print:text-black print:border print:border-black print:p-6 print:overflow-visible">
                     {legalNoticeDoc.formattedText}
                   </div>
                 </>
               ) : null}
             </div>
 
-            <div className="p-4 border-t border-white/10 bg-zinc-800/30 flex justify-between items-center">
+            <div className="p-4 border-t border-white/10 bg-zinc-800/30 flex justify-between items-center print:hidden">
               <div className="text-[10px] font-mono text-zinc-400">
                 Chandigarh Police Cyber Crime Division · Court Admissible
               </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { DarknetNLPExtractor } from "@/lib/nlp/slangExtractor";
 import prisma from "@/lib/db";
+import { kafkaService, KAFKA_TOPICS } from "@/lib/kafka/kafkaClient";
 
 // Tactical CTI Intercept presets for North India / Chandigarh Narcotics & Cyber investigations
 const CTI_TELEGRAM_PRESETS: Record<string, any[]> = {
@@ -1030,6 +1031,30 @@ Invite URL: ${inviteUrl} · Status: VERIFIED ACTIVE GROUP INVITE
         });
       } catch {
         // ZMQ publish handled gracefully
+      }
+
+      // 6. Publish to Apache Kafka Event Bus (pinesaw.raw.intercepts)
+      try {
+        await kafkaService.publish(
+          KAFKA_TOPICS.RAW_INTERCEPTS,
+          {
+            channel: post.channel || post.url || "@scraped_stream",
+            sender: post.sender || "Anonymous Actor",
+            url: post.url,
+            text: post.text,
+            timestamp: post.timestamp,
+            threatLevel: parsed.threatLevel,
+            extractedIOCs: {
+              cryptoWallets: parsed.identifiers.cryptoAddresses,
+              communicationHandles: parsed.identifiers.communicationHandles,
+              narcotics: parsed.narcotics,
+              onionMirrors: onionDomains,
+            },
+          },
+          type === "TELEGRAM" ? `Telegram Ingestor (${post.channel || "@feed"})` : "Clearweb Scraper"
+        );
+      } catch {
+        // Kafka publish handled gracefully
       }
 
       processedResults.push({

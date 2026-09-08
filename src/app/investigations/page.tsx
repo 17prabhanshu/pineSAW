@@ -115,8 +115,9 @@ export default function InvestigationsPage() {
                 <th className="px-4 py-3 font-semibold w-32">Case ID</th>
                 <th className="px-4 py-3 font-semibold">Title</th>
                 <th className="px-4 py-3 font-semibold w-28">Priority</th>
-                <th className="px-4 py-3 font-semibold w-28">Status</th>
-                <th className="px-4 py-3 font-semibold w-36 text-right">Last Updated</th>
+                <th className="px-4 py-3 font-semibold w-24">Exhibits</th>
+                <th className="px-4 py-3 font-semibold w-24">Status</th>
+                <th className="px-4 py-3 font-semibold w-32 text-right">Last Updated</th>
               </tr>
             </thead>
             {isLoading ? (
@@ -152,6 +153,14 @@ export default function InvestigationsPage() {
                         "bg-white/10 text-white border-white/20"
                       )}>
                         {inv.priority}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={clsx(
+                        "px-2 py-0.5 rounded text-[9px] font-mono border inline-block",
+                        (inv.evidence?.length || 0) > 0 ? "bg-emerald-950/50 text-emerald-300 border-emerald-500/30 font-bold" : "bg-white/5 text-zinc-400 border-white/10"
+                      )}>
+                        {inv.evidence?.length || 0} Exhibits
                       </span>
                     </td>
                     <td className="px-4 py-3">

@@ -8,6 +8,7 @@
  */
 
 const PINESAW_API_ENDPOINT = process.env.PINESAW_API || "http://localhost:3000/api/ingest/parse";
+const PINESAW_KAFKA_ENDPOINT = process.env.PINESAW_KAFKA || "http://localhost:3000/api/kafka/publish";
 
 console.log("================================================================================");
 console.log("  pineSAW TELEGRAM CHAT & CHANNEL MONITORING MICROSERVICE");
@@ -56,6 +57,28 @@ async function runTelegramIngestionStream() {
         console.log(`  ✔ Ingested to Graph: Threat Tier [${data.parsed.threatLevel}] | Identified: ${data.parsed.narcotics.map(n => n.standardizedName).join(", ")}`);
       } else {
         console.log(`  ⚠ API ingestion returned status ${res.status}`);
+      }
+
+      // Stream to Apache Kafka Event Bus (pinesaw.raw.intercepts)
+      try {
+        await fetch(PINESAW_KAFKA_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            topic: "pinesaw.raw.intercepts",
+            source: `Telegram MTProto Listener [${msg.channel}]`,
+            data: {
+              channel: msg.channel,
+              sender: msg.sender,
+              rawText: msg.message,
+              timestamp: msg.timestamp
+            },
+            autoExtract: true
+          })
+        });
+        console.log(`  ✔ Dispatched to Kafka Bus with automated downstream extraction`);
+      } catch (kErr) {
+        // Kafka fallback handled gracefully
       }
     } catch (err) {
       console.log(`  ❌ API Connection Error: ${err.message}`);
