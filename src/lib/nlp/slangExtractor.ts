@@ -122,7 +122,7 @@ export class DarknetNLPExtractor {
     // 1. Slang & Substance matching
     for (const [slang, info] of Object.entries(this.SLANG_DICTIONARY)) {
       // Word boundary match
-      const regex = new RegExp(`\\b${slang}\\b`, "i");
+      const regex = new RegExp(`(?<![a-zA-Z0-9])${slang}(?![a-zA-Z0-9])`, "i");
       if (regex.test(textLower)) {
         // Try to extract quantity nearby (e.g. "100g of ice", "500 m30 pills")
         const qtyRegex = new RegExp(`(\\d+(?:\\.\\d+)?\\s*(?:g|grams?|kg|kilos?|pills?|tabs?|caps?|oz|ounces?|sheets?))\\s*(?:of\\s*)?${slang}`, "i");

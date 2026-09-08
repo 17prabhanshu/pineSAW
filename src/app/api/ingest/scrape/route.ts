@@ -829,7 +829,8 @@ Invite URL: ${inviteUrl} · Status: VERIFIED ACTIVE GROUP INVITE
     let vectorizedCount = 0;
 
     for (const post of scrapedPosts) {
-      let parsed = DarknetNLPExtractor.parse(post.text);
+      const fullText = [post.url, post.title, post.channel, post.text].filter(Boolean).join(" ");
+      let parsed = DarknetNLPExtractor.parse(fullText);
       
       // Enrich with Python FastAPI NLP & Chain Tracker
       try {

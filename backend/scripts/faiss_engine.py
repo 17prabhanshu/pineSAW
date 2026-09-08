@@ -321,11 +321,14 @@ def run_daemon(port=5055):
                     self.wfile.write(json.dumps({"status": "indexed", "total_vectors": engine.index_flat.ntotal, "document": added}).encode())
                 except Exception as e:
                     self.send_response(400)
+                    self.send_header("Content-Type", "application/json")
+                    self.send_header("Access-Control-Allow-Origin", "*")
                     self.end_headers()
                     self.wfile.write(json.dumps({"error": str(e)}).encode())
                 return
 
             self.send_response(404)
+            self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
 
     server = HTTPServer(("127.0.0.1", port), FaissHandler)

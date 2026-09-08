@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:backend": "backend/venv/Scripts/python.exe backend/simple_sse.py",
+    "dev:vector": "backend/venv/Scripts/python.exe backend/scripts/faiss_engine.py --daemon --port 5055",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev:vector\" \"npm run dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
