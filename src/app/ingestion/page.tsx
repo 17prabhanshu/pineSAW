@@ -1868,6 +1868,23 @@ export default function IngestionPanel() {
                         {p.text}
                       </div>
 
+                      {/* LLM Forensic Assessment */}
+                      {nlp.llmSlangExplanation && nlp.llmSlangExplanation !== "No unknown vernacular detected." && (
+                        <div className="mt-3 p-3 rounded-lg bg-purple-950/30 border border-purple-500/30 flex items-start gap-3">
+                          <div className="mt-0.5">
+                            <Sparkle size={14} className="text-purple-400" />
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            <div className="text-[10px] font-mono text-purple-400 uppercase tracking-widest font-bold">
+                              LLM Forensic Assessment
+                            </div>
+                            <div className="text-xs font-mono text-zinc-300 whitespace-pre-wrap leading-relaxed">
+                              {nlp.llmSlangExplanation}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Extracted IOC Badges */}
                       {(nlp.identifiers?.cryptoAddresses?.length > 0 || nlp.narcotics?.length > 0 || onions.length > 0 || nlp.identifiers?.communicationHandles?.length > 0) && (
                         <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 space-y-2 font-mono text-xs">
