@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { X, MapPin, Warning, CheckCircle, Copy } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { toast } from 'sonner';
@@ -54,7 +54,7 @@ function generateDraft(key: string, geo: GeoData, sender: string, postText: stri
   const coords = geo.lat && geo.lon ? `${geo.lat.toFixed(5)}N, ${geo.lon.toFixed(5)}E` : 'Unavailable';
   const ip   = geo.ip || 'Unknown';
   const isp  = geo.isp || geo.org || 'Unknown ISP';
-  const snippet = postText?.substring(0, 200) || '';
+  const snippet = (postText || '').substring(0, 200);
 
   if (key === 'police') return `TO,\nThe Station House Officer,\n[Nearest Police Station], ${geo.regionName || 'Punjab'}\n\nSUBJECT: Complaint under NDPS Act / IPC / IT Act\n\nOn behalf of Chandigarh Police Cyber Cell (DARKINT Platform):\n\nSUSPECT     : ${sender}\nPLATFORM    : Telegram / WhatsApp Narcotics Network\nSNIPPET     : "${snippet}..."\nTIMESTAMP   : ${ts || now}\n\nDIGITAL FORENSIC INDICATORS:\n  IP Address  : ${ip}  (${isp})\n  Geolocation : ${loc}\n  Coordinates : ${coords}\n  VPN/Proxy   : ${geo.proxy ? 'YES' : 'No'}\n  Tor Exit    : ${geo.tor ? 'YES' : 'No'}\n  Mobile      : ${geo.mobile ? 'Yes' : 'No'}\n\nLEGAL BASIS: Sec 8(c)/22 NDPS Act | Sec 67 IT Act | Sec 316/61 BNSS 2023\n\nKindly register FIR.\n\nChandigarh Cyber Cell\nDate: ${now} | Ref: DARKINT-GEO-${Date.now()}`;
 
@@ -80,12 +80,21 @@ export default function SuspectGeoModal({
   const [mapReady, setMapReady]   = useState(false);
   const mapRef     = useRef<HTMLDivElement>(null);
   const leafletRef = useRef<any>(null);
+  const mapInitRef = useRef(false);
 
-  const doGeolocate = async (overrideIp?: string) => {
+  const destroyMap = useCallback(() => {
+    if (leafletRef.current) {
+      try { leafletRef.current.remove(); } catch {}
+      leafletRef.current = null;
+    }
+    mapInitRef.current = false;
+    setMapReady(false);
+  }, []);
+
+  const doGeolocate = useCallback(async (overrideIp?: string) => {
     setLoading(true);
     setGeo(null);
-    setMapReady(false);
-    if (leafletRef.current) { try { leafletRef.current.remove(); } catch {} leafletRef.current = null; }
+    destroyMap();
     try {
       const phoneMatch = sender.match(/\+91[\s-]?\d{5}[\s-]?\d{5}/);
       const detectedPhone = phoneMatch ? phoneMatch[0] : phone;
@@ -94,52 +103,96 @@ export default function SuspectGeoModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ip: overrideIp || undefined, phone: detectedPhone, senderName: sender }),
       });
-      setGeo(await res.json());
+      const data = await res.json();
+      setGeo(data);
     } catch (err: any) {
       toast.error('Geolocation failed: ' + err.message);
-    } finally { setLoading(false); }
-  };
-
-  useEffect(() => {
-    if (isOpen) { doGeolocate(); }
-    else {
-      setGeo(null); setActiveAction(null); setDraftText(''); setManualIp(''); setMapReady(false);
-      if (leafletRef.current) { try { leafletRef.current.remove(); } catch {} leafletRef.current = null; }
+      setGeo({ success: false, message: err.message });
+    } finally {
+      setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [sender, phone, destroyMap]);
 
+  // Fire on open
   useEffect(() => {
-    if (!geo?.success || !geo.lat || !geo.lon || !mapRef.current || mapReady) return;
-    (async () => {
+    if (isOpen) {
+      setGeo(null);
+      setActiveAction(null);
+      setDraftText('');
+      setManualIp('');
+      destroyMap();
+      doGeolocate();
+    }
+  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Init Leaflet map after geo data arrives and map div is mounted
+  useEffect(() => {
+    if (!geo?.success || !geo.lat || !geo.lon || mapInitRef.current) return;
+
+    // Small delay to ensure the DOM element is rendered
+    const timer = setTimeout(async () => {
+      if (!mapRef.current || mapInitRef.current) return;
       try {
         const L = (await import('leaflet')).default;
-        if (!document.getElementById('leaflet-css')) {
+
+        // Inject Leaflet CSS once
+        if (!document.getElementById('leaflet-css-darkint')) {
           const link = document.createElement('link');
-          link.id = 'leaflet-css'; link.rel = 'stylesheet';
+          link.id   = 'leaflet-css-darkint';
+          link.rel  = 'stylesheet';
           link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
           document.head.appendChild(link);
+          // Give CSS time to load
+          await new Promise(r => setTimeout(r, 300));
         }
-        if (leafletRef.current) { try { leafletRef.current.remove(); } catch {} leafletRef.current = null; }
-        const map = L.map(mapRef.current!, { center: [geo.lat!, geo.lon!], zoom: 10, zoomControl: true, attributionControl: false });
+
+        if (!mapRef.current || mapInitRef.current) return;
+
+        mapInitRef.current = true;
+        destroyMap();
+
+        const map = L.map(mapRef.current, {
+          center: [geo.lat!, geo.lon!],
+          zoom: 11,
+          zoomControl: true,
+          attributionControl: false,
+        });
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
         const icon = L.divIcon({
           className: '',
           html: '<div style="position:relative;width:44px;height:44px;display:flex;align-items:center;justify-content:center"><div style="position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(239,68,68,0.22);animation:gp 1.5s infinite"></div><div style="position:absolute;width:22px;height:22px;border-radius:50%;background:rgba(239,68,68,0.6);border:2px solid #ef4444"></div><div style="position:absolute;width:9px;height:9px;border-radius:50%;background:#ef4444"></div></div><style>@keyframes gp{0%{transform:scale(1);opacity:1}100%{transform:scale(2.8);opacity:0}}</style>',
-          iconSize: [44, 44], iconAnchor: [22, 22],
+          iconSize: [44, 44],
+          iconAnchor: [22, 22],
         });
-        L.marker([geo.lat!, geo.lon!], { icon }).addTo(map)
-          .bindPopup(`<b>${geo.city}, ${geo.regionName}</b><br/>${geo.ip}<br/>${geo.isp}`)
+
+        L.marker([geo.lat!, geo.lon!], { icon })
+          .addTo(map)
+          .bindPopup(`<b>${geo.city || ''}, ${geo.regionName || ''}</b><br/>${geo.ip || ''}<br/>${geo.isp || ''}`)
           .openPopup();
+
         leafletRef.current = map;
         setMapReady(true);
-        setTimeout(() => map.flyTo([geo.lat!, geo.lon!], 13, { animate: true, duration: 1.6 }), 350);
-      } catch (e) { console.error('Leaflet error', e); }
-    })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [geo, mapReady]);
 
-  if (!isOpen) return null;
+        // Animate flyTo after marker settles
+        setTimeout(() => {
+          map.flyTo([geo.lat!, geo.lon!], 13, { animate: true, duration: 1.8 });
+        }, 500);
+
+      } catch (e) {
+        console.error('Leaflet init error:', e);
+        mapInitRef.current = false;
+      }
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, [geo]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => { destroyMap(); };
+  }, [destroyMap]);
 
   const riskFlags = [
     ...(geo?.tor    ? [{ label: 'TOR',       cls: 'bg-red-950 text-red-300 border-red-500/40' }]    : []),
@@ -147,9 +200,12 @@ export default function SuspectGeoModal({
     ...(geo?.mobile ? [{ label: 'MOBILE',    cls: 'bg-blue-950 text-blue-300 border-blue-500/40' }] : []),
   ];
 
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm p-2 sm:p-4">
       <div className="w-full max-w-6xl max-h-[95vh] overflow-hidden rounded-2xl bg-zinc-950 border border-red-500/30 shadow-2xl flex flex-col">
+
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/10 bg-red-950/20 shrink-0">
           <div className="flex items-center gap-3">
@@ -157,7 +213,7 @@ export default function SuspectGeoModal({
               <MapPin size={16} className="text-red-400" weight="fill" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white font-mono uppercase tracking-wider">Suspect Geolocation & Tactical Actions</h2>
+              <h2 className="text-sm font-bold text-white font-mono uppercase tracking-wider">Suspect Geolocation &amp; Tactical Actions</h2>
               <p className="text-[10px] font-mono text-zinc-400 mt-0.5">
                 Target: <span className="text-red-300">{sender}</span>
                 {channel && <span className="text-zinc-500"> &middot; {channel}</span>}
@@ -171,60 +227,48 @@ export default function SuspectGeoModal({
 
         {/* Body */}
         <div className="flex-1 overflow-auto">
+
+          {/* Loading */}
           {loading && (
             <div className="flex flex-col items-center justify-center h-72 gap-4">
               <div className="w-8 h-8 border-2 border-red-500/30 border-t-red-400 rounded-full animate-spin" />
               <div className="font-mono text-xs text-zinc-400 animate-pulse">TRIANGULATING SUSPECT COORDINATES...</div>
               <div className="flex gap-1.5">
-                {['OSINT','TRAI','IP-GEO','ISP'].map(s => (
+                {['OSINT', 'TRAI', 'IP-GEO', 'ISP'].map(s => (
                   <span key={s} className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[9px] text-zinc-500">{s}</span>
                 ))}
               </div>
             </div>
           )}
 
-          {!loading && geo?.needsIp && (
-            <div className="p-8 flex flex-col items-center gap-5 text-center">
-              <div className="w-14 h-14 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-                <Warning size={28} className="text-amber-400" />
-              </div>
-              <div>
-                <h3 className="font-mono font-bold text-white text-sm">IP Address Required</h3>
-                <p className="text-zinc-400 text-xs font-mono mt-1 max-w-sm">{geo.message}</p>
-              </div>
-              <div className="flex gap-2 w-full max-w-md">
-                <input type="text" placeholder="Enter IP from CDR (e.g. 49.36.44.107)"
-                  value={manualIp} onChange={e => setManualIp(e.target.value)}
-                  className="flex-1 bg-black border border-white/15 rounded-lg px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-red-400"
-                />
-                <button onClick={() => doGeolocate(manualIp)} disabled={!manualIp.trim()}
-                  className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-mono text-xs font-bold transition-colors disabled:opacity-50">
-                  GEOLOCATE
-                </button>
-              </div>
-            </div>
-          )}
-
+          {/* Main panel — shown whenever geo.success is true */}
           {!loading && geo?.success && (
             <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
-              {/* LEFT */}
+
+              {/* LEFT: Map + OSINT */}
               <div className="border-r border-white/10 flex flex-col">
-                <div className="relative bg-zinc-900" style={{ height: 280 }}>
-                  <div ref={mapRef} className="w-full h-full" />
+
+                {/* Map container */}
+                <div className="relative bg-zinc-900 shrink-0" style={{ height: 280 }}>
+                  <div ref={mapRef} style={{ width: '100%', height: '100%', zIndex: 1 }} />
                   {!mapReady && (
                     <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 z-10">
                       <div className="flex flex-col items-center gap-2">
-                        <div className="w-5 h-5 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
+                        <div className="w-6 h-6 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
                         <span className="text-[10px] font-mono text-zinc-500">RENDERING MAP...</span>
                       </div>
                     </div>
                   )}
+                  {/* Tactical overlays */}
                   <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5 pointer-events-none">
                     <div className="px-2 py-1 rounded bg-black/80 border border-red-500/40 font-mono text-[9px] text-red-300 flex items-center gap-1.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" /> LIVE TRIANGULATION ACTIVE
+                      <div className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                      LIVE TRIANGULATION ACTIVE
                     </div>
                     {geo.syntheticNote && (
-                      <div className="px-2 py-1 rounded bg-amber-950/80 border border-amber-500/30 font-mono text-[9px] text-amber-300">&#x26A0; CTI SYNTHETIC IP</div>
+                      <div className="px-2 py-1 rounded bg-amber-950/80 border border-amber-500/30 font-mono text-[9px] text-amber-300 max-w-[200px] leading-tight">
+                        &#x26A0; ESTIMATED LOCATION
+                      </div>
                     )}
                   </div>
                   <div className="absolute bottom-2 right-2 z-20 flex gap-1">
@@ -234,6 +278,7 @@ export default function SuspectGeoModal({
                   </div>
                 </div>
 
+                {/* OSINT Data */}
                 <div className="p-4 overflow-auto flex-1">
                   <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-3">Suspect Digital Footprint</p>
                   <div className="grid grid-cols-2 gap-2 font-mono text-xs">
@@ -259,17 +304,33 @@ export default function SuspectGeoModal({
                       </div>
                     ))}
                   </div>
-                  {geo.syntheticNote && <p className="mt-3 text-[9px] font-mono text-amber-400/70 border border-amber-500/20 rounded p-2 bg-amber-950/20">&#x26A0; {geo.syntheticNote}</p>}
-                  {geo.disclaimer   && <p className="mt-2 text-[9px] font-mono text-zinc-500 border border-white/5 rounded p-2 bg-white/[0.02]">&#x2139; {geo.disclaimer}</p>}
+
+                  {geo.syntheticNote && (
+                    <p className="mt-3 text-[9px] font-mono text-amber-400/70 border border-amber-500/20 rounded p-2 bg-amber-950/20 leading-relaxed">
+                      &#x26A0; {geo.syntheticNote}
+                    </p>
+                  )}
+                  {geo.disclaimer && (
+                    <p className="mt-2 text-[9px] font-mono text-zinc-500 border border-white/5 rounded p-2 bg-white/[0.02]">&#x2139; {geo.disclaimer}</p>
+                  )}
+
+                  {/* Manual IP override */}
                   <div className="mt-4 pt-3 border-t border-white/5">
-                    <p className="text-[9px] font-mono text-zinc-500 uppercase mb-2">Override with known IP from CDR</p>
+                    <p className="text-[9px] font-mono text-zinc-500 uppercase mb-2">Override with real IP from CDR / court order</p>
                     <div className="flex gap-2">
-                      <input type="text" placeholder="e.g. 103.24.96.78"
-                        value={manualIp} onChange={e => setManualIp(e.target.value)}
+                      <input
+                        type="text"
+                        placeholder="e.g. 103.24.96.78"
+                        value={manualIp}
+                        onChange={e => setManualIp(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && manualIp.trim() && doGeolocate(manualIp)}
                         className="flex-1 bg-black border border-white/10 rounded px-2.5 py-1.5 text-white font-mono text-[11px] focus:outline-none focus:border-red-400"
                       />
-                      <button onClick={() => doGeolocate(manualIp)} disabled={!manualIp.trim()}
-                        className="px-3 py-1.5 rounded bg-red-500/80 hover:bg-red-500 text-white font-mono text-[11px] font-bold transition-colors disabled:opacity-40">
+                      <button
+                        onClick={() => doGeolocate(manualIp)}
+                        disabled={!manualIp.trim()}
+                        className="px-3 py-1.5 rounded bg-red-500/80 hover:bg-red-500 text-white font-mono text-[11px] font-bold transition-colors disabled:opacity-40"
+                      >
                         REPLOT
                       </button>
                     </div>
@@ -277,22 +338,25 @@ export default function SuspectGeoModal({
                 </div>
               </div>
 
-              {/* RIGHT */}
+              {/* RIGHT: Action Cards + Draft */}
               <div className="flex flex-col">
                 <div className="p-4 border-b border-white/5 shrink-0">
                   <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-3">Law Enforcement Actions</p>
                   <div className="flex flex-col gap-2">
                     {ACTION_CARDS.map(card => (
-                      <button key={card.key} onClick={() => {
-                        setActiveAction(card.key);
-                        setDraftText(generateDraft(card.key, geo!, sender, postText, timestamp || new Date().toLocaleString('en-IN')));
-                      }}
+                      <button
+                        key={card.key}
+                        onClick={() => {
+                          setActiveAction(card.key);
+                          setDraftText(generateDraft(card.key, geo!, sender, postText, timestamp || new Date().toLocaleString('en-IN')));
+                        }}
                         className={clsx(
                           'w-full px-3 py-2.5 rounded-xl border text-left font-mono text-xs transition-all flex items-center gap-3',
                           activeAction === card.key
                             ? 'bg-white/10 border-white/30 text-white'
                             : 'bg-white/[0.02] border-white/10 text-zinc-300 hover:bg-white/[0.05] hover:border-white/20'
-                        )}>
+                        )}
+                      >
                         <span className="text-base shrink-0">{card.emoji}</span>
                         <div className="flex-1 min-w-0">
                           <div className="font-bold text-[11px]">{card.label}</div>
@@ -308,13 +372,18 @@ export default function SuspectGeoModal({
                   <div className="flex-1 flex flex-col p-4 gap-3 overflow-auto">
                     <div className="flex items-center justify-between">
                       <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Generated Legal Draft</span>
-                      <button onClick={() => { navigator.clipboard.writeText(draftText); toast.success('Draft copied to clipboard'); }}
-                        className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 font-mono text-[10px] text-zinc-300 flex items-center gap-1.5 transition-colors">
+                      <button
+                        onClick={() => { navigator.clipboard.writeText(draftText); toast.success('Draft copied to clipboard'); }}
+                        className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 font-mono text-[10px] text-zinc-300 flex items-center gap-1.5 transition-colors"
+                      >
                         <Copy size={11} /> Copy
                       </button>
                     </div>
-                    <textarea readOnly value={draftText}
-                      className="flex-1 bg-black border border-white/10 rounded-lg p-3 font-mono text-[10px] text-zinc-200 leading-relaxed resize-none focus:outline-none min-h-[240px]" />
+                    <textarea
+                      readOnly
+                      value={draftText}
+                      className="flex-1 bg-black border border-white/10 rounded-lg p-3 font-mono text-[10px] text-zinc-200 leading-relaxed resize-none focus:outline-none min-h-[240px]"
+                    />
                     <p className="text-[9px] font-mono text-zinc-600">&#x26A0; Review all blanks and obtain legal authorization before submission.</p>
                   </div>
                 ) : (
@@ -325,6 +394,24 @@ export default function SuspectGeoModal({
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Error / failure state */}
+          {!loading && geo && !geo.success && !geo.needsIp && (
+            <div className="p-8 flex flex-col items-center gap-4 text-center">
+              <Warning size={32} className="text-red-400" />
+              <p className="text-zinc-400 font-mono text-xs">{geo.message || 'Geolocation failed. Try entering an IP manually.'}</p>
+              <div className="flex gap-2 w-full max-w-md">
+                <input type="text" placeholder="Enter IP (e.g. 49.36.44.107)"
+                  value={manualIp} onChange={e => setManualIp(e.target.value)}
+                  className="flex-1 bg-black border border-white/15 rounded-lg px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-red-400"
+                />
+                <button onClick={() => doGeolocate(manualIp)} disabled={!manualIp.trim()}
+                  className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-mono text-xs font-bold transition-colors disabled:opacity-50">
+                  GEOLOCATE
+                </button>
               </div>
             </div>
           )}
