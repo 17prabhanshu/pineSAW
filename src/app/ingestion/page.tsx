@@ -40,6 +40,7 @@ import clsx from "clsx";
 import { toast } from "sonner";
 import Link from "next/link";
 import { AddToInvestigationModal, AddToInvestigationItem } from "@/components/AddToInvestigationModal";
+import SuspectGeoModal from "@/components/SuspectGeoModal";
 
 interface ExtractedEntity {
   type: string;
@@ -422,6 +423,11 @@ export default function IngestionPanel() {
   const [investigationModalItem, setInvestigationModalItem] = useState<AddToInvestigationItem | null>(null);
   const [isInvestigationModalOpen, setIsInvestigationModalOpen] = useState(false);
   const [addedToCasesMap, setAddedToCasesMap] = useState<Record<string, { caseId: string; id: string }>>({});
+
+  // Suspect Geolocation Modal State
+  const [suspectGeoTarget, setSuspectGeoTarget] = useState<{
+    sender: string; channel?: string; postText?: string; phone?: string; timestamp?: string;
+  } | null>(null);
   
   const isScrapingRef = useRef(false);
   useEffect(() => {
@@ -1814,7 +1820,21 @@ export default function IngestionPanel() {
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-white flex items-center gap-2">
-                              <span>{p.sender || p.title || p.channel || "Intercepted Item"}</span>
+                              <button
+                                type="button"
+                                title="Click to geolocate suspect"
+                                onClick={() => setSuspectGeoTarget({
+                                  sender: p.sender || p.title || p.channel || "Unknown Suspect",
+                                  channel: p.channel,
+                                  postText: p.text,
+                                  phone: (p.sender || "").match(/\+91[\s-]?\d{5}[\s-]?\d{5}/)?.[0],
+                                  timestamp: p.timestamp ? new Date(p.timestamp).toLocaleString() : undefined,
+                                })}
+                                className="hover:text-red-300 transition-colors cursor-pointer flex items-center gap-1.5 group"
+                              >
+                                <span>{p.sender || p.title || p.channel || "Intercepted Item"}</span>
+                                <span className="text-[9px] font-mono text-zinc-600 group-hover:text-red-400/70 transition-colors">[GEOLOCATE]</span>
+                              </button>
                               {p.views && (
                                 <span className="text-[10px] font-mono text-zinc-500 font-normal">
                                   ({p.views} views)
@@ -2882,6 +2902,17 @@ export default function IngestionPanel() {
             });
           }
         }}
+      />
+
+      {/* Suspect Geolocation & Tactical Action Modal */}
+      <SuspectGeoModal
+        isOpen={!!suspectGeoTarget}
+        onClose={() => setSuspectGeoTarget(null)}
+        sender={suspectGeoTarget?.sender || ""}
+        channel={suspectGeoTarget?.channel}
+        postText={suspectGeoTarget?.postText}
+        phone={suspectGeoTarget?.phone}
+        timestamp={suspectGeoTarget?.timestamp}
       />
 
     </div>
