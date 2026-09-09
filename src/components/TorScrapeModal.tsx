@@ -171,6 +171,9 @@ export function TorScrapeModal({ open, onClose, investigationId }: Props) {
           appendLog(
             `           → Ingested — Threat: ${p.threatLevel ?? "N/A"} | Drugs: ${p.narcotics?.length ?? 0} | Wallets: ${p.identifiers?.cryptoAddresses?.length ?? 0}`
           );
+          if (p.llmSlangExplanation && p.llmSlangExplanation !== "No unknown vernacular detected.") {
+            appendLog(`           → [SLANG IDENTIFIED]: ${p.llmSlangExplanation.replace(/\n/g, ' ')}`);
+          }
         } else {
           appendLog(`           → Ingested into pineSAW graph`);
         }

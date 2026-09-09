@@ -85,6 +85,24 @@ export async function POST(request: Request) {
       console.warn("Falling back to local TS extractor:", e);
       parsed = DarknetNLPExtractor.parse(text);
     }
+    
+    // EXPLAIN UNKNOWN VERNACULAR USING GEMINI 3.6 FLASH
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        const { GoogleGenerativeAI } = require("@google/generative-ai");
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
+        const prompt = `You are a forensic slang analyst. Read the following intercepted text:\n"${text}"\n\nIdentify any underground vernacular, slang, encoded language, or darknet-specific terminology used in the text that a standard dictionary would not know. Explain what each slang term means concisely. If there is no unknown vernacular, just reply "No unknown vernacular detected."`;
+        
+        const res = await model.generateContent(prompt);
+        parsed.llmSlangExplanation = res.response.text();
+      } catch (err: any) {
+        console.error("Gemini Slang Explainer error:", err.message);
+        parsed.llmSlangExplanation = "Error explaining vernacular.";
+      }
+    } else {
+      parsed.llmSlangExplanation = "No API key provided for LLM vernacular explanation.";
+    }
 
     // If autoIngest is requested, persist new entities/alerts to database
     let createdEntities: any[] = [];
