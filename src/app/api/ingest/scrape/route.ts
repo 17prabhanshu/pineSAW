@@ -874,7 +874,7 @@ Invite URL: ${inviteUrl} · Status: VERIFIED ACTIVE GROUP INVITE
       const priorityScore = parsed.threatLevel === "CRITICAL" ? 92 : parsed.threatLevel === "HIGH" ? 82 : 68;
 
       // DYNAMIC DUAL-PURPOSE SLANG & ENTITY EXTRACTION VIA GEMINI 3.6 FLASH
-      if (process.env.GEMINI_API_KEY) {
+      if (false) { // GEMINI DISABLED BY USER REQUEST
         if (idx >= 5) {
           (parsed as any).llmSlangExplanation = "LLM assessment skipped (Batch limit reached to prevent 429 Rate Limit).";
         } else {
