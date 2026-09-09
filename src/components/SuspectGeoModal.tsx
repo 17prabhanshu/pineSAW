@@ -178,12 +178,22 @@ export default function SuspectGeoModal({
           .bindPopup(`<b>${geo.city || ''}, ${geo.regionName || ''}</b><br/>${geo.ip || ''}<br/>${geo.isp || ''}`)
           .openPopup();
 
+        // Draw 600m accuracy radius
+        L.circle([geo.lat!, geo.lon!], {
+          color: '#ef4444',
+          fillColor: '#ef4444',
+          fillOpacity: 0.1,
+          weight: 1.5,
+          dashArray: '4',
+          radius: 600
+        }).addTo(map);
+
         leafletRef.current = map;
         setMapReady(true);
 
-        // Animate flyTo after marker settles
+        // Animate flyTo after marker settles (zoom level 15 for ~600m scale)
         setTimeout(() => {
-          map.flyTo([geo.lat!, geo.lon!], 13, { animate: true, duration: 1.8 });
+          map.flyTo([geo.lat!, geo.lon!], 15, { animate: true, duration: 1.8 });
         }, 500);
 
       } catch (e) {
@@ -269,7 +279,7 @@ export default function SuspectGeoModal({
                   <div className="absolute top-2 left-2 z-20 flex flex-col gap-1.5 pointer-events-none">
                     <div className="px-2 py-1 rounded bg-black/80 border border-red-500/40 font-mono text-[9px] text-red-300 flex items-center gap-1.5">
                       <div className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                      LIVE TRIANGULATION ACTIVE
+                      LIVE TRIANGULATION (RADIUS &lt; 600M)
                     </div>
                     {geo.syntheticNote && (
                       <div className="px-2 py-1 rounded bg-amber-950/80 border border-amber-500/30 font-mono text-[9px] text-amber-300 max-w-[200px] leading-tight">
