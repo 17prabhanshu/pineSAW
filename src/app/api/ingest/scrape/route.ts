@@ -874,18 +874,50 @@ Invite URL: ${inviteUrl} · Status: VERIFIED ACTIVE GROUP INVITE
       // Calculate composite priority score
       const priorityScore = parsed.threatLevel === "CRITICAL" ? 92 : parsed.threatLevel === "HIGH" ? 82 : 68;
 
-      // EXPLAIN UNKNOWN VERNACULAR USING GEMINI 3.6 FLASH
+      // DYNAMIC DUAL-PURPOSE SLANG & ENTITY EXTRACTION VIA GEMINI 3.6 FLASH
       if (process.env.GEMINI_API_KEY) {
         try {
           const { GoogleGenerativeAI } = require("@google/generative-ai");
           const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
           const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
-          const prompt = `You are a forensic slang analyst. Read the following intercepted text:\n"${post.text}"\n\nIdentify any underground vernacular, slang, encoded language, or darknet-specific terminology used in the text that a standard dictionary would not know. Explain what each slang term means concisely. If there is no unknown vernacular, just reply "No unknown vernacular detected."`;
-          const res = await model.generateContent(prompt);
-          (parsed as any).llmSlangExplanation = res.response.text();
+          const prompt = `You are a forensic slang analyst. Read the following intercepted text:
+"${post.text}"
+
+Identify any underground vernacular, slang, encoded language, or darknet-specific terminology used in the text that a standard dictionary would not know (especially related to drugs).
+Respond ONLY with a valid JSON object matching this schema:
+{
+  "explanation": "Concise explanation of the slang found, or 'No unknown vernacular detected.'",
+  "narcotics": [
+    {
+      "detectedSlang": "the exact slang word from the text",
+      "standardizedName": "the actual standardized drug name (e.g. Opium, Fentanyl)",
+      "substanceClass": "SYNTHETIC_OPIOID" // Choose: SYNTHETIC_OPIOID, STIMULANT, BENZODIAZEPINE, CANNABINOID, DISSOCIATIVE, or UNKNOWN
+    }
+  ]
+}`;
+          
+          const rawRes = await model.generateContent(prompt);
+          const jsonText = rawRes.response.text().replace(/```json/gi, '').replace(/```/g, '').trim();
+          const llmData = JSON.parse(jsonText);
+          
+          (parsed as any).llmSlangExplanation = llmData.explanation;
+
+          // Dynamically map LLM-discovered drugs back into the pipeline's core extraction array
+          if (llmData.narcotics && Array.isArray(llmData.narcotics)) {
+            for (const drug of llmData.narcotics) {
+              if (!parsed.narcotics.some(n => n.detectedSlang.toLowerCase() === drug.detectedSlang.toLowerCase())) {
+                parsed.narcotics.push({
+                  substanceClass: drug.substanceClass || "UNKNOWN",
+                  detectedSlang: drug.detectedSlang,
+                  standardizedName: drug.standardizedName,
+                  confidence: 0.95
+                });
+              }
+            }
+          }
         } catch (err: any) {
-          console.error("Gemini Slang Explainer error:", err.message);
-          (parsed as any).llmSlangExplanation = "Error explaining vernacular.";
+          console.error("Gemini Slang Explainer JSON error:", err.message);
+          (parsed as any).llmSlangExplanation = "Error generating or parsing dynamic vernacular JSON.";
         }
       } else {
         (parsed as any).llmSlangExplanation = "No API key provided for LLM vernacular explanation.";
