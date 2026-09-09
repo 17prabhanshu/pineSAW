@@ -825,11 +825,10 @@ Invite URL: ${inviteUrl} · Status: VERIFIED ACTIVE GROUP INVITE
     }
 
     // 2. Process every scraped post with Darknet NLP & IOC Extraction
-    const processedResults = [];
     let newEntitiesCreated = 0;
     let vectorizedCount = 0;
 
-    for (const post of scrapedPosts) {
+    const processedResults = await Promise.all(scrapedPosts.map(async (post, idx) => {
       const fullText = [post.url, post.title, post.channel, post.text].filter(Boolean).join(" ");
       let parsed = DarknetNLPExtractor.parse(fullText);
       
@@ -926,7 +925,7 @@ Respond ONLY with a valid JSON object matching this schema:
       let faissIndexingResult = null;
 
       // 3. Live FAISS Vectorization
-      if (autoVectorize && vectorizedCount < 5) {
+      if (autoVectorize && idx < 5) {
         try {
           const docId = `SCRAPE-${post.id || Math.random().toString(36).substring(2, 9)}`;
           const docLabel = `${post.sender || post.title || post.channel}: ${post.text.substring(0, 45)}...`;
@@ -1106,14 +1105,14 @@ Respond ONLY with a valid JSON object matching this schema:
         // Kafka publish handled gracefully
       }
 
-      processedResults.push({
+      return {
         post,
         nlp: parsed,
         onionDomains,
         priorityScore,
         faissIndexingResult
-      });
-    }
+      };
+    }));
 
     const totalElapsedMs = Math.round(performance.now() - startTime);
 
