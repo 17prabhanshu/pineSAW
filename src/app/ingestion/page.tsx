@@ -1833,7 +1833,7 @@ export default function IngestionPanel() {
                                 className="hover:text-red-300 transition-colors cursor-pointer flex items-center gap-1.5 group"
                               >
                                 <span>{p.sender || p.title || p.channel || "Intercepted Item"}</span>
-                                <span className="text-[9px] font-mono text-zinc-600 group-hover:text-red-400/70 transition-colors">[GEOLOCATE]</span>
+                                <span className="px-2 py-0.5 ml-2 rounded bg-red-500/20 text-red-400 border border-red-500/50 text-[10px] font-bold font-mono hover:bg-red-500 hover:text-white transition-all shadow-[0_0_10px_rgba(239,68,68,0.3)] animate-pulse">GEOLOCATE TARGET</span>
                               </button>
                               {p.views && (
                                 <span className="text-[10px] font-mono text-zinc-500 font-normal">

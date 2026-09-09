@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { X, MapPin, Warning, CheckCircle, Copy } from '@phosphor-icons/react';
+import { X, MapPin, Warning, CheckCircle, Copy, Printer } from '@phosphor-icons/react';
 import clsx from 'clsx';
 import { toast } from 'sonner';
 
@@ -388,12 +388,55 @@ export default function SuspectGeoModal({
                   <div className="flex-1 flex flex-col p-4 gap-3 overflow-auto">
                     <div className="flex items-center justify-between">
                       <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Generated Legal Draft</span>
-                      <button
-                        onClick={() => { navigator.clipboard.writeText(draftText); toast.success('Draft copied to clipboard'); }}
-                        className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 font-mono text-[10px] text-zinc-300 flex items-center gap-1.5 transition-colors"
-                      >
-                        <Copy size={11} /> Copy
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => { navigator.clipboard.writeText(draftText); toast.success('Draft copied to clipboard'); }}
+                          className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 font-mono text-[10px] text-zinc-300 flex items-center gap-1.5 transition-colors"
+                        >
+                          <Copy size={11} /> Copy
+                        </button>
+                        <button
+                          onClick={() => {
+                            const printWindow = window.open('', '_blank');
+                            if (printWindow) {
+                              printWindow.document.write(`
+                                <html>
+                                  <head>
+                                    <title>Official Order - Chandigarh Police Cyber Cell</title>
+                                    <style>
+                                      body { font-family: 'Times New Roman', serif; padding: 40px; line-height: 1.6; max-width: 800px; margin: 0 auto; color: black; background: white; }
+                                      .header { text-align: center; border-bottom: 2px solid black; padding-bottom: 20px; margin-bottom: 30px; }
+                                      .logo { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+                                      .sub { font-size: 14px; font-style: italic; }
+                                      .content { white-space: pre-wrap; font-size: 13pt; }
+                                      .footer { margin-top: 50px; font-size: 12pt; border-top: 1px dashed #ccc; padding-top: 20px; text-align: center; color: #555;}
+                                    </style>
+                                  </head>
+                                  <body>
+                                    <div class="header">
+                                      <div class="logo">CHANDIGARH POLICE</div>
+                                      <div class="sub">CYBER CRIME INVESTIGATION CELL (DARKINT)</div>
+                                      <div style="margin-top: 10px; font-size: 11pt;">Ref: DARKINT-GEO-${Date.now()}</div>
+                                    </div>
+                                    <div class="content">${draftText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                                    <div class="footer">
+                                      Generated securely via PineSAW CTI Intelligence Engine<br>
+                                      <b>CONFIDENTIAL &amp; RESTRICTED</b>
+                                    </div>
+                                    <script>
+                                      window.onload = () => { window.print(); window.close(); }
+                                    </script>
+                                  </body>
+                                </html>
+                              `);
+                              printWindow.document.close();
+                            }
+                          }}
+                          className="px-2.5 py-1 rounded bg-red-500/20 hover:bg-red-500 text-red-100 border border-red-500/40 font-mono text-[10px] font-bold flex items-center gap-1.5 transition-colors"
+                        >
+                          <Printer size={11} /> Print & Format
+                        </button>
+                      </div>
                     </div>
                     <textarea
                       readOnly
