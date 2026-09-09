@@ -101,7 +101,13 @@ export default function SuspectGeoModal({
       const res = await fetch('/api/suspect/geolocate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ip: overrideIp || undefined, phone: detectedPhone, senderName: sender }),
+        body: JSON.stringify({
+          ip: overrideIp || undefined,
+          phone: detectedPhone,
+          senderName: sender,
+          channel: channel || '',
+          postText: postText || '',
+        }),
       });
       const data = await res.json();
       setGeo(data);
