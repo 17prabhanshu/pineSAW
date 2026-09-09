@@ -91,6 +91,8 @@ export class DarknetNLPExtractor {
     "pudiya": { std: "Single-dose Heroin Sachet", cat: "SYNTHETIC_OPIOID" },
     "maal": { std: "Generic Drug Slang (Hindi)", cat: "STIMULANT" },
     "nasha": { std: "Intoxicant / Drug (Hindi)", cat: "STIMULANT" },
+    "afeem": { std: "Opium", cat: "SYNTHETIC_OPIOID" },
+    "opium": { std: "Opium", cat: "SYNTHETIC_OPIOID" },
     "dmt": { std: "N,N-Dimethyltryptamine", cat: "DISSOCIATIVE" },
     "ayahuasca": { std: "DMT / Ayahuasca Brew", cat: "DISSOCIATIVE" },
     "psilocybin": { std: "Psilocybin Mushrooms", cat: "DISSOCIATIVE" },
