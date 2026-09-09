@@ -875,10 +875,13 @@ Invite URL: ${inviteUrl} · Status: VERIFIED ACTIVE GROUP INVITE
 
       // DYNAMIC DUAL-PURPOSE SLANG & ENTITY EXTRACTION VIA GEMINI 3.6 FLASH
       if (process.env.GEMINI_API_KEY) {
+        if (idx >= 5) {
+          (parsed as any).llmSlangExplanation = "LLM assessment skipped (Batch limit reached to prevent 429 Rate Limit).";
+        } else {
         try {
           const { GoogleGenerativeAI } = require("@google/generative-ai");
           const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-          const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
+          const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
           const prompt = `You are a forensic slang analyst. Read the following intercepted text:
 "${post.text}"
 
@@ -915,9 +918,14 @@ Respond ONLY with a valid JSON object matching this schema:
             }
           }
         } catch (err: any) {
-          console.error("Gemini Slang Explainer JSON error:", err.message);
-          (parsed as any).llmSlangExplanation = "Error generating or parsing dynamic vernacular JSON.";
+          console.error("Gemini Slang Explainer error:", err.message);
+          if (err.message.includes("429")) {
+            (parsed as any).llmSlangExplanation = "LLM API Rate Limit Exceeded (Google Free Tier 15 RPM Limit). Please wait 1 minute.";
+          } else {
+            (parsed as any).llmSlangExplanation = "Error generating or parsing dynamic vernacular JSON.";
+          }
         }
+        } // close the else block for idx < 5
       } else {
         (parsed as any).llmSlangExplanation = "No API key provided for LLM vernacular explanation.";
       }
